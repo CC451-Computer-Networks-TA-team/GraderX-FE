@@ -4,6 +4,7 @@ import Button from '@material-ui/core/Button';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import FileUpload from './components/FileUpload';
 
 function App() {
   return (
@@ -16,7 +17,7 @@ function App() {
           </Toolbar>
         </AppBar>
         <Button style={{'marginTop': 100}} variant="contained" color="primary">Evaluate</Button>
-
+        <FileUpload></FileUpload>
     </div>
   );
 }
