@@ -36,11 +36,11 @@ function LabSelector(props) {
     return (
         <React.Fragment>
             <FormControl variant="outlined" className={classes.formControl}>
-                <InputLabel>Lab</InputLabel>
+                <InputLabel>Select Lab</InputLabel>
                 <Select
                     value={currLab}
                     onChange={handleChange}
-                    label="Lab"
+                    label="Select Lab"
                 >
                     {labs.map(lab => <MenuItem key={lab} value={lab}>{lab}</MenuItem>)}
                 </Select>

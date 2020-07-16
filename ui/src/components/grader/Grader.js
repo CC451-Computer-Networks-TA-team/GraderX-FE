@@ -1,24 +1,44 @@
 import React, { useState } from 'react'
 import LabSelector from './LabSelector'
 import Grid from '@material-ui/core/Grid'
-import Button from '@material-ui/core/Button'
 import Paper from '@material-ui/core/Paper'
+import FileUpload from './FileUpload'
+import DownloadResult from './DownloadResult';
 
 
 function Grader() {
     const [lab, setLab] = useState('')
+    const [resultsReady, setResultsReady] = useState(false)
+
+    function changeLab(val){
+        setLab(val)
+        setResultsReady(false)
+    }
 
     return (
         <Grid container justify="center" alignItems="center">
             <Grid item>
-                <Paper elevation={5} style={{ 'padding': 25 }}>
+                <Paper elevation={5} style={{ 'padding': 25, 'minWidth':700}}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
-                            <LabSelector setLab={setLab} />
+                            <LabSelector setLab={changeLab} />
                         </Grid>
-                        <Grid item xs={2}>
-                            <Button variant="contained" color="primary">Evaluate</Button>
-                        </Grid>
+                        {
+                            lab ?
+                            <Grid item xs={12}>
+                            <FileUpload lab={lab} resultsReady={setResultsReady}/>
+                            {
+                                resultsReady ?
+                                <DownloadResult lab={lab}/>
+                                :
+                                null
+                            }
+                            
+                            </Grid>
+                            :
+                            null
+                        }
+                        
                     </Grid>
                 </Paper>
             </Grid>
