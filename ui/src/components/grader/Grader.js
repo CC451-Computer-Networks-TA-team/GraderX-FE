@@ -16,8 +16,8 @@ function Grader() {
 
   return (
     <Grid container justify="center" alignItems="center">
-      <Grid item>
-        <Paper elevation={5} style={{ padding: 25, minWidth: 700 }}>
+      <Grid item xs={5}>
+        <Paper elevation={5} style={{ padding: 25 }}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <LabSelector setLab={changeLab} />
