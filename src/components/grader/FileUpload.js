@@ -9,13 +9,34 @@ function FileUpload(props) {
   }
 
   function onFileUpload() {
-    const formData = new FormData();
-    formData.append("submissions_file", selectedFile);
-    apiClient.uploadSubmissions(props.lab, formData).then(res => {
-      props.resultsReady(true);
-    });
+
+    
+    let extension = selectedFile.type
+    let supportedTypes = ["application/zip", "application/vnd.rar", "application/x-7z-compressed" ];
+    if (supportedTypes.includes(extension)) {
+      alert("Successfully Uploaded...")
+      return false;
+    }
+    
   }
 
+  function validateExtention(){
+
+    let extension = selectedFile.type
+    let supportedTypes = ["application/zip", "application/vnd.rar", "application/x-7z-compressed" ];
+    if (!supportedTypes.includes(extension)) {
+      alert("Invalid/Unsupported Extension!")
+      
+    }else{
+      const formData = new FormData();
+      formData.append("submissions_file", selectedFile);
+      apiClient.uploadSubmissions(props.lab, formData).then(res => {
+        props.resultsReady(true);
+      });
+
+    }
+
+  }
   function fileData() {
     if (selectedFile) {
       return (
@@ -41,7 +62,7 @@ function FileUpload(props) {
       <div>
         <input type="file" onChange={onFileChange} />
         {selectedFile ? (
-          <button onClick={onFileUpload}>Upload and Grade</button>
+          <button onClick={validateExtention}>Upload and Grade</button>
         ) : null}
       </div>
       {fileData()}
