@@ -16,15 +16,16 @@ function FileUpload(props) {
 
   function onFileUpload() {
 
-    
-    let extension = selectedFile.type
-    let supportedTypes = ["application/zip", "application/vnd.rar", "application/x-7z-compressed" ];
-    if (supportedTypes.includes(extension)) {
-      alert("Successfully Uploaded...")
-      return false;
-    }
+    const formData = new FormData();
+    formData.append("submissions_file", selectedFile);
+    apiClient.uploadSubmissions(props.lab, formData).then(res => {
+      props.resultsReady(true);
+    });
+
+     
     
   }
+
 
   function validateExtention(){
 
@@ -34,12 +35,8 @@ function FileUpload(props) {
       alert("Invalid/Unsupported Extension!")
       
     }else{
-      const formData = new FormData();
-      formData.append("submissions_file", selectedFile);
-      apiClient.uploadSubmissions(props.lab, formData).then(res => {
-        props.resultsReady(true);
-      });
 
+      onFileUpload();
     }
 
   }
