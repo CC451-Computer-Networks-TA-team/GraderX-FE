@@ -1,11 +1,17 @@
 import React, { useState } from "react";
 import apiClient from "../../api-client";
+import CircularProgress from "@material-ui/core/CircularProgress";
+
 
 function FileUpload(props) {
   const [selectedFile, selectFile] = useState(null);
-
+  const [loading , setLoading]=useState(false);
   function onFileChange(event) {
+    setLoading(false);
     selectFile(event.target.files[0]);
+  }
+  function onFileClick(){
+    setLoading(true);
   }
 
   function onFileUpload() {
@@ -60,10 +66,15 @@ function FileUpload(props) {
     <div>
       <h3>Upload a .rar file containing the lab submissions.</h3>
       <div>
-        <input type="file" onChange={onFileChange} />
+        <input type="file" onClick={onFileClick} onChange={onFileChange} />
+
+        
+
         {selectedFile ? (
           <button onClick={validateExtention}>Upload and Grade</button>
         ) : null}
+        <br></br>
+        {loading? <CircularProgress /> : null}
       </div>
       {fileData()}
     </div>
