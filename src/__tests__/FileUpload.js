@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import apiClient from "../api-client";
-//import {render, cleanup} from 'react-testing-library'
 import FileUpload from '../components/grader/FileUpload';
 import renderer from 'react-test-renderer';
 
