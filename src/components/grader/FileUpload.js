@@ -3,14 +3,22 @@ import apiClient from "../../api-client";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 
+export function validateExtension(extension) {
+  const supportedTypes = ["application/zip", "application/vnd.rar", "application/x-7z-compressed"];
+  return (supportedTypes.includes(extension));
+}
+
 function FileUpload(props) {
   const [selectedFile, selectFile] = useState(null);
-  const [loading , setLoading]=useState(false);
+  const [loading, setLoading] = useState(false);
+
+
   function onFileChange(event) {
     setLoading(false);
     selectFile(event.target.files[0]);
   }
-  function onFileClick(){
+
+  function onFileClick() {
     setLoading(true);
   }
 
@@ -22,24 +30,12 @@ function FileUpload(props) {
       props.resultsReady(true);
     });
 
-     
-    
   }
 
-
-  function validateExtention(){
-
-    let extension = selectedFile.type
-    let supportedTypes = ["application/zip", "application/vnd.rar", "application/x-7z-compressed" ];
-    if (!supportedTypes.includes(extension)) {
-      alert("Invalid/Unsupported Extension!")
-      
-    }else{
-
-      onFileUpload();
-    }
-
+  function handleValidation() {
+    (validateExtension(selectedFile.type) ? onFileUpload() : alert("Invalid/Unsupported Extension!"));
   }
+
   function fileData() {
     if (selectedFile) {
       return (
@@ -65,13 +61,11 @@ function FileUpload(props) {
       <div>
         <input type="file" onClick={onFileClick} onChange={onFileChange} />
 
-        
-
         {selectedFile ? (
-          <button onClick={validateExtention}>Upload and Grade</button>
+          <button onClick={handleValidation}>Upload and Grade</button>
         ) : null}
         <br></br>
-        {loading? <CircularProgress /> : null}
+        {loading ? <CircularProgress /> : null}
       </div>
       {fileData()}
     </div>
