@@ -1,37 +1,79 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Segment, Grid, Container } from "semantic-ui-react";
 import LabSelector from "./LabSelector";
-import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
 import FileUpload from "./FileUpload";
+import Status from "./Status";
 import DownloadResult from "./DownloadResult";
+import apiClient from "../../api-client";
+
+// import DownloadResult from "./DownloadResult";
 
 function Grader() {
   const [lab, setLab] = useState("");
-  const [resultsReady, setResultsReady] = useState(false);
+  const [file, setFile] = useState(null);
+  const [status, setStatus] = useState("");
 
   function changeLab(val) {
     setLab(val);
-    setResultsReady(false);
   }
 
+  const changeFile = f => {
+    setStatus("grading");
+    setFile(f);
+  };
+
+  const resetLab = () => {
+    setLab("");
+    setFile(null);
+    setStatus("");
+  };
+
+  const resetFile = () => {
+    setFile(null);
+    setStatus("");
+  };
+
+  const uploadFile = () => {
+    const formData = new FormData();
+    formData.append("submissions_file", file);
+    apiClient
+      .uploadSubmissions(lab, formData)
+      .then(res => {
+        setStatus("");
+      })
+      .catch(err => {
+        setStatus("failed");
+      });
+  };
+  useEffect(() => {
+    if (file) {
+      uploadFile();
+    }
+    // eslint-disable-next-line
+  }, [file]);
+
+  const determineVisible = () => {
+    if (!lab) {
+      return <LabSelector setLab={changeLab} />;
+    } else if (!file) {
+      return <FileUpload setFile={changeFile} resetLab={resetLab} />;
+    } else if (status) {
+      return <Status status={status} resetFile={resetFile} />;
+    } else {
+      return <DownloadResult lab={lab} resetLab={resetLab} />;
+    }
+  };
+
   return (
-    <Grid container justify="center" alignItems="center">
-      <Grid item xs={5}>
-        <Paper elevation={5} style={{ padding: 25 }}>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <LabSelector setLab={changeLab} />
-            </Grid>
-            {lab ? (
-              <Grid item xs={12}>
-                <FileUpload lab={lab} resultsReady={setResultsReady} />
-                {resultsReady ? <DownloadResult lab={lab} /> : null}
-              </Grid>
-            ) : null}
-          </Grid>
-        </Paper>
+    <Container style={{ marginTop: "7em" }}>
+      <Grid centered>
+        <Grid.Column width={7}>
+          <Segment raised padded>
+            {determineVisible()}
+          </Segment>
+        </Grid.Column>
       </Grid>
-    </Grid>
+    </Container>
   );
 }
 
