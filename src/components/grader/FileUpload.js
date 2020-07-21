@@ -2,16 +2,18 @@ import React, { useState } from "react";
 import apiClient from "../../api-client";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
-
 export function validateExtension(extension) {
-  const supportedTypes = ["application/zip", "application/vnd.rar", "application/x-7z-compressed"];
-  return (supportedTypes.includes(extension));
+  const supportedTypes = [
+    "application/zip",
+    "application/vnd.rar",
+    "application/x-7z-compressed",
+  ];
+  return supportedTypes.includes(extension);
 }
 
 function FileUpload(props) {
   const [selectedFile, selectFile] = useState(null);
   const [loading, setLoading] = useState(false);
-
 
   function onFileChange(event) {
     setLoading(false);
@@ -23,17 +25,17 @@ function FileUpload(props) {
   }
 
   function onFileUpload() {
-
     const formData = new FormData();
     formData.append("submissions_file", selectedFile);
-    apiClient.uploadSubmissions(props.lab, formData).then(res => {
+    apiClient.uploadSubmissions(props.lab, formData).then((res) => {
       props.resultsReady(true);
     });
-
   }
 
   function handleValidation() {
-    (validateExtension(selectedFile.type) ? onFileUpload() : alert("Invalid/Unsupported Extension!"));
+    validateExtension(selectedFile.type)
+      ? onFileUpload()
+      : alert("Invalid/Unsupported Extension!");
   }
 
   function fileData() {

@@ -1,9 +1,7 @@
-import { validateExtension } from '../components/grader/FileUpload';
+import { validateExtension } from "../components/grader/FileUpload";
 
 // letterly useless
-describe('Extension Validation', () => {
-
-
+describe("Extension Validation", () => {
   it("should accept the extension", () => {
     let extension = validateExtension("application/zip");
     expect(extension).toBeTruthy();
@@ -13,7 +11,6 @@ describe('Extension Validation', () => {
 
     extension = validateExtension("application/x-7z-compressed");
     expect(extension).toBeTruthy();
-
   });
 
   it("should reject the extension", () => {
@@ -25,8 +22,5 @@ describe('Extension Validation', () => {
 
     extension = validateExtension("anything");
     expect(extension).toBeFalsy();
-
   });
-
-
 });

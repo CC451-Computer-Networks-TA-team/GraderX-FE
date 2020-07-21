@@ -4,9 +4,9 @@ import apiClient from "../../api-client";
 
 function DownloadResult(props) {
   function downloadFile() {
-    apiClient.downloadResults(props.lab).then(res => {
+    apiClient.downloadResults(props.lab).then((res) => {
       let resFile = new File([res.data], "results.txt", {
-        type: "text/plain"
+        type: "text/plain",
       });
       fileDownload(resFile, "results.txt");
     });

@@ -6,10 +6,10 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import apiClient from "../../api-client";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   formControl: {
-    minWidth: 200
-  }
+    minWidth: 200,
+  },
 }));
 
 function LabSelector(props) {
@@ -18,12 +18,12 @@ function LabSelector(props) {
   const [labs, setLabs] = useState([]);
 
   useEffect(() => {
-    apiClient.getLabs().then(res => {
+    apiClient.getLabs().then((res) => {
       setLabs(res.data.labs);
     });
   }, []);
 
-  const handleChange = event => {
+  const handleChange = (event) => {
     setCurrLab(event.target.value);
     props.setLab(event.target.value);
   };
@@ -33,7 +33,7 @@ function LabSelector(props) {
       <FormControl variant="outlined" className={classes.formControl}>
         <InputLabel>Select Lab</InputLabel>
         <Select value={currLab} onChange={handleChange} label="Select Lab">
-          {labs.map(lab => (
+          {labs.map((lab) => (
             <MenuItem key={lab} value={lab}>
               {lab}
             </MenuItem>
