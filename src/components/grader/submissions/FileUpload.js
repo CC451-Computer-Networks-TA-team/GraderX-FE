@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Label, Header, Icon } from "semantic-ui-react";
+import { Button, Label, Header } from "semantic-ui-react";
 
 export function validateExtension(extension) {
   const supportedTypes = [
@@ -9,6 +9,8 @@ export function validateExtension(extension) {
   ];
   return supportedTypes.includes(extension);
 }
+
+
 
 function FileUpload(props) {
   const [selectedInvalid, setSelectedInvalid] = useState(false);
@@ -25,11 +27,12 @@ function FileUpload(props) {
     }
   }
 
+
   return (
     <React.Fragment>
-      <Header as="h4">
+      <Header as="h4" style={{ marginBottom: '5px' }}>
         Select a compressed file containing the submissions
-      </Header>
+        </Header>
       <Button
         content="Choose File"
         labelPosition="right"
@@ -45,7 +48,7 @@ function FileUpload(props) {
         </Label>
       ) : null}
       {/* a hidden input is created because semantic ui does not have a file upload component by default
-          a normal button is created that triggers a hidden file input when the button is clicked */}
+            a normal button is created that triggers a hidden file input when the button is clicked */}
       <input
         ref={fileInputRef}
         name="submissions_file"
@@ -54,16 +57,6 @@ function FileUpload(props) {
         onChange={onFileChange}
         accept=".zip,.rar,.7zip,.tar"
       />
-      <Header as="h5" textAlign="center">
-        <a
-          href={() => false}
-          style={{ cursor: "pointer" }}
-          onClick={props.resetLab}
-        >
-          <Icon name="chevron left" style={{ marginRight: ".4em" }} />
-          Select another lab
-        </a>
-      </Header>
     </React.Fragment>
   );
 }

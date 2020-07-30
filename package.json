@@ -11,6 +11,8 @@
     "js-file-download": "^0.4.12",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-google-login": "^5.1.21",
+    "react-html-parser": "^2.0.2",
     "react-promise-tracker": "^2.1.0",
     "react-scripts": "3.4.1",
     "semantic-ui-react": "^0.88.2"
