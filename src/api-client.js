@@ -13,5 +13,8 @@ export default {
   },
   downloadResults(labId) {
     return axios.get(`http://localhost:5000/results/cc451/${labId}`);
+  },
+  getStatus() {
+    return axios.get(`http://localhost:5000/get_status`);
   }
 };

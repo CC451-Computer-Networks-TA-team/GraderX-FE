@@ -1,20 +1,36 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Loader, Header, Icon } from "semantic-ui-react";
+import apiClient from "../../api-client";
 
 function Status(props) {
+
+  const [currentStatus, setCurrentStatus] = useState("")
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {  //assign interval to a variaable to clear it
+      apiClient.getStatus().then(res => {
+        setCurrentStatus(res.data);
+        console.log(currentStatus);
+      })
+    }, 5)
+  
+    return () => clearInterval(intervalId); //This is important
+  
+  }, );
+
   return (
     <React.Fragment>
       <div style={{ minHeight: "8em", textAlign: "center" }}>
         {props.status.toLowerCase() === "grading" ? (
-          <Loader
+          <div>
+            <Loader
             size="large"
             content={
-              props.status.charAt(0).toUpperCase() +
-              props.status.slice(1).toLowerCase() +
-              "..."
+              currentStatus
             }
             active
           />
+          </div>
         ) : (
           <React.Fragment>
             <Header as="h2" icon textAlign="center">
