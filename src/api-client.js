@@ -1,37 +1,37 @@
 import axios from "axios";
 
-const graderx_api = process.env.GRADERX_API
+const GRADERX_API = process.env.GRADERX_API
   ? process.env.GRADERX_API
   : "http://localhost:5000/";
 
 export default {
   getLabs() {
-    return axios.get(`${graderx_api}labs/cc451`);
+    return axios.get(`${GRADERX_API}labs/cc451`);
   },
 
   uploadSubmissions(labId, formData) {
-    return axios.post(`http://localhost:5000/results/cc451/${labId}`, formData);
+    return axios.post(`${GRADERX_API}results/cc451/${labId}`, formData);
   },
 
   downloadResults(labId) {
-    return axios.get(`http://localhost:5000/results/cc451/${labId}`);
+    return axios.get(`${GRADERX_API}results/cc451/${labId}`);
   },
 
   validateSheet(accessToken, sheetLink) {
-    return axios.post('http://localhost:5000/submissions/validate', {
+    return axios.post(`${GRADERX_API}submissions/validate`, {
       accessToken: accessToken,
       sheetLink: sheetLink
     })
   },
 
   startImporting(accessToken, sheetLink, field, lab) {
-    return axios.post(`http://localhost:5000/submissions/cc451/${lab}?field=${field}`, {
+    return axios.post(`${GRADERX_API}submissions/cc451/${lab}?field=${field}`, {
       accessToken: accessToken,
       sheetLink: sheetLink
     })
   },
 
   startGrading(lab) {
-    return axios.get(`http://localhost:5000/grader/cc451/${lab}`)
+    return axios.get(`${GRADERX_API}grader/cc451/${lab}`)
   }
 };
