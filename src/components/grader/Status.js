@@ -22,15 +22,13 @@ function Status(props) {
     <React.Fragment>
       <div style={{ minHeight: "8em", textAlign: "center" }}>
         {props.status.toLowerCase() === "grading" ? (
-          <div>
-            <Loader
-            size="large"
-            content={
-              currentStatus
-            }
-            active
-          />
-          </div>
+          <Loader
+          size="large"
+          content={
+            currentStatus
+          }
+          active
+        />
         ) : (
           <React.Fragment>
             <Header as="h2" icon textAlign="center">
