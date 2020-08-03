@@ -1,45 +1,43 @@
 import React, { useState, useEffect } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
+import { Dropdown, Grid } from "semantic-ui-react";
 import apiClient from "../../api-client";
 
-const useStyles = makeStyles(theme => ({
-  formControl: {
-    minWidth: 200
-  }
-}));
-
 function LabSelector(props) {
-  const classes = useStyles();
-  const [currLab, setCurrLab] = useState("");
   const [labs, setLabs] = useState([]);
+
+  const createLabObjects = labs_array => {
+    let labs_objects = [];
+    labs_array.forEach(lab => {
+      labs_objects.push({ key: lab, text: lab, value: lab });
+    });
+    setLabs(labs_objects);
+  };
 
   useEffect(() => {
     apiClient.getLabs().then(res => {
-      setLabs(res.data.labs);
+      createLabObjects(res.data.labs);
     });
   }, []);
 
-  const handleChange = event => {
-    setCurrLab(event.target.value);
-    props.setLab(event.target.value);
+  const handleChange = (_, data) => {
+    props.setLab(data.value);
   };
 
   return (
     <React.Fragment>
-      <FormControl variant="outlined" className={classes.formControl}>
-        <InputLabel>Select Lab</InputLabel>
-        <Select value={currLab} onChange={handleChange} label="Select Lab">
-          {labs.map(lab => (
-            <MenuItem key={lab} value={lab}>
-              {lab}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+      <Grid centered>
+        <Grid.Column width={7}>
+          <Dropdown
+            selectOnBlur={false}
+            placeholder="Select Lab"
+            fluid
+            selection
+            button
+            options={labs}
+            onChange={handleChange}
+          />
+        </Grid.Column>
+      </Grid>
     </React.Fragment>
   );
 }
