@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Loader, Header, Icon } from "semantic-ui-react";
 import apiClient from "../../api-client";
 
+const QUERY_INTERVAL = 100;
+
 function Status(props) {
 
   const [currentStatus, setCurrentStatus] = useState("")
@@ -12,7 +14,7 @@ function Status(props) {
         setCurrentStatus(res.data);
         console.log(currentStatus);
       })
-    }, 5)
+    }, QUERY_INTERVAL)
   
     return () => clearInterval(intervalId); //This is important
   
