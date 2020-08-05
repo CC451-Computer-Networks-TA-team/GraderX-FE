@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { Segment, Grid, Container } from "semantic-ui-react";
 import LabSelector from "./LabSelector";
-import FileUpload from "./FileUpload";
+import GetSubmissions from './submissions/GetSubmissions'
 import Status from "./Status";
 import DownloadResult from "./DownloadResult";
 import apiClient from "../../api-client";
 
-// import DownloadResult from "./DownloadResult";
 
 function Grader() {
   const [lab, setLab] = useState("");
   const [file, setFile] = useState(null);
   const [status, setStatus] = useState("");
+  const [importing, setImporting] = useState(false)
 
   function changeLab(val) {
     setLab(val);
@@ -25,11 +25,13 @@ function Grader() {
   const resetLab = () => {
     setLab("");
     setFile(null);
+    setImporting(false)
     setStatus("");
   };
 
   const resetFile = () => {
     setFile(null);
+    setImporting(false)
     setStatus("");
   };
 
@@ -45,6 +47,8 @@ function Grader() {
         setStatus("failed");
       });
   };
+
+
   useEffect(() => {
     if (file) {
       uploadFile();
@@ -52,11 +56,23 @@ function Grader() {
     // eslint-disable-next-line
   }, [file]);
 
+  const importAndGrade = (accessToken, sheetLink, field) => {
+    setStatus("grading")
+    setImporting("true")
+    apiClient.startImporting(accessToken, sheetLink, field, lab)
+      .then((res) => {
+        apiClient.startGrading(lab)
+          .then(res => {
+            setStatus("")
+          })
+      })
+  }
+
   const determineVisible = () => {
     if (!lab) {
       return <LabSelector setLab={changeLab} />;
-    } else if (!file) {
-      return <FileUpload setFile={changeFile} resetLab={resetLab} />;
+    } else if (!importing && !file) {
+      return <GetSubmissions setFile={changeFile} resetLab={resetLab} importAndGrade={importAndGrade} />;
     } else if (status) {
       return <Status status={status} resetFile={resetFile} />;
     } else {
@@ -67,7 +83,7 @@ function Grader() {
   return (
     <Container style={{ marginTop: "7em" }}>
       <Grid centered>
-        <Grid.Column width={7}>
+        <Grid.Column width={8}>
           <Segment raised padded>
             {determineVisible()}
           </Segment>
