@@ -81,6 +81,7 @@ const ImportSubmissions = (props) => {
                         <Grid.Column verticalAlign='middle' textAlign="center">
                             <GoogleLogin
                                 clientId="653543257974-p3uuv08hcftdhkolqpl2hpbbta2d1ck2.apps.googleusercontent.com"
+                                scope="https://www.googleapis.com/auth/spreadsheets.readonly https://www.googleapis.com/auth/drive.readonly"
                                 render={renderProps => (
                                     <Button onClick={renderProps.onClick}
                                         disabled={renderProps.disabled}
