@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import GoogleLogin from 'react-google-login';
+import MicrosoftLogin from "react-microsoft-login";
 import { Button, Header, Grid } from "semantic-ui-react";
 import { Label, Input, Transition, Container, Dropdown } from "semantic-ui-react";
 import ReactHtmlParser from 'react-html-parser';
@@ -17,6 +18,7 @@ const ImportSubmissions = (props) => {
     const [optionsVisibity, setOptionsVisibility] = useState(true)
     const [sheetFields, setSheetFields] = useState([])
     const [selectedField, setSelectedField] = useState("")
+    const MS_CLIENT_ID = "21adf918-a9cb-41af-8a1c-f8e4866a8107"
 
     const authSuccessful = (response) => {
         setAccessToken(response.accessToken)
@@ -67,7 +69,11 @@ const ImportSubmissions = (props) => {
         setSelectedField(data.value)
     }
 
+    const authHandler = (err, data) => {
+        setAccessToken(data.authResponseWithAccessToken.accessToken)
+        setOptionsVisibility(false)
 
+      };
     return (
         <React.Fragment>
             <Transition animation='slide right' duration={200}
@@ -78,7 +84,7 @@ const ImportSubmissions = (props) => {
                         Import From
                 </Header>
                     <Grid>
-                        <Grid.Column verticalAlign='middle' textAlign="center">
+                        <Grid.Column verticalAlign='left' textAlign="center">
                             <GoogleLogin
                                 clientId="653543257974-p3uuv08hcftdhkolqpl2hpbbta2d1ck2.apps.googleusercontent.com"
                                 render={renderProps => (
@@ -92,7 +98,22 @@ const ImportSubmissions = (props) => {
                                 onFailure={err => { }}
                                 cookiePolicy={'single_host_origin'}
                             />
+                        
                         </Grid.Column>
+
+
+                    </Grid>
+                    <Grid>                    
+                       
+                        <Grid.Column verticalAlign='left' textAlign="center">
+                            <MicrosoftLogin 
+                                    clientId={MS_CLIENT_ID} 
+                                    authCallback={authHandler}
+                                    buttonTheme="dark_short"
+                                />
+                        </Grid.Column>
+
+
                     </Grid>
                 </Container>
             </Transition>
