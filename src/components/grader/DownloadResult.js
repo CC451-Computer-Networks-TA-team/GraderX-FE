@@ -5,11 +5,8 @@ import { Button, Header, Icon } from "semantic-ui-react";
 
 function DownloadResult(props) {
   function downloadFile() {
-    apiClient.downloadResults(props.lab).then(res => {
-      let resFile = new File([res.data], "results.txt", {
-        type: "text/plain"
-      });
-      fileDownload(resFile, "results.txt");
+    apiClient.downloadResults(props.course, props.lab).then(res => {
+      fileDownload(res.data, "results.zip");
     });
   }
 
