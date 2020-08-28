@@ -6,14 +6,15 @@ import GetSubmissions from './submissions/GetSubmissions'
 import Status from "./Status";
 import DownloadResult from "./DownloadResult";
 import apiClient from "../../api-client";
-
+import DiffContainer from "./submissions/DiffContainer"
 
 function Grader() {
   const [course, setCourse] = useState("")
   const [lab, setLab] = useState("");
   const [file, setFile] = useState(null);
   const [status, setStatus] = useState("");
-  const [importing, setImporting] = useState(false)
+  const [importing, setImporting] = useState(false);
+  const [diff, setDiff] = useState(null);
 
   function changeLab(val) {
     setLab(val);
@@ -75,11 +76,28 @@ function Grader() {
           .then(res => {
             setStatus("")
           })
+
       })
+
+
+
+  }
+
+  const getDiffResults = () => {
+
+    
+    if (course === 'test_course') {
+      apiClient.getDiffResults(course, lab).then(res => {
+        setDiff(res.data)
+      });
+
+    }
+
   }
 
   const determineVisible = () => {
     if (!course) {
+      //return <DiffContainer/>
       return <CourseSelector setCourse={changeCourse} />
     } else if (!lab) {
       return <LabSelector setLab={changeLab} course={course} />;
@@ -88,7 +106,16 @@ function Grader() {
     } else if (status) {
       return <Status status={status} resetFile={resetFile} />;
     } else {
-      return <DownloadResult course={course} lab={lab} resetLab={resetLab} />;
+      return (<div>
+        {getDiffResults()
+        }
+        {diff ? <DiffContainer course={course} lab={lab} diff={diff} />
+          : <DownloadResult course={course} lab={lab} resetLab={resetLab} />
+          }
+
+      </div>
+      )
+
     }
   };
 
