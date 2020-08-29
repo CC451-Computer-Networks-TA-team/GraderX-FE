@@ -4,9 +4,8 @@ import LabSelector from "./LabSelector";
 import CourseSelector from './CourseSelector'
 import GetSubmissions from './submissions/GetSubmissions'
 import Status from "./Status";
-import DownloadResult from "./DownloadResult";
 import apiClient from "../../api-client";
-import DiffContainer from "./submissions/DiffContainer"
+import ResultsContainer from "./ResultsContainer"
 
 function Grader() {
   const [course, setCourse] = useState("")
@@ -81,12 +80,14 @@ function Grader() {
 
 
 
+
+
   }
 
   const getDiffResults = () => {
 
-    
-    if (course === 'test_course') {
+    const selected_course = "cc451"
+    if (course === selected_course) {
       apiClient.getDiffResults(course, lab).then(res => {
         setDiff(res.data)
       });
@@ -107,12 +108,7 @@ function Grader() {
       return <Status status={status} resetFile={resetFile} />;
     } else {
       return (<div>
-        {getDiffResults()
-        }
-        {diff ? <DiffContainer course={course} lab={lab} diff={diff} />
-          : <DownloadResult course={course} lab={lab} resetLab={resetLab} />
-          }
-
+        <ResultsContainer course={course} lab={lab} diff={diff} resetLab={resetLab} getDiffResults={getDiffResults} />
       </div>
       )
 
@@ -125,6 +121,7 @@ function Grader() {
         <Grid.Column width={8}>
           <Segment raised padded>
             {determineVisible()}
+
           </Segment>
         </Grid.Column>
       </Grid>

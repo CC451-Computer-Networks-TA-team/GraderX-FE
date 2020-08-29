@@ -1,17 +1,11 @@
 import React from "react";
-import { Header, Button } from "semantic-ui-react";
+import { Header } from "semantic-ui-react";
 import SingleDiff from "./SingleDiff";
 //import Card from "@bit/nexxtway.react-rainbow.card";
 import Accordion from "@bit/nexxtway.react-rainbow.accordion";
 
 
 function DiffContainer(props) {
-
-  // TODO: route to downloads
-  function handleClick() {
-    console.log("you clicked me!")
-  }
-
 
   return (
     <React.Fragment>
@@ -26,7 +20,6 @@ function DiffContainer(props) {
       </Accordion>
 
       <br></br>
-      <Button positive fluid onClick={handleClick}>Go to Downloads</Button>
     
     </React.Fragment>
   );

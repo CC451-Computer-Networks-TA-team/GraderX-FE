@@ -18,7 +18,10 @@ const GetSubmissions = (props) => {
           <Icon name="chevron left" style={{ marginRight: ".4em" }} />
           Select another lab
         </a>
+
       </Header>
+
+
     </React.Fragment>
   )
 }
