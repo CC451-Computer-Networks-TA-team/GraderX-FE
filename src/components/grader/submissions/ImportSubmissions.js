@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import GoogleLogin from 'react-google-login';
-import { Button, Header, Grid, GridRow, GridColumn, Icon } from "semantic-ui-react";
+import { Button, Header, Grid, GridColumn, Icon } from "semantic-ui-react";
 import { Label, Input, Transition, Container, Dropdown } from "semantic-ui-react";
 import ReactHtmlParser from 'react-html-parser';
 import apiClient from "../../../api-client"
