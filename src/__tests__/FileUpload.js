@@ -1,4 +1,4 @@
-import { validateExtension } from '../components/grader/FileUpload';
+import { validateExtension } from '../components/grader/submissions/FileUpload';
 
 // letterly useless
 describe('Extension Validation', () => {
