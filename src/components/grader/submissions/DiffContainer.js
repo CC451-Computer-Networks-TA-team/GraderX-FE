@@ -15,6 +15,7 @@ function DiffContainer(props) {
 
       <Accordion id="accordion-1">
         {props.diff.map((result) => (
+          result.failed.length > 0 &&
           <SingleDiff result={result} key={result.id}/>
         ))}
       </Accordion>
