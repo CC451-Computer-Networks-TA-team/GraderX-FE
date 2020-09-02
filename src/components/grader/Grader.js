@@ -86,7 +86,7 @@ function Grader() {
 
   const getDiffResults = () => {
 
-    const selected_course = "cc451"
+    const selected_course = "test_course"
     if (course === selected_course) {
       apiClient.getDiffResults(course, lab).then(res => {
         setDiff(res.data)
