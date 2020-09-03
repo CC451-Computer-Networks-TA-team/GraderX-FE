@@ -1,7 +1,7 @@
 import React from "react";
 import fileDownload from "js-file-download";
 import apiClient from "../../api-client";
-import { Button, Header, Icon } from "semantic-ui-react";
+import { Button, Header} from "semantic-ui-react";
 
 function DownloadResult(props) {
   function downloadFile() {
@@ -15,19 +15,9 @@ function DownloadResult(props) {
       <Header textAlign="center" as="h4">
         Results are ready for download
       </Header>
-      <Button positive fluid onClick={downloadFile}>
+      <Button positive fluid onClick={downloadFile} style={{ marginBottom: "1%" }}>
         DOWNLOAD
       </Button>
-      <Header as="h5" textAlign="center">
-        <a
-          href={() => false}
-          style={{ cursor: "pointer" }}
-          onClick={props.resetLab}
-        >
-          <Icon name="chevron left" style={{ marginRight: ".4em" }} />
-          Select another lab
-        </a>
-      </Header>
     </React.Fragment>
   );
 }

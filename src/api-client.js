@@ -39,5 +39,9 @@ export default {
 
   startGrading(course, lab) {
     return axios.get(`${GRADERX_API}run_grader?course=${course}&lab=${lab}`)
+  },
+
+  getDiffResults(course, lab) {
+    return axios.get(`${GRADERX_API}results?course=${course}&lab=${lab}&type=diff`)
   }
 };

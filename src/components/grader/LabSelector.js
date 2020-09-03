@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Dropdown, Grid } from "semantic-ui-react";
+import { Dropdown, Grid, Label } from "semantic-ui-react";
 import apiClient from "../../api-client";
 
 function LabSelector(props) {
@@ -27,6 +27,12 @@ function LabSelector(props) {
     <React.Fragment>
       <Grid centered>
         <Grid.Column width={7}>
+          <Label as="a" color="violet" image style={{ marginBottom: "3%" }}
+>
+            {props.course}
+            <Label.Detail>Course Name</Label.Detail>
+          </Label>
+
           <Dropdown
             selectOnBlur={false}
             placeholder="Select Lab"
