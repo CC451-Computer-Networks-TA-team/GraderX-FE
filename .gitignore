@@ -25,6 +25,3 @@ yarn-error.log*
 
 .devcontainer
 
-#yarn
-package-lock.json
-package.json
