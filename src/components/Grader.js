@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Segment, Grid, Container } from "semantic-ui-react";
-import LabSelector from "./LabSelector";
-import CourseSelector from './CourseSelector'
-import GetSubmissions from './submissions/GetSubmissions'
-import Status from "./Status";
-import DownloadResult from "./DownloadResult";
-import apiClient from "../../api-client";
+import LabSelector from "./grader/LabSelector";
+import CourseSelector from './grader/CourseSelector'
+import GetSubmissions from './grader/submissions/GetSubmissions'
+import Status from "./grader/Status";
+import DownloadResult from "./grader/DownloadResult";
+import apiClient from "../api-client";
 
 
 function Grader() {

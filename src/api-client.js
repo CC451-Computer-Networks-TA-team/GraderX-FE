@@ -16,7 +16,9 @@ export default {
   uploadSubmissions(course, labId, formData) {
     return axios.post(`${GRADERX_API}submissions?course=${course}&lab=${labId}&method=file`, formData);
   },
-
+  uploadSubmissionsMoss(formData) {
+    return axios.post(`${GRADERX_API}submissions?course=cc451&lab=lab3&method=file-moss`, formData);
+  },
   downloadResults(course, labId) {
     return axios.get(`${GRADERX_API}results?course=${course}&lab=${labId}&type=download`, {
       responseType: 'blob',
@@ -39,5 +41,9 @@ export default {
 
   startGrading(course, lab) {
     return axios.get(`${GRADERX_API}run_grader?course=${course}&lab=${lab}`)
+  },
+
+  runMoss(course, lab){
+    return axios.get(`${GRADERX_API}moss?course=${course}&lab=${lab}`)
   }
 };
