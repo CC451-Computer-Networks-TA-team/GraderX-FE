@@ -5,16 +5,22 @@ const GRADERX_API = process.env.GRADERX_API
   : "http://localhost:5000/";
 
 export default {
-  getLabs() {
-    return axios.get(`${GRADERX_API}labs/cc451`);
+  getLabs(course) {
+    return axios.get(`${GRADERX_API}courses/${course}/labs`);
   },
 
-  uploadSubmissions(labId, formData) {
-    return axios.post(`${GRADERX_API}results/cc451/${labId}`, formData);
+  getCourses() {
+    return axios.get(`${GRADERX_API}courses`);
   },
 
-  downloadResults(labId) {
-    return axios.get(`${GRADERX_API}results/cc451/${labId}`);
+  uploadSubmissions(course, labId, formData) {
+    return axios.post(`${GRADERX_API}submissions?course=${course}&lab=${labId}&method=file`, formData);
+  },
+
+  downloadResults(course, labId) {
+    return axios.get(`${GRADERX_API}results?course=${course}&lab=${labId}&type=download`, {
+      responseType: 'blob',
+    });
   },
 
   validateSheet(accessToken, sheetLink) {
@@ -24,14 +30,14 @@ export default {
     })
   },
 
-  startImporting(accessToken, sheetLink, field, lab) {
-    return axios.post(`${GRADERX_API}submissions/cc451/${lab}?field=${field}`, {
+  startImporting(accessToken, sheetLink, field, course, lab) {
+    return axios.post(`${GRADERX_API}submissions?course=${course}&lab=${lab}&method=import-google&field=${field}`, {
       accessToken: accessToken,
       sheetLink: sheetLink
     })
   },
 
-  startGrading(lab) {
-    return axios.get(`${GRADERX_API}grader/cc451/${lab}`)
+  startGrading(course, lab) {
+    return axios.get(`${GRADERX_API}run_grader?course=${course}&lab=${lab}`)
   }
 };
