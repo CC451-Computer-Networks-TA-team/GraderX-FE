@@ -1,5 +1,19 @@
 import axios from "axios";
 
+function getImportMethod(sheetLink) {
+
+  var parse = require('url-parse')
+    , url = parse(sheetLink, true);
+  if (url.hostname === "alexuuni-my.sharepoint.com") {
+    return "import-ms"
+
+  } else if (url.hostname === "docs.google.com") {
+    return "import-google"
+
+  }
+
+
+}
 const GRADERX_API = process.env.GRADERX_API
   ? process.env.GRADERX_API
   : "http://localhost:5000/";
@@ -24,14 +38,21 @@ export default {
   },
 
   validateSheet(accessToken, sheetLink) {
+
+
+
     return axios.post(`${GRADERX_API}submissions/validate`, {
       accessToken: accessToken,
-      sheetLink: sheetLink
+      sheetLink: sheetLink,
+      method: getImportMethod(sheetLink)
+
     })
   },
 
   startImporting(accessToken, sheetLink, field, course, lab) {
-    return axios.post(`${GRADERX_API}submissions?course=${course}&lab=${lab}&method=import-google&field=${field}`, {
+    const method = getImportMethod(sheetLink)
+
+    return axios.post(`${GRADERX_API}submissions?course=${course}&lab=${lab}&method=${method}&field=${field}`, {
       accessToken: accessToken,
       sheetLink: sheetLink
     })

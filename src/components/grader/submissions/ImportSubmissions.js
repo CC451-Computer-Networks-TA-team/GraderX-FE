@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import GoogleLogin from 'react-google-login';
-import { Button, Header, Grid } from "semantic-ui-react";
+import { Button, Header, Grid, GridColumn, Icon } from "semantic-ui-react";
 import { Label, Input, Transition, Container, Dropdown } from "semantic-ui-react";
 import ReactHtmlParser from 'react-html-parser';
 import apiClient from "../../../api-client"
-
+import MicrosoftLogin from "react-microsoft-login";
 
 const ImportSubmissions = (props) => {
     const [accessToken, setAccessToken] = useState("")
@@ -17,11 +17,19 @@ const ImportSubmissions = (props) => {
     const [optionsVisibity, setOptionsVisibility] = useState(true)
     const [sheetFields, setSheetFields] = useState([])
     const [selectedField, setSelectedField] = useState("")
+    const MS_CLIENT_ID = "21adf918-a9cb-41af-8a1c-f8e4866a8107"
 
     const authSuccessful = (response) => {
         setAccessToken(response.accessToken)
         setOptionsVisibility(false)
     }
+
+
+    const authHandler = (err, data) => {
+        setAccessToken(data.authResponseWithAccessToken.accessToken)
+        setOptionsVisibility(false)
+
+    };
 
     const createFieldsObjects = fieldsArray => {
         let fieldsObjects = [];
@@ -69,33 +77,53 @@ const ImportSubmissions = (props) => {
 
 
     return (
-        <React.Fragment>
+        <React.Fragment >
             <Transition animation='slide right' duration={200}
                 visible={optionsVisibity}
                 onHide={() => setAuthorized(true)}>
-                <Container>
+                <Container >
                     <Header style={{ margin: '0', marginBottom: '7px' }} textAlign="center" as="h4">
                         Import From
-                </Header>
-                    <Grid>
-                        <Grid.Column verticalAlign='middle' textAlign="center">
+                </Header >
+
+                    <Grid >
+                        <GridColumn style={{marginLeft:"27%", marginRight:"20%"}}>
+                        <div class="ui buttons">
                             <GoogleLogin
                                 clientId="653543257974-p3uuv08hcftdhkolqpl2hpbbta2d1ck2.apps.googleusercontent.com"
                                 scope="https://www.googleapis.com/auth/spreadsheets.readonly https://www.googleapis.com/auth/drive.readonly"
                                 render={renderProps => (
                                     <Button onClick={renderProps.onClick}
                                         disabled={renderProps.disabled}
-                                        style={{ backgroundColor: '#7147BC', color: 'white' }}>
-                                        Google Forms
+                                        style={{ backgroundColor: '#2f2f2f', color: 'white' }}>
+
+                                        <Icon name='google' />
+                                            Sign in
                                     </Button>
                                 )}
                                 onSuccess={authSuccessful}
                                 onFailure={err => { }}
                                 cookiePolicy={'single_host_origin'}
                             />
-                        </Grid.Column>
+                            <div class="or"></div>
+                            <MicrosoftLogin
+                                clientId={MS_CLIENT_ID}
+                                authCallback={authHandler}
+                                buttonTheme="dark_short"
+                                graphScopes={["user.read", "Files.Read.All"]}
+                            />
+                        </div>
+
+
+                        </GridColumn>
+                        
+
+
                     </Grid>
+
+
                 </Container>
+                
             </Transition>
 
             <Transition animation='slide left' duration={200} visible={authorized}>
