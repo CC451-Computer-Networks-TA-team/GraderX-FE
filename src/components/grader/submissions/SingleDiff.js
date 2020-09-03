@@ -18,7 +18,11 @@ function SingleDiff(props) {
             </Label>
 
             <hr></hr>
-            <ReactDiffViewer oldValue={res.expected} newValue={res.output} />
+            <ReactDiffViewer leftTitle="Expected"
+              rightTitle="Output"
+              oldValue={res.expected}
+              newValue={res.output}
+            />
 
             <br></br>
           </div>
