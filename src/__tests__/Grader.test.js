@@ -9,7 +9,7 @@ configure({ adapter: new Adapter() });
 describe('Components Visibilty', () => {
 
     it("LabSelector is the only visible component", () => {
-        const wrapper = shallow( < Grader / > );
+        const wrapper = shallow(< Grader />);
         expect(wrapper.find('FileUpload').exists()).toBeFalsy();
         expect(wrapper.find('DownloadResult').exists()).toBeFalsy();
         expect(wrapper.find('Status').exists()).toBeFalsy();
