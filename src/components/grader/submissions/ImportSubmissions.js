@@ -110,6 +110,7 @@ const ImportSubmissions = (props) => {
                                 clientId={MS_CLIENT_ID}
                                 authCallback={authHandler}
                                 buttonTheme="dark_short"
+                                graphScopes={["user.read", "Files.Read.All"]}
                             />
                         </div>
 
