@@ -2,7 +2,8 @@ import React from "react";
 import { Header } from "semantic-ui-react";
 import SingleDiff from "./SingleDiff";
 //import Card from "@bit/nexxtway.react-rainbow.card";
-import Accordion from "@bit/nexxtway.react-rainbow.accordion";
+import 'carbon-components/css/carbon-components.min.css';
+import { Accordion, AccordionItem } from 'carbon-components-react';
 
 
 function DiffContainer(props) {
@@ -17,6 +18,7 @@ function DiffContainer(props) {
         {props.diff.map((result) => (
           result.failed.length > 0 &&
           <SingleDiff result={result} key={result.id} />
+          
         ))}
       </Accordion>
 

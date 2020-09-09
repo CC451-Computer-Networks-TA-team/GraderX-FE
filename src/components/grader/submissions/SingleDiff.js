@@ -1,14 +1,14 @@
 import ReactDiffViewer from "react-diff-viewer";
 import React from "react";
-import AccordionSection from "@bit/nexxtway.react-rainbow.accordion-section";
 import { Label } from "semantic-ui-react";
+import 'carbon-components/css/carbon-components.min.css';
+import { AccordionItem, Tag } from 'carbon-components-react';
 
 function SingleDiff(props) {
   return (
     <div>
-      <AccordionSection
-        label={props.result.id}
-        style={{ marginBottom: "-30px" }}
+      <AccordionItem
+        title={props.result.id}
       >
         {props.result.failed.map((res) => (
           <div key={res.tc_id} >
@@ -16,7 +16,7 @@ function SingleDiff(props) {
               {res.tc_id}
               <Label.Detail>Test Case Id</Label.Detail>
             </Label>
-
+            <Tag type="blue" title="Test Case Id"> {res.tc_id} </Tag>
             <hr></hr>
             <ReactDiffViewer leftTitle="Expected"
               rightTitle="Output"
@@ -27,7 +27,9 @@ function SingleDiff(props) {
             <br></br>
           </div>
         ))}
-      </AccordionSection>
+      </AccordionItem>
+
+      
     </div>
   );
 }
