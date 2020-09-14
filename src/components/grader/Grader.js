@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Segment, Grid, Container } from "semantic-ui-react";
+//import { Segment, Grid, Container } from "semantic-ui-react";
 import LabSelector from "./LabSelector";
 import CourseSelector from './CourseSelector'
 import GetSubmissions from './submissions/GetSubmissions'
 import Status from "./Status";
 import apiClient from "../../api-client";
 import ResultsContainer from "./ResultsContainer"
+import { Tabs, Tab } from 'carbon-components-react';
+
 
 function Grader() {
   const [course, setCourse] = useState("")
@@ -116,16 +118,30 @@ function Grader() {
   };
 
   return (
-    <Container style={{ marginTop: "7em" }}>
-      <Grid centered>
-        <Grid.Column width={8}>
-          <Segment raised padded>
-            {determineVisible()}
 
-          </Segment>
-        </Grid.Column>
-      </Grid>
-    </Container>
+    <Tabs>
+      <Tab
+        href="#"
+        id="tab-1"
+        label="Tab label 1"
+      >
+        {determineVisible()}
+
+      </Tab>
+
+
+    </Tabs>
+    
+    // <Container style={{ marginTop: "7em" }}>
+    //   <Grid centered>
+    //     <Grid.Column width={8}>
+    //       <Segment raised padded>
+    //         {determineVisible()}
+
+    //       </Segment>
+    //     </Grid.Column>
+    //   </Grid>
+    // </Container>
   );
 }
 

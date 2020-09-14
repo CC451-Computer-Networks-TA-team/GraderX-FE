@@ -1,5 +1,5 @@
 import React from "react";
-import { Header, Icon, Divider } from "semantic-ui-react";
+import { Header, Divider } from "semantic-ui-react";
 import ImportSubmissions from './ImportSubmissions'
 import FileUpload from "./FileUpload";
 import { Button} from 'carbon-components-react';
