@@ -1,13 +1,153 @@
 // import React, { useState, useRef } from "react";
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import MultiRef from 'react-multi-ref';
-import { Tabs, Tab, ModalWrapper, Button } from 'carbon-components-react';
+import { Tabs, Tab, Button } from 'carbon-components-react';
 import AceEditor from "react-ace";
+import { ModalWrapper } from 'carbon-components-react';
+
 import "ace-builds/src-noconflict/mode-python";
+import "ace-builds/src-noconflict/mode-sql";
+import "ace-builds/src-noconflict/mode-c_cpp";
+import "ace-builds/src-noconflict/mode-java";
+import "ace-builds/src-noconflict/mode-javascript";
+import "ace-builds/src-noconflict/mode-json";
 import "ace-builds/src-noconflict/theme-dracula";
 import 'ace-builds/src-min-noconflict/ext-searchbox';
+import apiClient from "../../../api-client";
 
 
+function CodeEditor(props) {
+    const [itemRefs] = useState(() => new MultiRef());
+    const [tabRefs] = useState(() => new MultiRef());
+    const [preVal, setPreVal] = useState("")
+    const [theLabels, setTheLabels] = useState([])
+    const [currentTab, setCurrentTab] = useState(0)
+    const [currentTabLabel, setCurrentTabLabel] = useState(props.defaultLabel)
+    // eslint-disable-next-line
+    const [submissionFiles, setSubmissionFiles] = useState({})
+    const countRenderRef = useRef(1);
+    const [theFile, setTheFile]=useState(props.theFile)
+    useEffect(function afterRender() {
+        countRenderRef.current++;
+        console.log(countRenderRef)
+    });
+
+    useEffect(() => {
+        console.log("state changed", currentTab)
+        if (isEmpty()) {
+            //setEditor(itemRefs.map.get(currentTab).editor, props.codeFiles[currentTabLabel])
+            // fetch file here 
+            apiClient.getFile(props.course, props.lab, props.submissionId, currentTabLabel)
+            .then(res => {
+                setEditor(itemRefs.map.get(currentTab).editor, res.data)
+                setTheFile(res)
+                //setFilesList(res.data)
+            });
+            //setEditor(itemRefs.map.get(currentTab).editor, props.codeFiles[currentTabLabel])
+        }
+    }, [currentTab])
+
+   
+    function isEmpty() {
+        return itemRefs.map.get(currentTab).editor.getValue() === ''
+    }
+
+    function setEditor(editor, value) {
+        editor.setValue(value)
+    }
+
+    function handleSelect(index) {
+        setCurrentTab(index)
+        setCurrentTabLabel(theLabels[index])
+    }
+
+
+
+    function getFiles() {
+        const formData = new FormData();
+        for (let key in submissionFiles) {
+            console.log(key, submissionFiles[key]);
+            formData.append(key, new Blob([submissionFiles[key]], {
+                type: "text/plain",
+            }))
+        }
+        return formData
+    }
+
+    function saveFiles() {
+        if (submissionFiles) {
+            const formData = getFiles();
+            apiClient.modifySubmissions(props.course, props.lab, props.submissionId, formData)
+                .then(res => {
+                    console.log(res)
+                });
+        }
+        return true
+    }
+
+
+    function setTabLabel(theLabel, index) {
+        //handle if exists
+        console.log(theLabel, index)
+        theLabels[index] = theLabel
+        return theLabel
+    }
+
+    return (
+
+
+
+        <ModalWrapper size='sm'
+            buttonTriggerText="Edit Submission"
+            modalHeading="Edit Mode"
+            handleSubmit={saveFiles}
+        >
+
+            <Tabs light
+                label="Files"
+                onSelectionChange={handleSelect}
+            >
+
+                {props.subList.map((sub_id, index) => (
+
+                    <Tab
+                        href="#"
+                        id={index}
+                        label={setTabLabel(sub_id, index)}
+                        ref={tabRefs.ref(index)}
+                    >
+                        <AceEditor
+                            mode="python"
+                            theme="dracula"
+                            name="UNIQUE_ID_OF_DIV"
+                            //placeholder={EmptyEditor?"click to reveal file":""}
+                            //value={handleValue(index, sub_id)}
+                            minLines="5"
+                            maxLines="20"
+                            ref={itemRefs.ref(index)}
+                            // value shall not change if modified
+                            //onFocus={handleFocus}
+                            focus={true}
+                            onChange={(newValue) => {
+                                //check if not empty first
+                                if (preVal !== "") {
+                                    submissionFiles[sub_id] = newValue;
+                                }
+                                setPreVal(newValue)
+                            }}
+                        />
+                    </Tab>
+
+                ))}
+
+            </Tabs>
+            <br />
+        </ModalWrapper>
+    )
+
+}
+
+export default CodeEditor;
 
 
 // const newStyles = {
@@ -66,101 +206,3 @@ import 'ace-builds/src-min-noconflict/ext-searchbox';
 //         }
 //     }
 // }
-
-
-function CodeEditor(props) {
-    const [itemRefs] = useState(() => new MultiRef());
-    const [tabRefs] = useState(() => new MultiRef());
-    const [theTab, setTab] = useState(Array.apply(null, Array(props.subList.length)).
-        map(function (x, i) { return i === 0 ? true : false }));
-    const [currentTab, setCurrentTab] = useState(0)
-    const [currentTabLabel, setCurrentTabLabel] = useState(props.defaultLabel)
-    const [EmptyEditor, setEmptyEditor] = useState(true)
-    const [firstTime, setFirstTime] = useState(true)
-
-
-
-    function onClick() {
-        const editors = [];
-        itemRefs.map.forEach(input => {
-
-            editors.push(input)
-        });
-        if (editors[currentTab].editor.getValue() === "") {
-            editors[currentTab].editor.setValue(props.codeFiles[currentTabLabel])
-            setEmptyEditor(false)
-
-        }
-
-
-    }
-
-    function handleSelect(index) {
-        setCurrentTab(index)
-        setCurrentTabLabel(document.getElementById(index).textContent)
-
-    }
-
-    function handleValue(index) {
-        if (firstTime) {
-            if (index === 0) {
-                setFirstTime(false)
-                return props.codeFiles[currentTabLabel]
-            }
-
-        }
-
-        return null
-
-    }
-
-    return (
-        <div>
-
-            <ModalWrapper size='sm'
-                buttonTriggerText="Edit Submission"
-                modalHeading="Edit Mode"
-            >
-
-                <Tabs light
-                    label="Files"
-                    onSelectionChange={handleSelect}
-                >
-                    {/* state array */}
-                    {/* {countMyTabs(sub_list)} */}
-
-                    {props.subList.map((sub_id, index) => (
-
-                        <Tab
-                            href="#"
-                            id={index}
-                            label={sub_id.submssionFile}
-                            ref={tabRefs.ref(index)}
-                        //onClick={setCurrentTabLabel(this.label)}
-
-                        >
-                            <AceEditor
-                                mode="python"
-                                theme="dracula"
-                                name="UNIQUE_ID_OF_DIV"
-                                //placeholder={EmptyEditor?"click to reveal file":""}
-                                //value={props.codeFiles[sub_id.submssionFile]}
-                                value=""
-                                onFocus={onClick}
-                                //onChange={handleState}
-                                ref={itemRefs.ref(index)}
-                            />
-                        </Tab>
-
-                    ))}
-
-                </Tabs>
-
-
-            </ModalWrapper>
-        </div>
-    )
-
-}
-
-export default CodeEditor;

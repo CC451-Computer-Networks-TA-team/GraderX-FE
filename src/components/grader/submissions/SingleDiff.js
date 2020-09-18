@@ -1,49 +1,65 @@
 import ReactDiffViewer from "react-diff-viewer";
-import React from "react";
+import React, {useState, useLayoutEffect} from "react";
 import { AccordionItem, Tile } from 'carbon-components-react';
 import CodeEditor from "./CodeEditor"
-
+//import { ModalWrapper } from 'carbon-components-react';
+import apiClient from "../../../api-client";
 import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/theme-dracula";
 import 'ace-builds/src-min-noconflict/ext-searchbox';
 
 const sub_list = [
-  { "submssionFile": "main.py" },
-  { "submssionFile": "helper.py" }
-
+  "main.py", "helper.py"
 ]
-
-const code_files =
-{
-  "main.py": "print('Hi')",
-  "helper.py": "print('Bye')"
-}
+// const code_files =
+// {
+//   // eslint-disable-next-line
+//   "main.py": "parents, babies = (1, 1)\n\
+//   while babies < 100:\n\
+//   print('This generation has {0} babies'.format(babies))\n\
+//   parents, babies = (babies, parents + babies)",
+//   // eslint-disable-next-line
+//   "helper.py": "def greet(name):\n\
+//   print ('Hello', name)\n\
+// greet('Jack')\n\
+// greet('Jill')\n\
+// greet('Hagar')"
+// }
 
 
 
 function SingleDiff(props) {
-  // const [tabState, setTab] = useState(true);
-  //const [theTabs, setTabs] = useState([]);
 
-  // function countMyTabs(theTabList) {
-  //   console.log(theTabList.length)
-  //   setTabs(Array.apply(null, Array(5)).map(function (x, i) { return i === 0 ? true : false }))
+  const [filesList, setFilesList] = useState([])
+  const [theFile, setFile] = useState("")
+  let fileList = []
+  useLayoutEffect(() => {
+    apiClient.getFilesList(props.course, props.lab, props.result.id)
+    .then(res => {
+        setFilesList(res.data)
+        fileList = res.data;
+    });
 
-  // }
+  }, [])
 
-  // function handleChange(event) {
-  //   console.log(event)
-  //   //setValue("Some Text");
-  // }
+ 
   return (
     <div>
       <AccordionItem
         title={props.result.id}
       >
-        <CodeEditor subList={sub_list}
-                    codeFiles={code_files}
-                    defaultLabel={sub_list[0].submssionFile}
-        />
+       
+
+          <CodeEditor
+            subList={sub_list}
+            defaultLabel={sub_list[0]}
+            course={props.course}
+            lab={props.lab}
+            submissionId={props.result.id}
+            theFile={theFile}
+          />
+
+
         {props.result.failed.map((res) => (
           <div key={res.tc_id} >
             <Tile> Test Case {res.tc_id}</Tile>
@@ -60,40 +76,12 @@ function SingleDiff(props) {
             <br></br>
           </div>
         ))}
-        {/* 
-        <ModalWrapper size='sm'
-          buttonTriggerText="Edit Submission"
-          modalHeading="Edit Mode"
-        >
 
-          <Tabs >
-           
-            {sub_list.map((sub_id) => (
-              <Tab
-                href="#"
-                id={sub_id.submssionFile}
-                label={sub_id.submssionFile}
-                onClick={console.log("Tab1")}
+        {/* <CodeEditor subList={sub_list}
+            codeFiles={code_files}
+            defaultLabel={sub_list[0].submssionFile}
+          /> */}
 
-              >
-
-                <AceEditor
-                  mode="python"
-                  theme="dracula"
-                  name="UNIQUE_ID_OF_DIV"
-                  value={code_files[sub_id.submssionFile]}
-                  onChange={handleChange}
-
-                />
-              </Tab>
-
-
-            ))}
-
-          </Tabs>
-
-
-        </ModalWrapper> */}
       </AccordionItem>
 
 

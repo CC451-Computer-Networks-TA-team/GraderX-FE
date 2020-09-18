@@ -4,6 +4,7 @@ import DiffContainer from "./submissions/DiffContainer"
 import { Header } from "semantic-ui-react";
 import { Button } from 'carbon-components-react';
 import { ArrowLeft32 } from '@carbon/icons-react';
+
 //import AceEditor from "react-ace";
 
 function ResultsContainer(props) {
