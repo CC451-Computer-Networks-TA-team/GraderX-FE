@@ -9,6 +9,7 @@ import { Accordion } from 'carbon-components-react';
 
 function DiffContainer(props) {
 
+
   return (
     <React.Fragment>
       <Header textAlign="center" as="h4" >

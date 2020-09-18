@@ -1,10 +1,9 @@
 // import React, { useState, useRef } from "react";
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect} from 'react';
 import MultiRef from 'react-multi-ref';
-import { Tabs, Tab, Button } from 'carbon-components-react';
+import { Tabs, Tab } from 'carbon-components-react';
 import AceEditor from "react-ace";
 import { ModalWrapper } from 'carbon-components-react';
-
 import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/mode-sql";
 import "ace-builds/src-noconflict/mode-c_cpp";
@@ -19,35 +18,34 @@ import apiClient from "../../../api-client";
 function CodeEditor(props) {
     const [itemRefs] = useState(() => new MultiRef());
     const [tabRefs] = useState(() => new MultiRef());
-    const [preVal, setPreVal] = useState("")
+    const [preVal, setPreVal] = useState("");
+    // eslint-disable-next-line
     const [theLabels, setTheLabels] = useState([])
     const [currentTab, setCurrentTab] = useState(0)
-    const [currentTabLabel, setCurrentTabLabel] = useState(props.defaultLabel)
+    const [currentTabLabel, setCurrentTabLabel] = useState(props.subList[0])
     // eslint-disable-next-line
     const [submissionFiles, setSubmissionFiles] = useState({})
-    const countRenderRef = useRef(1);
-    const [theFile, setTheFile]=useState(props.theFile)
-    useEffect(function afterRender() {
-        countRenderRef.current++;
-        console.log(countRenderRef)
-    });
+    //const countRenderRef = useRef(1);
+
+    // useEffect(function afterRender() {
+    //     countRenderRef.current++;
+    //     console.log(countRenderRef)
+    // });
 
     useEffect(() => {
-        console.log("state changed", currentTab)
         if (isEmpty()) {
-            //setEditor(itemRefs.map.get(currentTab).editor, props.codeFiles[currentTabLabel])
             // fetch file here 
             apiClient.getFile(props.course, props.lab, props.submissionId, currentTabLabel)
-            .then(res => {
-                setEditor(itemRefs.map.get(currentTab).editor, res.data)
-                setTheFile(res)
-                //setFilesList(res.data)
-            });
-            //setEditor(itemRefs.map.get(currentTab).editor, props.codeFiles[currentTabLabel])
-        }
+                .then(res => {
+                    console.log(res.data);
+                    setEditor(itemRefs.map.get(currentTab).editor, res.data);
+                });
+
+            }
+        // eslint-disable-next-line
     }, [currentTab])
 
-   
+
     function isEmpty() {
         return itemRefs.map.get(currentTab).editor.getValue() === ''
     }
@@ -88,14 +86,11 @@ function CodeEditor(props) {
 
     function setTabLabel(theLabel, index) {
         //handle if exists
-        console.log(theLabel, index)
         theLabels[index] = theLabel
         return theLabel
     }
 
     return (
-
-
 
         <ModalWrapper size='sm'
             buttonTriggerText="Edit Submission"
@@ -120,14 +115,9 @@ function CodeEditor(props) {
                             mode="python"
                             theme="dracula"
                             name="UNIQUE_ID_OF_DIV"
-                            //placeholder={EmptyEditor?"click to reveal file":""}
-                            //value={handleValue(index, sub_id)}
                             minLines="5"
                             maxLines="20"
                             ref={itemRefs.ref(index)}
-                            // value shall not change if modified
-                            //onFocus={handleFocus}
-                            focus={true}
                             onChange={(newValue) => {
                                 //check if not empty first
                                 if (preVal !== "") {

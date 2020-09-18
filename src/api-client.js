@@ -63,9 +63,10 @@ export default {
     return axios.get(`${GRADERX_API}results?course=${course}&lab=${lab}&type=diff`)
   },
 
+  /////////// change endpoints name /////////////////////////////////
   // change: shall go to submission/
   modifySubmissions(course, lab, submissionId, formData) {
-    return axios.put(`${GRADERX_API}modifySubmissions?course=${course}&lab=${lab}&submissionId=${submissionId}`,
+    return axios.put(`${GRADERX_API}submission_file?course=${course}&lab=${lab}&submissionId=${submissionId}`,
       formData);
   },
 
