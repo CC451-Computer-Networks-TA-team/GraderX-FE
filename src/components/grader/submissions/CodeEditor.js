@@ -1,5 +1,5 @@
 // import React, { useState, useRef } from "react";
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import MultiRef from 'react-multi-ref';
 import { Tabs, Tab } from 'carbon-components-react';
 import AceEditor from "react-ace";
@@ -10,6 +10,8 @@ import "ace-builds/src-noconflict/mode-c_cpp";
 import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/mode-json";
+import "ace-builds/src-noconflict/mode-markdown";
+
 import "ace-builds/src-noconflict/theme-dracula";
 import 'ace-builds/src-min-noconflict/ext-searchbox';
 import apiClient from "../../../api-client";
@@ -25,7 +27,6 @@ function CodeEditor(props) {
     const [currentTabLabel, setCurrentTabLabel] = useState(props.subList[0])
     // eslint-disable-next-line
     const [submissionFiles, setSubmissionFiles] = useState({})
-    //const countRenderRef = useRef(1);
 
     // useEffect(function afterRender() {
     //     countRenderRef.current++;
@@ -41,9 +42,31 @@ function CodeEditor(props) {
                     setEditor(itemRefs.map.get(currentTab).editor, res.data);
                 });
 
-            }
+        }
         // eslint-disable-next-line
     }, [currentTab])
+
+
+    function getLanguageMode(lang) {
+        var ext = lang.substr(lang.lastIndexOf('.') + 1);
+        console.log(ext);
+        switch (ext) {
+            case 'py':
+                return 'python';
+            case 'cc', 'c', 'cpp':
+                return 'c_cpp';
+            case 'java':
+                return 'java';
+            case 'js':
+                return 'javascript';
+            case 'json':
+                return 'json';
+            case 'sql':
+                return 'sql';
+            default:
+                return 'markdown';
+        }
+    }
 
 
     function isEmpty() {
@@ -112,7 +135,7 @@ function CodeEditor(props) {
                         ref={tabRefs.ref(index)}
                     >
                         <AceEditor
-                            mode="python"
+                            mode={getLanguageMode(sub_id)}
                             theme="dracula"
                             name="UNIQUE_ID_OF_DIV"
                             minLines="5"
