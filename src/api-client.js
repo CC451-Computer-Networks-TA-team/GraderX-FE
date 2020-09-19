@@ -66,17 +66,16 @@ export default {
   /////////// change endpoints name /////////////////////////////////
   // change: shall go to submission/
   modifySubmissions(course, lab, submissionId, formData) {
-    return axios.put(`${GRADERX_API}submission_file?course=${course}&lab=${lab}&submissionId=${submissionId}`,
+    return axios.put(`${GRADERX_API}submissions?course=${course}&lab=${lab}&submission_id=${submissionId}`,
       formData);
   },
 
   getFilesList(course, lab, submissionId) {
-    return axios.get(`${GRADERX_API}submissions?course=${course}&lab=${lab}&submissionId=${submissionId}`)
+    return axios.get(`${GRADERX_API}submissions?course=${course}&lab=${lab}&submission_id=${submissionId}`)
   },
 
   getFile(course, lab, submissionId, fileName){
-    return axios.get(`${GRADERX_API}submissions/fetchFile?course=${course}&lab=${lab}
-    &submissionId=${submissionId}&fileName=${fileName}`)
+    return axios.get(`${GRADERX_API}submission_file?course=${course}&lab=${lab}&submission_id=${submissionId}&file_name=${fileName}`)
   }
 
 };
