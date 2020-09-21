@@ -1,12 +1,17 @@
 import React from "react";
-import AppHeader from "./components/layout/AppHeader";
-import Grader from "./components/grader/Grader";
+/* import AppHeader from "./components/layout/AppHeader";
+import Grader from "./components/grader/Grader"; */
+import GoursesPage from "./pages/Courses";
+
+/**
+ *      <AppHeader />
+      <Grader />
+ */
 
 function App() {
   return (
     <React.Fragment>
-      <AppHeader />
-      <Grader />
+      <GoursesPage />
     </React.Fragment>
   );
 }
