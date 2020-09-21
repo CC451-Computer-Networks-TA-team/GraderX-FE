@@ -38,9 +38,6 @@ export default {
   },
 
   validateSheet(accessToken, sheetLink) {
-
-
-
     return axios.post(`${GRADERX_API}submissions/validate`, {
       accessToken: accessToken,
       sheetLink: sheetLink,
@@ -64,5 +61,20 @@ export default {
 
   getDiffResults(course, lab) {
     return axios.get(`${GRADERX_API}results?course=${course}&lab=${lab}&type=diff`)
+  },
+
+ 
+  modifySubmissions(course, lab, submissionId, formData) {
+    return axios.put(`${GRADERX_API}submissions?course=${course}&lab=${lab}&submission_id=${submissionId}`,
+      formData);
+  },
+
+  getFilesList(course, lab, submissionId) {
+    return axios.get(`${GRADERX_API}submissions?course=${course}&lab=${lab}&submission_id=${submissionId}`)
+  },
+
+  getFile(course, lab, submissionId, fileName){
+    return axios.get(`${GRADERX_API}submission_file?course=${course}&lab=${lab}&submission_id=${submissionId}&file_name=${fileName}`)
   }
+
 };
