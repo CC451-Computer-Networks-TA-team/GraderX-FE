@@ -48,6 +48,8 @@ function CodeEditor(props) {
                 return 'python';
             case 'c':
             case 'cc':
+            case 'h':
+            case 'hpp':
             case 'cpp':
                 return 'c_cpp';
             case 'java':
