@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Segment, Grid, Container } from "semantic-ui-react";
 import LabSelector from "./LabSelector";
 import CourseSelector from './CourseSelector'
 import GetSubmissions from './submissions/GetSubmissions'
@@ -116,16 +115,9 @@ function Grader() {
   };
 
   return (
-    <Container style={{ marginTop: "7em" }}>
-      <Grid centered>
-        <Grid.Column width={8}>
-          <Segment raised padded>
-            {determineVisible()}
-
-          </Segment>
-        </Grid.Column>
-      </Grid>
-    </Container>
+    <div>
+      {determineVisible()}
+    </div>
   );
 }
 

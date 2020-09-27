@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import GoogleLogin from 'react-google-login';
-import { Button, Header, Grid, GridColumn, Icon } from "semantic-ui-react";
+import { Icon } from "semantic-ui-react";
 import { Label, Input, Transition, Container, Dropdown } from "semantic-ui-react";
 import ReactHtmlParser from 'react-html-parser';
 import apiClient from "../../../api-client"
 import MicrosoftLogin from "react-microsoft-login";
+
+import { Button, TextInput } from 'carbon-components-react';
 
 const ImportSubmissions = (props) => {
     const [accessToken, setAccessToken] = useState("")
@@ -26,9 +28,9 @@ const ImportSubmissions = (props) => {
 
 
     const authHandler = (err, data) => {
-        setAccessToken(data.authResponseWithAccessToken.accessToken)
-        setOptionsVisibility(false)
-
+        setAccessToken(data.authResponseWithAccessToken.accessToken);
+        setOptionsVisibility(false);
+        setAuthorized(true);
     };
 
     const createFieldsObjects = fieldsArray => {
@@ -78,99 +80,80 @@ const ImportSubmissions = (props) => {
 
     return (
         <React.Fragment >
-            <Transition animation='slide right' duration={200}
-                visible={optionsVisibity}
-                onHide={() => setAuthorized(true)}>
-                <Container >
-                    <Header style={{ margin: '0', marginBottom: '7px' }} textAlign="center" as="h4">
-                        Import From
-                </Header >
+            <div style={optionsVisibity ? {} : { display: 'none' }}>
+                <div>
+                    <p>Import From:</p>
+                    <div style={{ height: 16 }}></div>
+                </div>
+                <span>
+                    <GoogleLogin
+                        clientId="653543257974-p3uuv08hcftdhkolqpl2hpbbta2d1ck2.apps.googleusercontent.com"
+                        scope="https://www.googleapis.com/auth/spreadsheets.readonly https://www.googleapis.com/auth/drive.readonly"
+                        render={renderProps => (
+                            <Button
+                                kind="secondary"
+                                hasIconOnly
+                                iconDescription="Google Sheet"
+                                onClick={renderProps.onClick}>
+                                <Icon name='google' size='small' />
+                            </Button>
 
-                    <Grid >
-                        <GridColumn style={{marginLeft:"27%", marginRight:"20%"}}>
-                        <div class="ui buttons">
-                            <GoogleLogin
-                                clientId="653543257974-p3uuv08hcftdhkolqpl2hpbbta2d1ck2.apps.googleusercontent.com"
-                                scope="https://www.googleapis.com/auth/spreadsheets.readonly https://www.googleapis.com/auth/drive.readonly"
-                                render={renderProps => (
-                                    <Button onClick={renderProps.onClick}
-                                        disabled={renderProps.disabled}
-                                        style={{ backgroundColor: '#2f2f2f', color: 'white' }}>
+                        )}
+                        onSuccess={(response) => {
+                            authSuccessful(response);
+                            setAuthorized(true);
+                        }}
+                        onFailure={err => { }}
+                        cookiePolicy={'single_host_origin'}
+                    />
+                    <Button
+                        kind="secondary"
+                        hasIconOnly
+                        style={{ marginLeft: 8 }}
+                        iconDescription="Micosoft Sheet">
+                        <Icon name='microsoft' size='small' />
+                    </Button>
 
-                                        <Icon name='google' />
-                                            Sign in
-                                    </Button>
-                                )}
-                                onSuccess={authSuccessful}
-                                onFailure={err => { }}
-                                cookiePolicy={'single_host_origin'}
-                            />
-                            <div class="or"></div>
-                            <MicrosoftLogin
-                                clientId={MS_CLIENT_ID}
-                                authCallback={authHandler}
-                                buttonTheme="dark_short"
-                                graphScopes={["user.read", "Files.Read.All"]}
-                            />
-                        </div>
-
-
-                        </GridColumn>
-                        
+                </span>
 
 
-                    </Grid>
-
-
-                </Container>
-                
-            </Transition>
+            </div>
 
             <Transition animation='slide left' duration={200} visible={authorized}>
                 <Container>
-                    <Header
-                        as="h4"
-                        style={{ marginBottom: '5px' }} >
-                        Enter the link of the form's responses spreadsheet
-                    </Header>
-                    <Input
+                    <p>Enter the spreadsheet link:</p>
+                    <div style={{ height: 16 }}></div>
+                    <TextInput
+                        id='spreadsheetLinkField'
                         disabled={disableSheetInput}
-                        type='text'
-                        placeholder='Spreadsheet Link'
-                        action
-                        fluid
                         value={sheetLink}
-                        error={!validSheet}
+                        invalid={!validSheet}
+                        type='text'
+                        invalidText={warningText}
+                        placeholder="Spreadsheet Link"
                         onChange={(e) => setSheetLink(e.target.value)}
-                    >
-                        <input />
-                        {
-                            sheetFields.length > 0 &&
-                            <Dropdown
-                                selectOnBlur={false}
-                                placeholder="Select Field"
-                                compact
-                                button
-                                selection
-                                options={sheetFields}
-                                onChange={onFieldsChange}
-                            />
-                        }
-                        <Button
-                            loading={disableSheetInput}
-                            disabled={disableContinue}
-                            style={{ backgroundColor: '#7147BC', color: 'white' }}
-                            onClick={() => props.importAndGrade(accessToken, sheetLink, selectedField)}
-                        >
-                            Continue
-                        </Button>
-                    </Input>
+                    />
+
+                    <input />
                     {
-                        !validSheet &&
-                        <Label basic color='red' pointing>
-                            {ReactHtmlParser(warningText)}
-                        </Label>
+                        sheetFields.length > 0 &&
+                        <Dropdown
+                            selectOnBlur={false}
+                            placeholder="Select Field"
+                            compact
+                            button
+                            selection
+                            options={sheetFields}
+                            onChange={onFieldsChange}
+                        />
                     }
+                    <Button
+                        loading={disableSheetInput}
+                        disabled={disableContinue}
+                        onClick={() => props.importAndGrade(accessToken, sheetLink, selectedField)}
+                    >
+                        Continue
+                        </Button>
 
                 </Container>
             </Transition>

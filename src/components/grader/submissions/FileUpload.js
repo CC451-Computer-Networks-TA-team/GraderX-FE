@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Button, Label, Header } from "semantic-ui-react";
+import { Button } from 'carbon-components-react';
+import { Upload16 } from '@carbon/icons-react';
 
 export function validateExtension(extension) {
   const supportedTypes = [
@@ -30,22 +31,14 @@ function FileUpload(props) {
 
   return (
     <React.Fragment>
-      <Header as="h4" style={{ marginBottom: '5px' }}>
-        Select a compressed file containing the submissions
-        </Header>
-      <Button
-        content="Choose File"
-        labelPosition="right"
-        fluid
-        basic
-        size={"large"}
-        icon="upload"
-        onClick={() => fileInputRef.current.click()}
-      />
+      <p> Only .rar / .7z / .zip files. 500mb max file size </p>
+      <div style={{ height: 16 }}></div>
+      <Button renderIcon={Upload16} onClick={() => fileInputRef.current.click()}>Select file</Button>
       {selectedInvalid ? (
-        <Label pointing size={"medium"} basic color="red">
-          Supported types: rar, 7z, zip
-        </Label>
+        <div>
+          <div style={{ height: 16 }}></div>
+          <p>Supported files: .rar / .7z / .zip</p>
+        </div>
       ) : null}
       {/* a hidden input is created because semantic ui does not have a file upload component by default
             a normal button is created that triggers a hidden file input when the button is clicked */}
