@@ -21,3 +21,8 @@ npm install
 ```bash
 npm run start
 ```
+
+### Designs
+```
+https://drive.google.com/drive/folders/1XQxoNiS4Vzrq0QUx-bBQPktyA8NOmvKE?usp=sharing
+```
