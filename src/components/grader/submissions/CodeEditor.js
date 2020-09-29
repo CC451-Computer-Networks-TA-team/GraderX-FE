@@ -1,4 +1,3 @@
-// import React, { useState, useRef } from "react";
 import React, { useState, useEffect } from 'react';
 import MultiRef from 'react-multi-ref';
 import { Tabs, Tab } from 'carbon-components-react';
@@ -14,14 +13,14 @@ import "ace-builds/src-noconflict/mode-json";
 import "ace-builds/src-noconflict/theme-dracula";
 import 'ace-builds/src-min-noconflict/ext-searchbox';
 import apiClient from "../../../api-client";
-
+import './CodeEditor.css'
 
 function CodeEditor(props) {
     const [itemRefs] = useState(() => new MultiRef());
     const [tabRefs] = useState(() => new MultiRef());
-    const [preVal, setPreVal] = useState("");
+    const [preValue, setPreValue] = useState("");
     // eslint-disable-next-line
-    const [theLabels, setTheLabels] = useState([])
+    const [tabLabels, setTabLabels] = useState([])
     const [currentTab, setCurrentTab] = useState(0)
     const [currentTabLabel, setCurrentTabLabel] = useState(props.subList[0])
     // eslint-disable-next-line
@@ -30,12 +29,7 @@ function CodeEditor(props) {
 
     useEffect(() => {
         if (isEmpty()) {
-            // fetch file here 
-            apiClient.getFile(props.course, props.lab, props.submissionId, currentTabLabel)
-                .then(res => {
-                    setEditor(itemRefs.map.get(currentTab).editor, res.data.file_content);
-                });
-
+            getSubmissionFile();
         }
         // eslint-disable-next-line
     }, [currentTab])
@@ -76,7 +70,7 @@ function CodeEditor(props) {
 
     function handleSelect(index) {
         setCurrentTab(index)
-        setCurrentTabLabel(theLabels[index])
+        setCurrentTabLabel(tabLabels[index])
     }
 
 
@@ -91,33 +85,43 @@ function CodeEditor(props) {
         return formData
     }
 
+    function getSubmissionFile() {
+        apiClient
+            .getFile(props.course, props.lab, props.submissionId, currentTabLabel)
+            .then(res => {
+                setEditor(itemRefs.map.get(currentTab).editor, res.data.file_content);
+            })
+    }
+
+
+    function modifySubmissions(formData) {
+        apiClient
+            .modifySubmissions(props.course, props.lab, props.submissionId, formData)
+
+    }
+
     function saveFiles() {
         if (submissionFiles) {
             const formData = getFiles();
-            apiClient.modifySubmissions(props.course, props.lab, props.submissionId, formData)
-                .then(res => {
-                    // console.log(res)
-                    // console.log(submissionFiles)
-                });
+            modifySubmissions(formData);
         }
         return true
     }
 
 
     function setTabLabel(theLabel, index) {
-        //handle if exists
-        theLabels[index] = theLabel
+        tabLabels[index] = theLabel
         return theLabel
     }
 
     return (
 
-        <ModalWrapper size='sm'
+        <ModalWrapper size='lg'
             buttonTriggerText="Edit Submission"
             modalHeading="Edit Mode"
             handleSubmit={saveFiles}
-            hasForm
         >
+
 
             <Tabs light
                 label="Files"
@@ -137,14 +141,15 @@ function CodeEditor(props) {
                             theme="dracula"
                             name="UNIQUE_ID_OF_DIV"
                             minLines="5"
-                            maxLines="20"
+                            maxLines="30"
                             ref={itemRefs.ref(index)}
+                            style={{ width: "100%" }}
                             onChange={(newValue) => {
                                 //check if not empty first
-                                if (preVal !== "") {
+                                if (preValue !== "") {
                                     submissionFiles[sub_id] = newValue;
                                 }
-                                setPreVal(newValue)
+                                setPreValue(newValue)
                             }}
                         />
                     </Tab>
@@ -152,7 +157,9 @@ function CodeEditor(props) {
                 ))}
 
             </Tabs>
-            <br />
+
+
+
         </ModalWrapper>
     )
 

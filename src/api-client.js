@@ -75,6 +75,10 @@ export default {
 
   getFile(course, lab, submissionId, fileName){
     return axios.get(`${GRADERX_API}submission_file?course=${course}&lab=${lab}&submission_id=${submissionId}&file_name=${fileName}`)
+  },
+
+  getSubmissionFilesList(course,lab){
+    return axios.get(`${GRADERX_API}/results/submission_list?course=${course}&lab=${lab}`)
   }
 
 };
