@@ -13,7 +13,6 @@ function Grader() {
   const [file, setFile] = useState(null);
   const [status, setStatus] = useState("");
   const [importing, setImporting] = useState(false);
-  const [diff, setDiff] = useState(null);
 
   function changeLab(val) {
     setLab(val);
@@ -84,21 +83,8 @@ function Grader() {
 
   }
 
-  const getDiffResults = () => {
-
-    const selected_course = "test_course"
-    if (course === selected_course) {
-      apiClient.getDiffResults(course, lab).then(res => {
-        setDiff(res.data)
-      });
-
-    }
-
-  }
-
   const determineVisible = () => {
     if (!course) {
-      //return <DiffContainer/>
       return <CourseSelector setCourse={changeCourse} />
     } else if (!lab) {
       return <LabSelector setLab={changeLab} course={course} />;
@@ -108,7 +94,7 @@ function Grader() {
       return <Status status={status} resetFile={resetFile} />;
     } else {
       return (<div>
-        <ResultsContainer course={course} lab={lab} diff={diff} resetLab={resetLab} getDiffResults={getDiffResults} />
+        <ResultsContainer course={course} lab={lab} resetLab={resetLab} />
       </div>
       )
 
