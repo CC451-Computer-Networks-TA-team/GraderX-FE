@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import GoogleLogin from 'react-google-login';
 import { Icon } from "semantic-ui-react";
-import { Label, Input, Transition, Container, Dropdown } from "semantic-ui-react";
-import ReactHtmlParser from 'react-html-parser';
 import apiClient from "../../../api-client"
 import MicrosoftLogin from "react-microsoft-login";
+import '../../styles.scss'
 
-import { Button, TextInput } from 'carbon-components-react';
+import { Button, TextInput, Dropdown } from 'carbon-components-react';
 
 const ImportSubmissions = (props) => {
     const [accessToken, setAccessToken] = useState("")
@@ -71,7 +70,7 @@ const ImportSubmissions = (props) => {
         // eslint-disable-next-line
     }, [sheetLink])
 
-    const onFieldsChange = (_, data) => {
+    const onFieldsChange = (data) => {
         setDisableContinue(false)
         setValidSheet(true)
         setSelectedField(data.value)
@@ -85,78 +84,99 @@ const ImportSubmissions = (props) => {
                     <p>Import From:</p>
                     <div style={{ height: 16 }}></div>
                 </div>
-                <span>
-                    <GoogleLogin
-                        clientId="653543257974-p3uuv08hcftdhkolqpl2hpbbta2d1ck2.apps.googleusercontent.com"
-                        scope="https://www.googleapis.com/auth/spreadsheets.readonly https://www.googleapis.com/auth/drive.readonly"
-                        render={renderProps => (
-                            <Button
-                                kind="secondary"
-                                hasIconOnly
-                                iconDescription="Google Sheet"
-                                onClick={renderProps.onClick}>
-                                <Icon name='google' size='small' />
-                            </Button>
-
-                        )}
-                        onSuccess={(response) => {
-                            authSuccessful(response);
-                            setAuthorized(true);
-                        }}
-                        onFailure={err => { }}
-                        cookiePolicy={'single_host_origin'}
-                    />
-                    <Button
-                        kind="secondary"
-                        hasIconOnly
-                        style={{ marginLeft: 8 }}
-                        iconDescription="Micosoft Sheet">
-                        <Icon name='microsoft' size='small' />
-                    </Button>
-
-                </span>
+                <div style={{
+                    display: "flex",
+                    alignItems: "center",
+                }}>
+                    <div style={{ display: "inline-block" }}>
+                        <GoogleLogin
+                            clientId="653543257974-p3uuv08hcftdhkolqpl2hpbbta2d1ck2.apps.googleusercontent.com"
+                            scope="https://www.googleapis.com/auth/spreadsheets.readonly https://www.googleapis.com/auth/drive.readonly"
+                            render={renderProps => (
+                                <div
+                                    id="googlebutton"
+                                    onClick={renderProps.onClick}
+                                    style={{
+                                        backgroundColor: "#4285F4",
+                                        height: 40,
+                                        width: 104,
+                                        display: "flex",
+                                        alignItems: "center",
+                                        paddingLeft: 16,
+                                    }}
+                                >
+                                    <div style={{ display: "inline-block" }}><Icon name='google' /></div>
+                                    <p style={{ display: "inline-block" }}>Sign in</p>
+                                </div>
+                            )}
+                            onSuccess={(response) => {
+                                authSuccessful(response);
+                                setAuthorized(true);
+                            }}
+                            onFailure={err => { }}
+                            cookiePolicy={'single_host_origin'}
+                        />
+                    </div>
+                    <div
+                        style={{ height: 40, width: 104, display: "inline-block" }}
+                    ><MicrosoftLogin
+                            clientId={MS_CLIENT_ID}
+                            authCallback={authHandler}
+                            buttonTheme="dark_short"
+                            graphScopes={["user.read", "Files.Read.All"]}
+                        />
+                    </div>
+                </div>
 
 
             </div>
 
-            <Transition animation='slide left' duration={200} visible={authorized}>
-                <Container>
-                    <p>Enter the spreadsheet link:</p>
-                    <div style={{ height: 16 }}></div>
-                    <TextInput
-                        id='spreadsheetLinkField'
-                        disabled={disableSheetInput}
-                        value={sheetLink}
-                        invalid={!validSheet}
-                        type='text'
-                        invalidText={warningText}
-                        placeholder="Spreadsheet Link"
-                        onChange={(e) => setSheetLink(e.target.value)}
-                    />
+            <div style={authorized ? {} : { display: 'none' }}>
+                <p>Enter the spreadsheet link:</p>
+                <div style={{ height: 16 }}></div>
+                <TextInput
+                    id='spreadsheetLinkField'
+                    labelText='Spreadsheet Link'
+                    disabled={disableSheetInput}
+                    value={sheetLink}
+                    invalid={!validSheet}
+                    type='text'
+                    invalidText={warningText}
 
-                    <input />
-                    {
-                        sheetFields.length > 0 &&
-                        <Dropdown
-                            selectOnBlur={false}
-                            placeholder="Select Field"
-                            compact
-                            button
-                            selection
-                            options={sheetFields}
-                            onChange={onFieldsChange}
-                        />
-                    }
-                    <Button
-                        loading={disableSheetInput}
-                        disabled={disableContinue}
-                        onClick={() => props.importAndGrade(accessToken, sheetLink, selectedField)}
-                    >
-                        Continue
+                    onChange={(e) => setSheetLink(e.target.value)}
+                />
+
+
+
+                {
+                    sheetFields.length > 0 ?
+                        <div>
+                            <div style={{ height: 16 }}></div>
+                            <Dropdown
+                                id="fieldsDropdown"
+                                titleText="Select Field"
+                                label="Select"
+                                onChange={(data) => {
+                                    onFieldsChange(data.selectedItem);
+                                }}
+                                itemToString={(item) => (item ? item.text : '')}
+                                items={sheetFields}
+                            />
+                        </div>
+
+
+                        : <div></div>
+                }
+
+                <div style={{ height: 16 }}></div>
+                <Button
+                    disabled={disableContinue}
+                    onClick={() => props.importAndGrade(accessToken, sheetLink, selectedField)}
+                >
+                    Continue
                         </Button>
 
-                </Container>
-            </Transition>
+            </div>
         </React.Fragment>
     )
 }

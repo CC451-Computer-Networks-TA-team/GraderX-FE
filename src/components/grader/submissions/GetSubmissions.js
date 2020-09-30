@@ -14,10 +14,10 @@ const GetSubmissions = (props) => {
           <div style={{ height: 24 }}></div>
           <FileUpload setFile={props.setFile} resetLab={props.resetLab} />
           <div style={{ height: 24 }}></div>
-          <div class="separator">
-            <div class="left"></div>
-            <div class="sep-word"><b>OR</b></div>
-            <div class="right"></div>
+          <div className="separator">
+            <div className="left"></div>
+            <div className="sep-word"><b>OR</b></div>
+            <div className="right"></div>
           </div>
           <div style={{ height: 16 }}></div>
           <ImportSubmissions importAndGrade={props.importAndGrade} />

@@ -1,17 +1,14 @@
-import React from 'react';
-
-import {
-  Header,
-  HeaderName,
-  HeaderNavigation,
-  HeaderMenuItem
-} from "carbon-components-react/lib/components/UIShell";
+import React, { useState, useEffect } from 'react';
+import apiClient from "../api-client";
 
 import {
   Link, Tile, DataTable, Button,
   ModalWrapper, TextInput, Select, SelectItem
 } from 'carbon-components-react';
+
+
 import { Delete16, Edit16 } from '@carbon/icons-react';
+
 const {
   Table,
   TableBody,
@@ -28,22 +25,10 @@ const {
 } = DataTable;
 
 function CoursesPage() {
+  const [courses, setCourses] = useState([]);
 
   return (
     <div>
-      <div>
-        <Header aria-label="Alexandria University - GraderX">
-          <HeaderName href="#" prefix="Alexandria University">
-            Grader-X
-        </HeaderName>
-          <HeaderNavigation aria-label="Alexandria University - GraderX">
-            <HeaderMenuItem href="#">Courses</HeaderMenuItem>
-            <HeaderMenuItem href="#">Labs</HeaderMenuItem>
-            <HeaderMenuItem href="#">Grader</HeaderMenuItem>
-            <HeaderMenuItem href="#">Moss</HeaderMenuItem>
-          </HeaderNavigation>
-        </Header>
-      </div>
       <div style={{ marginLeft: 16, marginTop: 64, marginRight: 16 }}>
         <Link href="#">Courses</Link>
         <div style={{ height: 16 }}></div>
