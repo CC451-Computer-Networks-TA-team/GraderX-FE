@@ -50,7 +50,8 @@ function Revision(props) {
 
 
             {visible &&
-                <Accordion align="start">
+                <Accordion align="start"
+                style= {{marginBottom:"10px"}}>
                     {
                         fileNameList.map((item) => (
                             <AccordionItem

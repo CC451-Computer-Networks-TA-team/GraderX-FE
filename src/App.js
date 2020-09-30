@@ -1,7 +1,8 @@
 import React from "react";
 /* import AppHeader from "./components/layout/AppHeader";
 import Grader from "./components/grader/Grader"; */
-import GoursesPage from "./pages/Courses";
+import CoursesPage from "./pages/Courses";
+import ResultsContainer from "./components/grader/ResultsContainer";
 
 /**
  *      <AppHeader />
@@ -11,7 +12,7 @@ import GoursesPage from "./pages/Courses";
 function App() {
   return (
     <React.Fragment>
-      <GoursesPage />
+      <CoursesPage />
     </React.Fragment>
   );
 }

@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import DownloadResult from "./DownloadResult";
 import Revision from "./submissions/Revision"
-import { Header, Icon } from "semantic-ui-react";
 import apiClient from "../../api-client";
-
+import { Tile, Link } from 'carbon-components-react';
 
 function ResultsContainer(props) {
   // eslint-disable-next-line
@@ -12,7 +11,6 @@ function ResultsContainer(props) {
   useEffect(() => {
     apiClient.getSubmissionFilesList(props.course, props.lab)
       .then(res => {
-        console.log(res)
         setFileNameList(res.data)
       })
     // eslint-disable-next-line
@@ -20,25 +18,35 @@ function ResultsContainer(props) {
 
   return (
     <React.Fragment>
-      <Header textAlign="center" as="h4" style={{ color: "Black" }}>
-        Here are the Results !
-        </Header>
 
-      <Revision
-        course={props.course}
-        lab={props.lab}
-      />
-      <DownloadResult course={props.course} lab={props.lab} resetLab={props.resetLab} />
-      <Header as="h5" textAlign="center">
-        <a
-          href={() => false}
-          style={{ cursor: "pointer" }}
-          onClick={props.resetLab}
-        >
-          <Icon name="chevron left" style={{ marginRight: ".4em" }} />
-          Select another lab
-        </a>
-      </Header>
+      <div
+        className="bx--grid"
+        style={{
+          width: "50%",
+          paddingTop: "20%",
+          margin: "auto"
+        }}
+      >
+
+        <div style={{ paddingBottom: "0.5rem" }}>
+
+          <Tile style={{ color: "White" }}>
+            <h4> Grading Results</h4>
+          </Tile>
+
+          <Revision
+            course={props.course}
+            lab={props.lab}
+          />
+          
+          <DownloadResult course={props.course} lab={props.lab} resetLab={props.resetLab} />
+        </div>
+
+        <Link href="#"
+          onClick={props.resetLab}> {"< "}Select another lab</Link>
+
+      </div>
+
     </React.Fragment>
   );
 }
