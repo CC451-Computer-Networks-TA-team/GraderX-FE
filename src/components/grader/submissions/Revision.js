@@ -16,7 +16,7 @@ function Revision(props) {
     }, [])
 
     function getSubmissionFilesList() {
-        apiClient.getSubmissionFilesList("course", "lab")
+        apiClient.getSubmissionFilesList(props.course, props.lab)
             .then(res => {
                 setFileNameList(res.data)
             });
