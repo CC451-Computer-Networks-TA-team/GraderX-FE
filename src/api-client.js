@@ -27,6 +27,18 @@ export default {
     return axios.get(`${GRADERX_API}courses`);
   },
 
+  getCourseEdit(couseName) {
+    return axios.get(`${GRADERX_API}courses/${couseName}/edit`);
+  },
+
+  updateCourse(course, oldCourseName) {
+    return axios.put(`${GRADERX_API}courses/${oldCourseName}`, course);
+  },
+
+  addCourse(course) {
+    return axios.post(`${GRADERX_API}course`, course);
+  },
+
   uploadSubmissions(course, labId, formData) {
     return axios.post(`${GRADERX_API}submissions?course=${course}&lab=${labId}&method=file`, formData);
   },
