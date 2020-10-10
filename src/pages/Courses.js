@@ -38,9 +38,12 @@ function CoursesPage() {
 
   const createCoursesObjects = labs_array => {
     let courses_objects = [];
+
     labs_array.forEach((lab, index, _arr) => {
-      courses_objects.push({ id: `${index}`, key: lab, text: lab, value: lab });
+      lab.id = `${index}`;
+      courses_objects.push(lab);
     });
+
     setCourses(courses_objects);
   };
 
@@ -53,7 +56,7 @@ function CoursesPage() {
   const addCourse = () => {
     let newCourse = {
       "name": fromCourseName,
-      "variant": formCourseLang.toLowerCase(),
+      "variant": formCourseLang,
       "labs": []
     };
 
@@ -69,12 +72,14 @@ function CoursesPage() {
 
   const editCourse = () => {
     apiClient.getCourseEdit(oldCourseName).then(res => {
+
       let course = res.data;
       let temp = {};
 
-      temp.variant = formCourseLang;
       temp.name = fromCourseName;
+      temp.type = course.type;
       temp.labs = course.labs;
+      temp.variant = formCourseLang;
 
       apiClient.updateCourse(temp, oldCourseName).then(_res => {
         apiClient.getCourses().then(res => {
@@ -87,15 +92,14 @@ function CoursesPage() {
     });
   };
 
-  const deleteCourse = (couseName) => {
-    console.log(couseName);
+  const deleteCourse = (courseName) => {
+    apiClient.deleteCourse(courseName).then(_res => {
+      apiClient.getCourses().then(res => {
+        createCoursesObjects(res.data.courses);
 
-    // TODO: consume API
-
-    apiClient.getCourses().then(res => {
-      createCoursesObjects(res.data.courses);
-
-      // refresh data
+        setFormTitle('Add');
+        setFormCourseName('');
+      });
     });
   };
 
@@ -140,6 +144,7 @@ function CoursesPage() {
           titleText="Select Language"
 
           label="Select"
+          selectedItem={formCourseLang}
           onChange={(data) => {
             setFormCourseLang(data.selectedItem);
           }}
@@ -165,8 +170,16 @@ function CoursesPage() {
           rows={courses}
           headers={[
             {
-              key: "key",
+              key: "id",
+              header: "Id",
+            },
+            {
+              key: "name",
               header: "Name",
+            },
+            {
+              key: "variant",
+              header: "Variant",
             },
             {
               key: 'actions',
@@ -182,13 +195,6 @@ function CoursesPage() {
                 <TableToolbar aria-label="data table toolbar">
                   <TableToolbarContent>
                     <TableToolbarSearch onChange={onInputChange} />
-                    <TableToolbarMenu>
-                      <TableToolbarAction
-                        onClick={() => { }}
-                      > Delete All
-                      </TableToolbarAction>
-                    </TableToolbarMenu>
-
                   </TableToolbarContent>
                   <Button
                     renderIcon={Add16}
@@ -216,24 +222,24 @@ function CoursesPage() {
                         {row.cells.map((cell) => (
                           <TableCell key={cell.id}>
                             {
-                              cell.value === row.cells[1].value ?
+                              cell.value === row.cells[3].value ?
                                 <span>
                                   <Button kind="ghost" size="small" hasIconOnly renderIcon={Edit16} iconDescription="Edit"
                                     onClick={() => {
-                                      setOldCourseName(row.cells[0].value);
-                                      setFormCourseName(row.cells[0].value);
+                                      setOldCourseName(row.cells[1].value);
+                                      setFormCourseName(row.cells[1].value);
+                                      setFormCourseLang(row.cells[2].value)
                                       setIsEdit(true);
                                       setFormTitle('Edit');
                                       setOpenModal(true);
                                     }}
                                   />
                                   <Button kind="ghost" size="small" hasIconOnly renderIcon={Delete16} iconDescription="Delete"
-                                    onClick={() => { deleteCourse(row.cells[0].value); }}
+                                    onClick={() => { deleteCourse(row.cells[1].value); }}
                                   />
                                 </span>
                                 : cell.value
                             }
-
                           </TableCell>
                         ))}
                       </TableRow>

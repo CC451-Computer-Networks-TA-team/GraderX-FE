@@ -31,6 +31,10 @@ export default {
     return axios.get(`${GRADERX_API}courses/${couseName}/edit`);
   },
 
+  deleteCourse(couseName) {
+    return axios.delete(`${GRADERX_API}courses/${couseName}`);
+  },
+
   updateCourse(course, oldCourseName) {
     return axios.put(`${GRADERX_API}courses/${oldCourseName}`, course);
   },
