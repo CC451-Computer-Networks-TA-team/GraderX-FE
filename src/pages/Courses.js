@@ -25,15 +25,16 @@ const {
 } = DataTable;
 
 function CoursesPage() {
-  let [courses, setCourses] = useState([]);
-  let [openModal, setOpenModal] = useState(false);
-  let [isEdit, setIsEdit] = useState(false);
+  const [courses, setCourses] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
+
   /// Form props
 
-  let [formTitle, setFormTitle] = useState('Add');
-  let [fromCourseName, setFormCourseName] = useState('');
-  let [formCourseLang, setFormCourseLang] = useState('');
-  let [oldCourseName, setOldCourseName] = useState('');
+  const [formTitle, setFormTitle] = useState('Add');
+  const [fromCourseName, setFormCourseName] = useState('');
+  const [formCourseLang, setFormCourseLang] = useState('');
+  const [oldCourseName, setOldCourseName] = useState('');
 
 
   const createCoursesObjects = labs_array => {
@@ -131,6 +132,7 @@ function CoursesPage() {
       >
         <div style={{ height: 32 }}></div>
         <TextInput
+          disabled={isEdit}
           helperText="E.G: CC451-Computer Networks"
           id="courseName"
           labelText="Name"
