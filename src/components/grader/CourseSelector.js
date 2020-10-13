@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Dropdown, Grid } from "semantic-ui-react";
-import apiClient from "../../api-client";
+import GradingService from '../../services/GradingService'
 
 function LabSelector(props) {
     const [labs, setLabs] = useState([]);
@@ -14,8 +14,8 @@ function LabSelector(props) {
     };
 
     useEffect(() => {
-        apiClient.getCourses().then(res => {
-            createLabObjects(res.data.courses);
+        GradingService.getCourses().then(res => {
+            createLabObjects(res.courses);
         });
     }, []);
 

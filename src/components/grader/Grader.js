@@ -4,7 +4,7 @@ import LabSelector from "./LabSelector";
 import CourseSelector from './CourseSelector'
 import GetSubmissions from './submissions/GetSubmissions'
 import Status from "./Status";
-import apiClient from "../../api-client";
+import GradingService from '../../services/GradingService'
 import ResultsContainer from "./ResultsContainer"
 
 function Grader() {
@@ -44,18 +44,19 @@ function Grader() {
   const uploadFile = () => {
     const formData = new FormData();
     formData.append("submissions_file", file);
-    apiClient
+
+    GradingService
       .uploadSubmissions(course, lab, formData)
-      .then(res => {
-        apiClient.startGrading(course, lab)
-          .then(res => {
+      .then(response => {
+        console.log(response)
+        GradingService
+          .startGrading(course, lab)
+          .then(response => {
             setStatus("");
           })
 
       })
-      .catch(err => {
-        setStatus("failed");
-      });
+
   };
 
 
@@ -69,14 +70,15 @@ function Grader() {
   const importAndGrade = (accessToken, sheetLink, field) => {
     setStatus("grading")
     setImporting("true")
-    apiClient.startImporting(accessToken, sheetLink, field, course, lab)
-      .then((res) => {
-        apiClient.startGrading(course, lab)
+
+    GradingService
+      .startImporting(accessToken, sheetLink, field, course, lab)
+      .then((response) => {
+        GradingService.startGrading(course, lab)
           .then(res => {
             setStatus("")
           })
-
-      })
+      });
 
 
 
@@ -88,12 +90,14 @@ function Grader() {
 
     const selected_course = "test_course"
     if (course === selected_course) {
-      apiClient.getDiffResults(course, lab).then(res => {
-        setDiff(res.data)
-      });
+
+      GradingService
+        .getDiffResults(course, lab)
+        .then((response) => {
+          setDiff(response)
+        });
 
     }
-
   }
 
   const determineVisible = () => {
