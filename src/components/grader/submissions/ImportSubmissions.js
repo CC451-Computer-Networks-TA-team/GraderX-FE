@@ -4,7 +4,6 @@ import MicrosoftLogin from "react-microsoft-login";
 import { Button, Header, Grid, GridColumn, Icon } from "semantic-ui-react";
 import { Label, Input, Transition, Container, Dropdown } from "semantic-ui-react";
 import ReactHtmlParser from 'react-html-parser';
-//import apiClient from "../../../api-client"
 import GradingService from '../../../services/GradingService'
 
 const ImportSubmissions = (props) => {
@@ -88,43 +87,43 @@ const ImportSubmissions = (props) => {
                 </Header >
 
                     <Grid >
-                        <GridColumn style={{marginLeft:"27%", marginRight:"20%"}}>
-                        <div class="ui buttons">
-                            <GoogleLogin
-                                clientId="653543257974-p3uuv08hcftdhkolqpl2hpbbta2d1ck2.apps.googleusercontent.com"
-                                scope="https://www.googleapis.com/auth/spreadsheets.readonly https://www.googleapis.com/auth/drive.readonly"
-                                render={renderProps => (
-                                    <Button onClick={renderProps.onClick}
-                                        disabled={renderProps.disabled}
-                                        style={{ backgroundColor: '#2f2f2f', color: 'white' }}>
+                        <GridColumn style={{ marginLeft: "27%", marginRight: "20%" }}>
+                            <div class="ui buttons">
+                                <GoogleLogin
+                                    clientId="653543257974-p3uuv08hcftdhkolqpl2hpbbta2d1ck2.apps.googleusercontent.com"
+                                    scope="https://www.googleapis.com/auth/spreadsheets.readonly https://www.googleapis.com/auth/drive.readonly"
+                                    render={renderProps => (
+                                        <Button onClick={renderProps.onClick}
+                                            disabled={renderProps.disabled}
+                                            style={{ backgroundColor: '#2f2f2f', color: 'white' }}>
 
-                                        <Icon name='google' />
+                                            <Icon name='google' />
                                             Sign in
-                                    </Button>
-                                )}
-                                onSuccess={authSuccessful}
-                                onFailure={err => { }}
-                                cookiePolicy={'single_host_origin'}
-                            />
-                            <div class="or"></div>
-                            <MicrosoftLogin
-                                clientId={MS_CLIENT_ID}
-                                authCallback={authHandler}
-                                buttonTheme="dark_short"
-                                graphScopes={["user.read", "Files.Read.All"]}
-                            />
-                        </div>
+                                        </Button>
+                                    )}
+                                    onSuccess={authSuccessful}
+                                    onFailure={err => { }}
+                                    cookiePolicy={'single_host_origin'}
+                                />
+                                <div class="or"></div>
+                                <MicrosoftLogin
+                                    clientId={MS_CLIENT_ID}
+                                    authCallback={authHandler}
+                                    buttonTheme="dark_short"
+                                    graphScopes={["user.read", "Files.Read.All"]}
+                                />
+                            </div>
 
 
                         </GridColumn>
-                        
+
 
 
                     </Grid>
 
 
                 </Container>
-                
+
             </Transition>
 
             <Transition animation='slide left' duration={200} visible={authorized}>

@@ -4,17 +4,14 @@ import request from '../request'
 function getImportMethod(sheetLink) {
 
     var parse = require('url-parse')
-      , url = parse(sheetLink, true);
+        , url = parse(sheetLink, true);
     if (url.hostname === "alexuuni-my.sharepoint.com") {
-      return "import-ms"
-  
+        return "import-ms"
+
     } else if (url.hostname === "docs.google.com") {
-      return "import-google"
-  
+        return "import-google"
     }
-  
-  
-  }
+}
 
 function getLabs(course) {
     return request({
@@ -37,7 +34,7 @@ function uploadSubmissions(course, lab, formData) {
         url: `submissions?course=${course}&lab=${lab}&method=file`,
         method: 'POST',
         data: formData
-        
+
     });
 }
 
@@ -90,7 +87,7 @@ function getDiffResults(course, lab) {
 
 
 const GradingService = {
-    getDiffResults, startGrading,startImporting, validateSheet, downloadResults, uploadSubmissions, getCourses, getLabs
+    getDiffResults, startGrading, startImporting, validateSheet, downloadResults, uploadSubmissions, getCourses, getLabs
 }
 
 export default GradingService;

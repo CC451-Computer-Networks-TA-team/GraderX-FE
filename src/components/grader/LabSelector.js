@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Dropdown, Grid, Label } from "semantic-ui-react";
-//import apiClient from "../../api-client";
 import GradingService from '../../services/GradingService'
 
 function LabSelector(props) {
