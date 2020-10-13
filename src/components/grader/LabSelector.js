@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Dropdown, Grid, Label } from "semantic-ui-react";
-import apiClient from "../../api-client";
+//import apiClient from "../../api-client";
+import GradingService from '../../services/GradingService'
 
 function LabSelector(props) {
   const [labs, setLabs] = useState([]);
@@ -14,9 +15,10 @@ function LabSelector(props) {
   };
 
   useEffect(() => {
-    apiClient.getLabs(props.course).then(res => {
-      createLabObjects(res.data.labs);
+    GradingService.getLabs(props.course).then(res => {
+      createLabObjects(res.labs);
     });
+    // eslint-disable-next-line
   }, []);
 
   const handleChange = (_, data) => {
@@ -28,7 +30,7 @@ function LabSelector(props) {
       <Grid centered>
         <Grid.Column width={7}>
           <Label as="a" color="violet" image style={{ marginBottom: "3%" }}
->
+          >
             {props.course}
             <Label.Detail>Course Name</Label.Detail>
           </Label>

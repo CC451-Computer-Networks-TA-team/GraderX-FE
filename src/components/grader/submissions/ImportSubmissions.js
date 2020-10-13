@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import GoogleLogin from 'react-google-login';
+import MicrosoftLogin from "react-microsoft-login";
 import { Button, Header, Grid, GridColumn, Icon } from "semantic-ui-react";
 import { Label, Input, Transition, Container, Dropdown } from "semantic-ui-react";
 import ReactHtmlParser from 'react-html-parser';
-import apiClient from "../../../api-client"
-import MicrosoftLogin from "react-microsoft-login";
+//import apiClient from "../../../api-client"
+import GradingService from '../../../services/GradingService'
 
 const ImportSubmissions = (props) => {
     const [accessToken, setAccessToken] = useState("")
@@ -43,7 +44,7 @@ const ImportSubmissions = (props) => {
     useEffect(() => {
         if (sheetLink.length > 0) {
             setDisableSheetInput(true)
-            apiClient.validateSheet(accessToken, sheetLink)
+            GradingService.validateSheet(accessToken, sheetLink)
                 .then((res) => {
                     setSheetFields([])
                     setValidSheet(true)
