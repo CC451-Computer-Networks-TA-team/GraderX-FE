@@ -2,22 +2,9 @@ import React, { useEffect, useState } from "react";
 import DownloadResult from "./DownloadResult";
 import Revision from "./submissions/Revision"
 import { Header, Icon } from "semantic-ui-react";
-import apiClient from "../../api-client";
-
 
 function ResultsContainer(props) {
-  // eslint-disable-next-line
-  const [fileNameList, setFileNameList] = useState();
-
-  useEffect(() => {
-    apiClient.getSubmissionFilesList(props.course, props.lab)
-      .then(res => {
-        console.log(res)
-        setFileNameList(res.data)
-      })
-    // eslint-disable-next-line
-  }, [])
-
+  
   return (
     <React.Fragment>
       <Header textAlign="center" as="h4" style={{ color: "Black" }}>
