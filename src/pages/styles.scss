@@ -1,0 +1,10 @@
+.container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .column-1,
+  .column-2 {
+    float: left;
+    width: 50%;
+  }
