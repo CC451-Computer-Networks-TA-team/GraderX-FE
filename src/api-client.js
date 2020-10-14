@@ -42,7 +42,12 @@ export default {
   addCourse(course) {
     return axios.post(`${GRADERX_API}course`, course);
   },
-
+  addLab(course, lab_id, runtime, internet){
+    return axios.post(`${GRADERX_API}courses/${course}/labs`, {name: lab_id, runtime_limit: runtime, disable_internet: !internet, test_cases: []})
+  },
+  deleteLab(course, lab){
+    return axios.delete(`${GRADERX_API}courses/${course}/labs/${lab}`)
+  },
   uploadSubmissions(course, labId, formData) {
     return axios.post(`${GRADERX_API}submissions?course=${course}&lab=${labId}&method=file`, formData);
   },
