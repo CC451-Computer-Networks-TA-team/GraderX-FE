@@ -21,7 +21,7 @@ function LabSelector(props) {
 
     useEffect(() => {
         apiClient.getCourses().then(res => {
-            createLabObjects(res.data.courses);
+            createLabObjects(res.data.courses.map((course => course.name)));
         });
     }, []);
 

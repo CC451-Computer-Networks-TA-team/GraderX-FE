@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import apiClient from "../../api-client";
+import LabForm from "./LabForm";
 import "./styles.scss";
 
 import {
@@ -38,17 +39,7 @@ function LabsPage() {
   const [courseIds, setCourseIds] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState("");
   const [openModal, setOpenModal] = useState(false);
-  const [isTCModalOpen, setIsTCModalOpen] = useState(false);
-  const [isEdit, setIsEdit] = useState(false);
-  // Add lab form
-  const [formLabId, setFormLabId] = useState("");
-  const [formRuntime, setFormRuntime] = useState("");
-  const [formInternet, setFormInternet] = useState(false);
-  const [formTestcases, setFormTestcases] = useState([]);
-  // Testcase form
-  const [formTestcaseID, setFormTestcaseID] = useState("");
-  const [formTestcaseIN, setFormTestcaseIN] = useState("");
-  const [formTestcaseOUT, setFormTestcaseOUT] = useState("");
+  const [labToEdit, setLabToEdit] = useState(null)
 
   const createLabsObjects = (labs_array) => {
     let labs_objects = [];
@@ -69,11 +60,6 @@ function LabsPage() {
     setCourseIds(courses_ids);
   };
 
-  const clearForm = () => {
-    setFormLabId("");
-    setFormRuntime("");
-  };
-
   const fetchLabs = (course_name) => {
     apiClient.getLabs(course_name).then((res) => {
       createLabsObjects(res.data.labs);
@@ -87,41 +73,76 @@ function LabsPage() {
   };
 
   useEffect(() => {
-    apiClient.getCourses().then((res) => {
+    apiClient.getCourses(true).then((res) => {
       createCoursesIds(res.data.courses);
-      createLabsObjects(res.data.courses[0].labs);
+      fetchLabs(res.data.courses[0].name)
       setSelectedCourse(res.data.courses[0].name);
     });
   }, []);
 
-  const addLab = () => {
+  const addLab = (formLabId, formRuntime, formInternet, formTestcases) => {
     apiClient
-      .addLab(selectedCourse, formLabId, formRuntime, formInternet)
+      .addLab(
+        selectedCourse,
+        formLabId,
+        formRuntime,
+        formInternet,
+        formTestcases
+      )
       .then((res) => {
         fetchLabs(selectedCourse);
       })
-      .catch((res) => {
-        alert("Failed to add a new lab");
+      .catch((error) => {
+        alert(error.response.data.status);
       });
   };
 
-  const addTestcase = () => {
-    console.log("INSIDE")
-    let testcasesClone = formTestcases.slice(0)
-    console.log(testcasesClone)
-    testcasesClone.push({id: formTestcaseID, input: formTestcaseIN, output: formTestcaseOUT})
-    console.log(testcasesClone)
-    setFormTestcases(testcasesClone)
 
-  }
+  const editLab = (formLabId, formRuntime, formInternet, formTestcases) => {
+    apiClient
+      .editLab(
+        selectedCourse,
+        formLabId,
+        formRuntime,
+        formInternet,
+        formTestcases
+      )
+      .then((res) => {
+        fetchLabs(selectedCourse);
+      })
+      .catch((error) => {
+        alert(error.response.data.status);
+      });
+  };
+
   const deleteLab = (lab_name) => {
     apiClient.deleteLab(selectedCourse, lab_name).then((res) => {
       fetchLabs(selectedCourse);
     });
   };
 
+  const openEditLab = (labID) => {
+    let labWithLabID = labs.find(lab => lab.name == labID)
+    setLabToEdit(labWithLabID)
+    setOpenModal(true)
+  }
+
+  const closeLabModal = () => {
+    setOpenModal(false)
+    setLabToEdit(null)
+  }
+
+
   return (
     <div>
+      <LabForm
+        addLab={addLab}
+        editLab={editLab}
+        openModal={openModal}
+        setOpenModal={setOpenModal}
+        closeLabModal={closeLabModal}
+        labData={labToEdit}
+      />
       <div style={{ marginLeft: 16, marginTop: 64, marginRight: 16 }}>
         <Link href="#">Labs</Link>
         <div style={{ height: 16 }}></div>
@@ -132,158 +153,6 @@ function LabsPage() {
             <SelectItem key={course_id} value={course_id} text={course_id} />
           ))}
         </Select>
-        <Modal
-          hasForm
-          open={openModal}
-          onRequestClose={() => {
-            clearForm();
-            setOpenModal(false);
-          }}
-          primaryButtonText="Save"
-          secondaryButtonText="Close"
-          onRequestSubmit={() => {
-            addLab();
-            setOpenModal(false);
-          }}
-          size="sm"
-          modalHeading="Lab"
-          modalLabel="Add"
-        >
-          <Grid style={{ padding: "0" }}>
-            <Row>
-              <Column>
-                <TextInput
-                  labelText="Name"
-                  value={formLabId}
-                  onChange={(e) => setFormLabId(e.target.value)}
-                />
-              </Column>
-              <Column>
-                <TextInput
-                  labelText="Runtime Limit (Seconds)"
-                  value={formRuntime}
-                  onChange={(e) => setFormRuntime(e.target.value)}
-                />
-              </Column>
-            </Row>
-            <Row style={{ marginTop: "1rem" }}>
-              <Column>
-                <Checkbox
-                  labelText={`Enable Internet Access`}
-                  id="checkbox-label-1"
-                  onChange={(e) => setFormInternet(e)}
-                />
-              </Column>
-            </Row>
-            <Row style={{ marginTop: "2rem" }}>
-              <Column>
-                {/* <FileUploader
-                buttonLabel="Add file"
-                labelTitle="Test Cases"
-                labelDescription="Only .json files, 500kb max file size." /> */}
-                <div className="test-cases-container">
-                  {formTestcases.map((test_case) => (
-                    <Row key={test_case.id} className="container">
-                      <p
-                        className="column-1"
-                        style={{ display: "inline-block" }}
-                      >
-                        {test_case.id}
-                      </p>
-
-                      <div
-                        className="column-2"
-                        style={{ display: "inline-block" }}
-                      >
-                        <Button
-                          kind="ghost"
-                          size="small"
-                          hasIconOnly
-                          renderIcon={Edit16}
-                          iconDescription="Edit"
-                        ></Button>
-                        <Button
-                          kind="ghost"
-                          size="small"
-                          hasIconOnly
-                          renderIcon={Delete16}
-                          iconDescription="Delete"
-                        ></Button>
-                      </div>
-                    </Row>
-                  ))}
-                </div>
-
-                <Button
-                  renderIcon={Add16}
-                  onClick={() => {
-                    setOpenModal(false);
-                    setIsTCModalOpen(true);
-                  }}
-                >
-                  Add test case
-                </Button>
-              </Column>
-            </Row>
-          </Grid>
-        </Modal>
-        <Modal
-          hasForm
-          open={isTCModalOpen}
-          onRequestClose={() => {
-            setIsTCModalOpen(false);
-            setOpenModal(true);
-          }}
-          onRequestSubmit={() => {
-            addTestcase();
-            setIsTCModalOpen(false);
-            setOpenModal(true);
-          }}
-          primaryButtonText="Save"
-          secondaryButtonText="Close"
-          size="sm"
-          modalHeading="Test Case"
-          modalLabel="Add"
-        >
-          <Grid style={{ padding: "0" }}>
-            <TextInput
-              id="my_input"
-              labelText="ID"
-              value={formTestcaseID}
-              onChange={(e) => setFormTestcaseID(e.target.value)}
-            />
-            <div style={{ height: 24 }}></div>
-            <Row>
-              <Column>
-                <TextArea
-                  cols={50}
-                  helperText="Optional helper text"
-                  id="test2"
-                  invalidText="A valid value is required"
-                  labelText="Text area label"
-                  placeholder="Placeholder text"
-                  rows={4}
-                  value={formTestcaseIN}
-                  onChange={(e) => setFormTestcaseIN(e.target.value)}
-                />
-              </Column>
-              <Column>
-                <TextArea
-                  cols={50}
-                  helperText="Optional helper text"
-                  id="test2"
-                  invalidText="A valid value is required"
-                  labelText="Text area label"
-                  placeholder="Placeholder text"
-                  rows={4}
-                  value={formTestcaseOUT}
-                  onChange={(e) => setFormTestcaseOUT(e.target.value)}
-                />
-              </Column>
-            </Row>
-          </Grid>
-        </Modal>
-
         <div style={{ height: 56 }}></div>
         <DataTable
           rows={labs}
@@ -318,7 +187,6 @@ function LabsPage() {
                 <Button
                   renderIcon={Add16}
                   onClick={() => {
-                    setIsEdit(false);
                     setOpenModal(true);
                   }}
                 >
@@ -352,9 +220,7 @@ function LabsPage() {
                                 renderIcon={Edit16}
                                 iconDescription="Edit"
                                 onClick={() => {
-                                  setIsEdit(true);
-                                  // setFormTitle('Edit');
-                                  // setOpenModal(true);
+                                  openEditLab(row.cells[1].value)
                                 }}
                               />
                               <Button

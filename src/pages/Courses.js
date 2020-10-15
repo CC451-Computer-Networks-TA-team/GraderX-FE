@@ -49,7 +49,7 @@ function CoursesPage() {
   };
 
   useEffect(() => {
-    apiClient.getCourses().then(res => {
+    apiClient.getCourses(true).then(res => {
       createCoursesObjects(res.data.courses);
     });
   }, []);
@@ -65,7 +65,7 @@ function CoursesPage() {
       setFormTitle('Add');
       setFormCourseName('');
 
-      apiClient.getCourses().then(res => {
+      apiClient.getCourses(true).then(res => {
         createCoursesObjects(res.data.courses);
       });
     });
@@ -83,7 +83,7 @@ function CoursesPage() {
       temp.variant = formCourseLang;
 
       apiClient.updateCourse(temp, oldCourseName).then(_res => {
-        apiClient.getCourses().then(res => {
+        apiClient.getCourses(true).then(res => {
           createCoursesObjects(res.data.courses);
 
           setFormTitle('Add');
@@ -95,7 +95,7 @@ function CoursesPage() {
 
   const deleteCourse = (courseName) => {
     apiClient.deleteCourse(courseName).then(_res => {
-      apiClient.getCourses().then(res => {
+      apiClient.getCourses(true).then(res => {
         createCoursesObjects(res.data.courses);
 
         setFormTitle('Add');
