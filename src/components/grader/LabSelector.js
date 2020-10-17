@@ -19,7 +19,7 @@ function LabSelector(props) {
 
   useEffect(() => {
     apiClient.getLabs(props.course).then(res => {
-      createLabObjects(res.data.labs);
+      createLabObjects(res.data.labs.map(lab => lab.name));
     });
   }, []);
 

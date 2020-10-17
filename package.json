@@ -25,6 +25,7 @@
     "react-microsoft-login": "^1.10.1",
     "react-multi-ref": "^1.0.0",
     "react-promise-tracker": "^2.1.0",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "^3.4.3",
     "semantic-ui-react": "^1.0.0",
     "url-parse": "^1.4.7"

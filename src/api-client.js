@@ -23,8 +23,8 @@ export default {
     return axios.get(`${GRADERX_API}courses/${course}/labs`);
   },
 
-  getCourses() {
-    return axios.get(`${GRADERX_API}courses`);
+  getCourses(onlySTDOUT = false) {
+    return axios.get(`${GRADERX_API}courses${onlySTDOUT ? '?STDOUT' : ''}`);
   },
 
   getCourseEdit(couseName) {
@@ -43,6 +43,16 @@ export default {
     return axios.post(`${GRADERX_API}course`, course);
   },
 
+  addLab(course, lab_id, runtime, internet, test_cases){
+    return axios.post(`${GRADERX_API}courses/${course}/labs`, {name: lab_id, runtime_limit: runtime, disable_internet: !internet, test_cases})
+  },
+  editLab(course, lab_id, runtime, internet, test_cases){
+    return axios.put(`${GRADERX_API}courses/${course}/labs/${lab_id}`, {name: lab_id, runtime_limit: runtime, disable_internet: !internet, test_cases})
+  },
+  deleteLab(course, lab){
+    return axios.delete(`${GRADERX_API}courses/${course}/labs/${lab}`)
+  },
+    
   uploadSubmissions(course, labId, formData) {
     return axios.post(`${GRADERX_API}submissions?course=${course}&lab=${labId}&method=file`, formData);
   },
