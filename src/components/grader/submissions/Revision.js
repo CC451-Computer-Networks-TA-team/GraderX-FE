@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Accordion, AccordionItem } from "carbon-components-react";
 import apiClient from "../../../api-client";
 import SingleSubmission from "./SingleSubmission"
+import './Revision.scss'
 
 function Revision(props) {
 

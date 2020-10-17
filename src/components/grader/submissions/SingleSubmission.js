@@ -43,7 +43,7 @@ function SingleSubmission(props) {
                         {res.failed.map((f) => (
 
                             <div key={f.tc_id} >
-                                <Tile> Test Case {f.tc_id}</Tile>
+                                <h4>Test Case {f.tc_id}</h4>
                                 <hr></hr>
                                 <ReactDiffViewer
                                     leftTitle="Expected"
@@ -51,6 +51,7 @@ function SingleSubmission(props) {
                                     oldValue={f.expected}
                                     newValue={f.output}
                                     useDarkTheme={true}
+                                    className="single-diff-container"
                                 />
                                 <br></br>
                             </div>
