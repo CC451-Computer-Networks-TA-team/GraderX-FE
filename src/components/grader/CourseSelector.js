@@ -10,7 +10,6 @@ import {
 
 function LabSelector(props) {
     const [labs, setLabs] = useState([]);
-    console.log(labs);
 
     const createLabObjects = labs_array => {
         let labs_objects = [];

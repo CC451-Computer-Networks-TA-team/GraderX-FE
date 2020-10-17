@@ -1,17 +1,14 @@
-import React from 'react';
-
-import {
-  Header,
-  HeaderName,
-  HeaderNavigation,
-  HeaderMenuItem
-} from "carbon-components-react/lib/components/UIShell";
+import React, { useState, useEffect } from 'react';
+import apiClient from "../api-client";
 
 import {
   Link, Tile, DataTable, Button,
-  ModalWrapper, TextInput, Select, SelectItem
+  TextInput, Dropdown, Modal,
 } from 'carbon-components-react';
-import { Delete16, Edit16 } from '@carbon/icons-react';
+
+
+import { Delete16, Edit16, Add16 } from '@carbon/icons-react';
+
 const {
   Table,
   TableBody,
@@ -28,22 +25,135 @@ const {
 } = DataTable;
 
 function CoursesPage() {
+  const [courses, setCourses] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
+
+  /// Form props
+
+  const [formTitle, setFormTitle] = useState('Add');
+  const [fromCourseName, setFormCourseName] = useState('');
+  const [formCourseLang, setFormCourseLang] = useState('');
+  const [oldCourseName, setOldCourseName] = useState('');
+
+
+  const createCoursesObjects = labs_array => {
+    let courses_objects = [];
+
+    labs_array.forEach((lab, index, _arr) => {
+      lab.id = `${index}`;
+      courses_objects.push(lab);
+    });
+
+    setCourses(courses_objects);
+  };
+
+  useEffect(() => {
+    apiClient.getCourses().then(res => {
+      createCoursesObjects(res.data.courses);
+    });
+  }, []);
+
+  const addCourse = () => {
+    let newCourse = {
+      "name": fromCourseName,
+      "variant": formCourseLang,
+      "labs": []
+    };
+
+    apiClient.addCourse(newCourse).then(rest => {
+      setFormTitle('Add');
+      setFormCourseName('');
+
+      apiClient.getCourses().then(res => {
+        createCoursesObjects(res.data.courses);
+      });
+    });
+  };
+
+  const editCourse = () => {
+    apiClient.getCourseEdit(oldCourseName).then(res => {
+
+      let course = res.data;
+      let temp = {};
+
+      temp.name = fromCourseName;
+      temp.type = course.type;
+      temp.labs = course.labs;
+      temp.variant = formCourseLang;
+
+      apiClient.updateCourse(temp, oldCourseName).then(_res => {
+        apiClient.getCourses().then(res => {
+          createCoursesObjects(res.data.courses);
+
+          setFormTitle('Add');
+          setFormCourseName('');
+        });
+      });
+    });
+  };
+
+  const deleteCourse = (courseName) => {
+    apiClient.deleteCourse(courseName).then(_res => {
+      apiClient.getCourses().then(res => {
+        createCoursesObjects(res.data.courses);
+
+        setFormTitle('Add');
+        setFormCourseName('');
+      });
+    });
+  };
+
 
   return (
     <div>
-      <div>
-        <Header aria-label="Alexandria University - GraderX">
-          <HeaderName href="#" prefix="Alexandria University">
-            Grader-X
-        </HeaderName>
-          <HeaderNavigation aria-label="Alexandria University - GraderX">
-            <HeaderMenuItem href="#">Courses</HeaderMenuItem>
-            <HeaderMenuItem href="#">Labs</HeaderMenuItem>
-            <HeaderMenuItem href="#">Grader</HeaderMenuItem>
-            <HeaderMenuItem href="#">Moss</HeaderMenuItem>
-          </HeaderNavigation>
-        </Header>
-      </div>
+      <Modal
+        hasForm
+        open={openModal}
+        onRequestClose={() => {
+          setOpenModal(false);
+          setFormTitle('Add');
+          setFormCourseName('');
+        }}
+        primaryButtonText='Save'
+        secondaryButtonText='Close'
+        onRequestSubmit={() => {
+          if (isEdit) {
+            editCourse();
+          } else {
+            addCourse();
+          }
+
+          setOpenModal(false);
+        }}
+        size='sm'
+        modalHeading="Course"
+        modalLabel={formTitle.toString()}
+      >
+        <div style={{ height: 32 }}></div>
+        <TextInput
+          disabled={isEdit}
+          helperText="E.G: CC451-Computer Networks"
+          id="courseName"
+          labelText="Name"
+          value={fromCourseName}
+          onChange={(data) => { setFormCourseName(data.target.value); }}
+          placeholder="Enter course name"
+        />
+        <div style={{ height: 24 }}></div>
+        <Dropdown
+          id="langDropdown"
+          titleText="Select Language"
+
+          label="Select"
+          selectedItem={formCourseLang}
+          onChange={(data) => {
+            setFormCourseLang(data.selectedItem);
+          }}
+          items={['C', 'Java', 'Python']}
+        />
+        <div style={{ height: 40 }}></div>
+      </Modal>
       <div style={{ marginLeft: 16, marginTop: 64, marginRight: 16 }}>
         <Link href="#">Courses</Link>
         <div style={{ height: 16 }}></div>
@@ -54,92 +164,29 @@ function CoursesPage() {
         <div style={{ width: 208 }}>
           <Tile>
             Total Courses
-            <h3>13</h3>
+            <h3>{courses.length}</h3>
           </Tile>
         </div>
         <div style={{ height: 56 }}></div>
         <DataTable
-          rows={[
-            {
-              id: "a",
-              name: "Load Balancer 3",
-              protocol: "HTTP",
-              port: 3000,
-              rule: "Round robin",
-              attached_groups: "Kevin’s VM Groups",
-              status: "Disabled",
-            },
-            {
-              id: "b",
-              name: "Load Balancer 1",
-              protocol: "HTTP",
-              port: 443,
-              rule: "Round robin",
-              attached_groups: "Maureen’s VM Groups",
-              status: "Starting",
-            },
-            {
-              id: "c",
-              name: "Load Balancer 2",
-              protocol: "HTTP",
-              port: 80,
-              rule: "DNS delegation",
-              attached_groups: "Andrew’s VM Groups",
-              status: "Active",
-            },
-            {
-              id: "d",
-              name: "Load Balancer 6",
-              protocol: "HTTP",
-              port: 3000,
-              rule: "Round robin",
-              attached_groups: "Marc’s VM Groups",
-              status: "Disabled",
-            },
-            {
-              id: "e",
-              name: "Load Balancer 4",
-              protocol: "HTTP",
-              port: 443,
-              rule: "Round robin",
-              attached_groups: "Mel’s VM Groups",
-              status: "Starting",
-            },
-            {
-              id: "f",
-              name: "Load Balancer 5",
-              protocol: "HTTP",
-              port: 80,
-              rule: "DNS delegation",
-              attached_groups: "Ronja’s VM Groups",
-              status: "Active",
-            },
-          ]}
+          rows={courses}
           headers={[
+            {
+              key: "id",
+              header: "Id",
+            },
             {
               key: "name",
               header: "Name",
             },
             {
-              key: "protocol",
-              header: "Protocol",
+              key: "variant",
+              header: "Variant",
             },
             {
-              key: "port",
-              header: "Port",
-            },
-            {
-              key: "rule",
-              header: "Rule",
-            },
-            {
-              key: "attached_groups",
-              header: "Attached Groups",
-            },
-            {
-              key: "status",
-              header: "Status",
-            },
+              key: 'actions',
+              header: "Actions"
+            }
           ]}
           render={({
             rows,
@@ -150,42 +197,16 @@ function CoursesPage() {
                 <TableToolbar aria-label="data table toolbar">
                   <TableToolbarContent>
                     <TableToolbarSearch onChange={onInputChange} />
-                    <TableToolbarMenu>
-                      <TableToolbarAction
-                        onClick={function name() { }}
-
-                      > Delete All
-                      </TableToolbarAction>
-
-                    </TableToolbarMenu>
-
                   </TableToolbarContent>
-                  <ModalWrapper
-                    hasForm
-                    size='sm'
-                    buttonTriggerText="Add"
-                    modalHeading="Course"
-                    modalLabel="Add Course"
-                  >
-                    <TextInput
-                      helperText="E.G: CC451-Computer Networks"
-                      id="courseName"
-                      labelText="Name"
-                      placeholder="Enter course name"
-                    />
-                    <div style={{ height: 24 }}></div>
-                    <Select id="select-1" labelText="Select Language">
-                      <SelectItem
-                        disabled
-                        hidden
-                        value="placeholder-item"
-                        text="Select a language"
-                      />
-                      <SelectItem value="option-1" text="C" />
-                      <SelectItem value="option-2" text="Python" />
-                      <SelectItem value="option-3" text="Java" />
-                    </Select>
-                  </ModalWrapper>
+                  <Button
+                    renderIcon={Add16}
+                    onClick={
+                      () => {
+                        setIsEdit(false);
+                        setFormTitle('Add');
+                        setFormCourseName('');
+                        setOpenModal(true);
+                      }}>Add Course</Button>
                 </TableToolbar>
                 <Table>
                   <TableHead>
@@ -202,16 +223,25 @@ function CoursesPage() {
                       <TableRow>
                         {row.cells.map((cell) => (
                           <TableCell key={cell.id}>
-
                             {
-                              cell.value === row.cells[5].value ?
+                              cell.value === row.cells[3].value ?
                                 <span>
-                                  <Button kind="ghost" size="small" hasIconOnly renderIcon={Edit16} iconDescription="Edit" />
-                                  <Button kind="ghost" size="small" hasIconOnly renderIcon={Delete16} iconDescription="Delete" />
+                                  <Button kind="ghost" size="small" hasIconOnly renderIcon={Edit16} iconDescription="Edit"
+                                    onClick={() => {
+                                      setOldCourseName(row.cells[1].value);
+                                      setFormCourseName(row.cells[1].value);
+                                      setFormCourseLang(row.cells[2].value)
+                                      setIsEdit(true);
+                                      setFormTitle('Edit');
+                                      setOpenModal(true);
+                                    }}
+                                  />
+                                  <Button kind="ghost" size="small" hasIconOnly renderIcon={Delete16} iconDescription="Delete"
+                                    onClick={() => { deleteCourse(row.cells[1].value); }}
+                                  />
                                 </span>
                                 : cell.value
                             }
-
                           </TableCell>
                         ))}
                       </TableRow>
