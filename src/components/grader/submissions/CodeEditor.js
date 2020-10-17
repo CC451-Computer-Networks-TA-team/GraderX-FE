@@ -13,7 +13,7 @@ import "ace-builds/src-noconflict/mode-json";
 import "ace-builds/src-noconflict/theme-dracula";
 import 'ace-builds/src-min-noconflict/ext-searchbox';
 import apiClient from "../../../api-client";
-import './CodeEditor.css'
+import './CodeEditor.scss'
 
 function CodeEditor(props) {
     const [itemRefs] = useState(() => new MultiRef());
@@ -120,6 +120,7 @@ function CodeEditor(props) {
             buttonTriggerText="Edit Submission"
             modalHeading="Edit Mode"
             handleSubmit={saveFiles}
+            className="code-editor-wrapper"
         >
 
 
