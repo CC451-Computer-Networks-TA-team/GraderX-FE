@@ -1,41 +1,52 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import DownloadResult from "./DownloadResult";
-import DiffContainer from "./submissions/DiffContainer"
-import { Button, Header, Icon } from "semantic-ui-react";
-
+import Revision from "./submissions/Revision"
+import apiClient from "../../api-client";
+import { Tile, Link } from 'carbon-components-react';
 
 function ResultsContainer(props) {
+  // eslint-disable-next-line
+  const [fileNameList, setFileNameList] = useState();
 
+  useEffect(() => {
+    apiClient.getSubmissionFilesList(props.course, props.lab)
+      .then(res => {
+        setFileNameList(res.data)
+      })
+    // eslint-disable-next-line
+  }, [])
 
   return (
     <React.Fragment>
-      <Header textAlign="center" as="h4" style={{ color: "Black" }}>
-        Here are the Results !
-        </Header>
 
-      {
-      props.diff
-        ? <div>
-          <DiffContainer course={props.course} lab={props.lab} diff={props.diff} />
-          <DownloadResult course={props.course} lab={props.lab} resetLab={props.resetLab} getDiffResults={props.getDiffResults} />
-          </div>
-        : <div>
-            <DownloadResult course={props.course} lab={props.lab} resetLab={props.resetLab} getDiffResults={props.getDiffResults} />
-          </div>
-      }
-     
-        {/* visible based on the course */}
-       <Button positive fluid onClick={props.getDiffResults} style={{visibility: props.course === "test_course"? 'visible' : 'hidden' }} >SHOW DIFFERENCES</Button>
-       <Header as="h5" textAlign="center">
-        <a
-          href={() => false}
-          style={{ cursor: "pointer" }}
-          onClick={props.resetLab}
-        >
-          <Icon name="chevron left" style={{ marginRight: ".4em" }} />
-          Select another lab
-        </a>
-      </Header>
+      <div
+        className="bx--grid"
+        style={{
+          width: "50%",
+          paddingTop: "20%",
+          margin: "auto"
+        }}
+      >
+
+        <div style={{ paddingBottom: "0.5rem" }}>
+
+          <Tile style={{ color: "White" }}>
+            <h4> Grading Results</h4>
+          </Tile>
+
+          <Revision
+            course={props.course}
+            lab={props.lab}
+          />
+          
+          <DownloadResult course={props.course} lab={props.lab} resetLab={props.resetLab} />
+        </div>
+
+        <Link href="#"
+          onClick={props.resetLab}> {"< "}Select another lab</Link>
+
+      </div>
+
     </React.Fragment>
   );
 }

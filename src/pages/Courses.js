@@ -64,7 +64,6 @@ function CoursesPage() {
     apiClient.addCourse(newCourse).then(rest => {
       setFormTitle('Add');
       setFormCourseName('');
-
       apiClient.getCourses(true).then(res => {
         createCoursesObjects(res.data.courses);
       });
