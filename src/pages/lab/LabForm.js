@@ -8,6 +8,7 @@ import {
   Row,
   Column,
   Checkbox,
+  FileUploader
 } from "carbon-components-react";
 import { Delete16, Edit16, Add16 } from "@carbon/icons-react";
 
@@ -20,17 +21,19 @@ const LabForm = (props) => {
   const [formRuntime, setFormRuntime] = useState("");
   const [formInternet, setFormInternet] = useState(false);
   const [formTestcases, setFormTestcases] = useState([]);
+  const [formLabGuide, setFormLabGuide] = useState(null)
 
-  const clearForm = () => {
-    setFormLabId("");
-    setFormRuntime("");
-    setFormInternet(false);
-    setFormTestcases([]);
-  };
 
   const addLab = () => {
     if(formLabId && formRuntime){
-        props.addLab(formLabId, formRuntime, formInternet, formTestcases);
+        const formData = new FormData();
+        formData.append('name', formLabId)
+        formData.append('runtime_limit', formRuntime)
+        formData.append('disable_internet', !formInternet)
+        formData.append('test_cases', JSON.stringify(formTestcases))
+        formData.append('lab_guide', formLabGuide)
+
+        props.addLab(formData);
         props.closeLabModal();
         resetAndCloseLabModal()
     }
@@ -49,6 +52,7 @@ const LabForm = (props) => {
     setFormRuntime("");
     setFormInternet(false);
     setFormTestcases([]);
+    setFormLabGuide(null);
     setDisableID(false);
     setIsEdit(false);
     props.closeLabModal()
@@ -66,12 +70,13 @@ const LabForm = (props) => {
     setTestCaseToEdit(null);
   };
 
-  const addTestcase = (formTestcaseID, formTestcaseIN, formTestcaseOUT) => {
+  const addTestcase = (formTestcaseID, formTestcaseIN, formTestcaseOUT, formStudentAccessible) => {
     let testcasesClone = formTestcases.slice(0);
     testcasesClone.push({
       id: formTestcaseID,
       input: formTestcaseIN,
       output: formTestcaseOUT,
+      public: formStudentAccessible
     });
     setFormTestcases(testcasesClone);
     closeTCModal();
@@ -106,6 +111,10 @@ const LabForm = (props) => {
         setIsEdit(true);
     }
   }, [props.openModal]);
+
+  const labGuideHandler = (e) => {
+    setFormLabGuide(e.target.files[0])
+  }
 
   return (
     <React.Fragment>
@@ -159,6 +168,11 @@ const LabForm = (props) => {
                 checked={formInternet}
                 onChange={(e) => setFormInternet(e)}
               />
+            </Column>
+          </Row>
+          <Row style={{ marginTop: "2rem" }}>
+            <Column>
+              <FileUploader buttonLabel="Select file" labelTitle="Upload Lab Guide (optional)" labelDescription="only .md files" filenameStatus='complete' onChange={labGuideHandler}/>
             </Column>
           </Row>
           <Row style={{ marginTop: "2rem" }}>

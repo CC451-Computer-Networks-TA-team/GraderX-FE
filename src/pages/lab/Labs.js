@@ -80,14 +80,11 @@ function LabsPage() {
     });
   }, []);
 
-  const addLab = (formLabId, formRuntime, formInternet, formTestcases) => {
+  const addLab = (formData) => {
     apiClient
       .addLab(
         selectedCourse,
-        formLabId,
-        formRuntime,
-        formInternet,
-        formTestcases
+        formData
       )
       .then((res) => {
         fetchLabs(selectedCourse);
