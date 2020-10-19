@@ -3,7 +3,7 @@ import apiClient from "../api-client";
 
 import {
   Link, Tile, DataTable, Button,
-  TextInput, Dropdown, Modal,
+  TextInput, Dropdown, Modal, DataTableSkeleton
 } from 'carbon-components-react';
 
 
@@ -25,7 +25,9 @@ const {
 } = DataTable;
 
 function CoursesPage() {
+  const [didMount, setDidMount] = useState(false)
   const [courses, setCourses] = useState([]);
+  const [coursesLoaded, setCoursesLoaded] = useState(false)
   const [openModal, setOpenModal] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
 
@@ -49,6 +51,13 @@ function CoursesPage() {
   };
 
   useEffect(() => {
+    if (didMount) {
+      setCoursesLoaded(true)
+    }
+  }, [courses])
+
+  useEffect(() => {
+    setDidMount(true)
     apiClient.getCourses(true).then(res => {
       createCoursesObjects(res.data.courses);
     });
@@ -154,7 +163,6 @@ function CoursesPage() {
         <div style={{ height: 40 }}></div>
       </Modal>
       <div style={{ marginLeft: 16, marginTop: 64, marginRight: 16 }}>
-        <Link href="#">Courses</Link>
         <div style={{ height: 16 }}></div>
         <h1>Browse Courses</h1>
         <div style={{ height: 40 }}></div>
@@ -167,89 +175,97 @@ function CoursesPage() {
           </Tile>
         </div>
         <div style={{ height: 56 }}></div>
-        <DataTable
-          rows={courses}
-          headers={[
-            {
-              key: "id",
-              header: "Id",
-            },
-            {
-              key: "name",
-              header: "Name",
-            },
-            {
-              key: "variant",
-              header: "Variant",
-            },
-            {
-              key: 'actions',
-              header: "Actions"
-            }
-          ]}
-          render={({
-            rows,
-            headers,
-            onInputChange,
-          }) => (
-              <TableContainer>
-                <TableToolbar aria-label="data table toolbar">
-                  <TableToolbarContent>
-                    <TableToolbarSearch onChange={onInputChange} />
-                  </TableToolbarContent>
-                  <Button
-                    renderIcon={Add16}
-                    onClick={
-                      () => {
-                        setIsEdit(false);
-                        setFormTitle('Add');
-                        setFormCourseName('');
-                        setOpenModal(true);
-                      }}>Add Course</Button>
-                </TableToolbar>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      {headers.map((header) => (
-                        <TableHeader>
-                          {header.header}
-                        </TableHeader>
-                      ))}
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {rows.map((row) => (
-                      <TableRow>
-                        {row.cells.map((cell) => (
-                          <TableCell key={cell.id}>
-                            {
-                              cell.value === row.cells[3].value ?
-                                <span>
-                                  <Button kind="ghost" size="small" hasIconOnly renderIcon={Edit16} iconDescription="Edit"
-                                    onClick={() => {
-                                      setOldCourseName(row.cells[1].value);
-                                      setFormCourseName(row.cells[1].value);
-                                      setFormCourseLang(row.cells[2].value)
-                                      setIsEdit(true);
-                                      setFormTitle('Edit');
-                                      setOpenModal(true);
-                                    }}
-                                  />
-                                  <Button kind="ghost" size="small" hasIconOnly renderIcon={Delete16} iconDescription="Delete"
-                                    onClick={() => { deleteCourse(row.cells[1].value); }}
-                                  />
-                                </span>
-                                : cell.value
-                            }
-                          </TableCell>
+        {
+          coursesLoaded ? 
+          (
+            <DataTable
+              rows={courses}
+              headers={[
+                {
+                  key: "id",
+                  header: "Id",
+                },
+                {
+                  key: "name",
+                  header: "Name",
+                },
+                {
+                  key: "variant",
+                  header: "Variant",
+                },
+                {
+                  key: 'actions',
+                  header: "Actions"
+                }
+              ]}
+              render={({
+                rows,
+                headers,
+                onInputChange,
+              }) => (
+                  <TableContainer>
+                    <TableToolbar aria-label="data table toolbar">
+                      <TableToolbarContent>
+                        <TableToolbarSearch onChange={onInputChange} />
+                      </TableToolbarContent>
+                      <Button
+                        renderIcon={Add16}
+                        onClick={
+                          () => {
+                            setIsEdit(false);
+                            setFormTitle('Add');
+                            setFormCourseName('');
+                            setOpenModal(true);
+                          }}>Add Course</Button>
+                    </TableToolbar>
+                    <Table>
+                      <TableHead>
+                        <TableRow>
+                          {headers.map((header) => (
+                            <TableHeader>
+                              {header.header}
+                            </TableHeader>
+                          ))}
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {rows.map((row) => (
+                          <TableRow>
+                            {row.cells.map((cell) => (
+                              <TableCell key={cell.id}>
+                                {
+                                  cell.value === row.cells[3].value ?
+                                    <span>
+                                      <Button kind="ghost" size="small" hasIconOnly renderIcon={Edit16} iconDescription="Edit"
+                                        onClick={() => {
+                                          setOldCourseName(row.cells[1].value);
+                                          setFormCourseName(row.cells[1].value);
+                                          setFormCourseLang(row.cells[2].value)
+                                          setIsEdit(true);
+                                          setFormTitle('Edit');
+                                          setOpenModal(true);
+                                        }}
+                                      />
+                                      <Button kind="ghost" size="small" hasIconOnly renderIcon={Delete16} iconDescription="Delete"
+                                        onClick={() => { deleteCourse(row.cells[1].value); }}
+                                      />
+                                    </span>
+                                    : cell.value
+                                }
+                              </TableCell>
+                            ))}
+                          </TableRow>
                         ))}
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            )}
-        />
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                )}
+            />
+          ) :
+          (
+            <DataTableSkeleton showHeader={false} />
+          )
+        }
       </div>
     </div>
 
