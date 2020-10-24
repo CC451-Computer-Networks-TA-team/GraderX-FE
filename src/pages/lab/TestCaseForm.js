@@ -6,6 +6,7 @@ import {
   Row,
   Column,
   TextArea,
+  Checkbox
 } from "carbon-components-react";
 
 const TestCaseForm = (props) => {
@@ -14,11 +15,11 @@ const TestCaseForm = (props) => {
   const [formTestcaseID, setFormTestcaseID] = useState("");
   const [formTestcaseIN, setFormTestcaseIN] = useState("");
   const [formTestcaseOUT, setFormTestcaseOUT] = useState("");
-
+  const [formStudentAccessible, setFormStudentAccessible] = useState(false)
 
   const addTestcase = () => {
     if (formTestcaseID && formTestcaseIN && formTestcaseOUT) {
-      props.addTestcase(formTestcaseID, formTestcaseIN, formTestcaseOUT);
+      props.addTestcase(formTestcaseID, formTestcaseIN, formTestcaseOUT, formStudentAccessible);
       resetAndCloseTCModal()
     }
   };
@@ -34,6 +35,7 @@ const TestCaseForm = (props) => {
     setFormTestcaseID("");
     setFormTestcaseIN("");
     setFormTestcaseOUT("");
+    setFormStudentAccessible(false);
     setDisableID(false);
     setIsEdit(false);
     props.closeTCModal()
@@ -97,6 +99,16 @@ const TestCaseForm = (props) => {
               rows={4}
               value={formTestcaseOUT}
               onChange={(e) => setFormTestcaseOUT(e.target.value)}
+            />
+          </Column>
+        </Row>
+        <Row style={{ marginTop: "1rem" }}>
+          <Column>
+            <Checkbox
+              labelText={`Visible To Students`}
+              id="test-case-privacy"
+              checked={formStudentAccessible}
+              onChange={(e) => setFormStudentAccessible(e)}
             />
           </Column>
         </Row>
