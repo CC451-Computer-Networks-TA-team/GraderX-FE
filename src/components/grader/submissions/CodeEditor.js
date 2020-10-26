@@ -87,7 +87,7 @@ function CodeEditor(props) {
 
     function getSubmissionFile() {
         apiClient
-            .getFile(props.course, props.lab, props.submissionId, currentTabLabel)
+            .getFile(props.course, props.lab, props.submissionId, currentTabLabel, props.submissionKey)
             .then(res => {
                 setEditor(itemRefs.map.get(currentTab).editor, res.data.file_content);
             })
@@ -96,7 +96,7 @@ function CodeEditor(props) {
 
     function modifySubmissions(formData) {
         apiClient
-            .modifySubmissions(props.course, props.lab, props.submissionId, formData)
+            .modifySubmissions(props.course, props.lab, props.submissionId, formData, props.submissionKey)
 
     }
 
