@@ -37,9 +37,10 @@ function ResultsContainer(props) {
           <Revision
             course={props.course}
             lab={props.lab}
+            submissionKey={props.submissionKey}
           />
           
-          <DownloadResult course={props.course} lab={props.lab} resetLab={props.resetLab} />
+          <DownloadResult course={props.course} lab={props.lab} resetLab={props.resetLab} submissionKey={props.submissionKey} />
         </div>
 
         <Link href="#"

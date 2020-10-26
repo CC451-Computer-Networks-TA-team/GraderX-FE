@@ -12,6 +12,7 @@ function Grader() {
   const [file, setFile] = useState(null);
   const [status, setStatus] = useState("");
   const [importing, setImporting] = useState(false);
+  const [submissionKey, setSubmissionKey] = useState("")
 
   function changeLab(val) {
     setLab(val);
@@ -45,7 +46,8 @@ function Grader() {
     apiClient
       .uploadSubmissions(course, lab, formData)
       .then(res => {
-        apiClient.startGrading(course, lab)
+        setSubmissionKey(res.data.key)
+        apiClient.startGrading(course, lab, res.data.key)
           .then(res => {
             setStatus("");
           })
@@ -93,7 +95,7 @@ function Grader() {
       return <Status status={status} resetFile={resetFile} />;
     } else {
       return (<div>
-        <ResultsContainer course={course} lab={lab} resetLab={resetLab} />
+        <ResultsContainer course={course} lab={lab} resetLab={resetLab} submissionKey={submissionKey} />
       </div>
       )
 

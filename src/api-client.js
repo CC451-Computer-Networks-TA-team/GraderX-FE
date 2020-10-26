@@ -11,8 +11,6 @@ function getImportMethod(sheetLink) {
     return "import-google"
 
   }
-
-
 }
 const GRADERX_API = process.env.GRADERX_API
   ? process.env.GRADERX_API
@@ -56,56 +54,51 @@ export default {
     return axios.post(`${GRADERX_API}submissions?course=${course}&lab=${labId}&method=file`, formData);
   },
 
-  downloadResults(course, labId) {
-    return axios.get(`${GRADERX_API}results?course=${course}&lab=${labId}&type=download`, {
+  downloadResults(course, labId, submission_key) {
+    return axios.get(`${GRADERX_API}results?course=${course}&lab=${labId}&type=download&key=${submission_key}`, {
       responseType: 'blob',
     });
   },
 
   validateSheet(accessToken, sheetLink) {
-
-
-
     return axios.post(`${GRADERX_API}submissions/validate`, {
       accessToken: accessToken,
       sheetLink: sheetLink,
       method: getImportMethod(sheetLink)
-
     })
   },
 
   startImporting(accessToken, sheetLink, field, course, lab) {
     const method = getImportMethod(sheetLink)
-
     return axios.post(`${GRADERX_API}submissions?course=${course}&lab=${lab}&method=${method}&field=${field}`, {
       accessToken: accessToken,
       sheetLink: sheetLink
     })
   },
 
-  startGrading(course, lab) {
-    return axios.get(`${GRADERX_API}run_grader?course=${course}&lab=${lab}`)
+  startGrading(course, lab, submission_key) {
+    return axios.get(`${GRADERX_API}run_grader?course=${course}&lab=${lab}&key=${submission_key}`)
   },
 
-  getDiffResults(course, lab) {
-    return axios.get(`${GRADERX_API}results?course=${course}&lab=${lab}&type=diff`)
+  getDiffResults(course, lab, submission_key) {
+    return axios.get(`${GRADERX_API}results?course=${course}&lab=${lab}&type=diff&key=${submission_key}`)
   },
 
  
-  modifySubmissions(course, lab, submissionId, formData) {
-    return axios.put(`${GRADERX_API}submissions?course=${course}&lab=${lab}&submission_id=${submissionId}`,
+  modifySubmissions(course, lab, submissionId, formData, submission_key) {
+    return axios.put(`${GRADERX_API}submissions?course=${course}&lab=${lab}&submission_id=${submissionId}&key=${submission_key}`,
       formData);
   },
 
-  getFilesList(course, lab, submissionId) {
-    return axios.get(`${GRADERX_API}submissions?course=${course}&lab=${lab}&submission_id=${submissionId}`)
+  getFilesList(course, lab, submissionId, submission_key) {
+    return axios.get(`${GRADERX_API}submissions?course=${course}&lab=${lab}&submission_id=${submissionId}&key=${submission_key}`)
   },
 
-  getFile(course, lab, submissionId, fileName){
-    return axios.get(`${GRADERX_API}submission_file?course=${course}&lab=${lab}&submission_id=${submissionId}&file_name=${fileName}`)
+  getFile(course, lab, submissionId, fileName, submission_key){
+    return axios.get(`${GRADERX_API}submission_file?course=${course}&lab=${lab}&submission_id=${submissionId}&file_name=${fileName}&key=${submission_key}`)
   },
 
-  getSubmissionFilesList(course,lab){
-    return axios.get(`${GRADERX_API}/submissions?course=${course}&lab=${lab}`)
+  getSubmissionFilesList(course,lab, submission_key){
+    return axios.get(`${GRADERX_API}/submissions?course=${course}&lab=${lab}&key=${submission_key}`)
   }
 };

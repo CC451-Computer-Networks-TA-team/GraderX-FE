@@ -17,7 +17,7 @@ function Revision(props) {
     }, [])
 
     function getSubmissionFilesList() {
-        apiClient.getSubmissionFilesList(props.course, props.lab)
+        apiClient.getSubmissionFilesList(props.course, props.lab, props.submissionKey)
             .then(res => {
                 setFileNameList(res.data)
             });
@@ -26,7 +26,7 @@ function Revision(props) {
 
     function getDiffResults() {
 
-        apiClient.getDiffResults(props.course, props.lab)
+        apiClient.getDiffResults(props.course, props.lab, props.submissionKey)
             .then(res => {
                 if (res) {
                     setDiff(res.data)
@@ -63,6 +63,7 @@ function Revision(props) {
                                     lab={props.lab}
                                     submissionId={item}
                                     diff={diff}
+                                    submissionKey={props.submissionKey}
                                 />
                             </AccordionItem>
                         ))

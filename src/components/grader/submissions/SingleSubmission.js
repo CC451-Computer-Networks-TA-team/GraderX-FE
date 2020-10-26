@@ -13,7 +13,7 @@ function SingleSubmission(props) {
 
     function getFilesListForSubmission() {
         apiClient
-            .getFilesList(props.course, props.lab, props.submissionId)
+            .getFilesList(props.course, props.lab, props.submissionId, props.submissionKey)
             .then(res => {
                 setSubmissionFileList(res.data)
             })
@@ -68,6 +68,7 @@ function SingleSubmission(props) {
                     course={props.course}
                     lab={props.lab}
                     submissionId={props.submissionId}
+                    submissionKey={submissionKey}
                 />
             }
 

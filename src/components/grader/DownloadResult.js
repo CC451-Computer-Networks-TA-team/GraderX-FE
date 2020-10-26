@@ -6,7 +6,7 @@ import { Button } from 'carbon-components-react';
 
 function DownloadResult(props) {
   function downloadFile() {
-    apiClient.downloadResults(props.course, props.lab).then(res => {
+    apiClient.downloadResults(props.course, props.lab, props.submissionKey).then(res => {
       fileDownload(res.data, "results.zip");
     });
   }
