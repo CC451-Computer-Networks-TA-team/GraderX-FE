@@ -68,7 +68,7 @@ function SingleSubmission(props) {
                     course={props.course}
                     lab={props.lab}
                     submissionId={props.submissionId}
-                    submissionKey={submissionKey}
+                    submissionKey={props.submissionKey}
                 />
             }
 
