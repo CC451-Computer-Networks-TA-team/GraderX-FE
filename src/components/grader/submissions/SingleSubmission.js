@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import apiClient from "../../../api-client";
 import CodeEditor from "./CodeEditor"
 import ReactDiffViewer from "react-diff-viewer";
-import { Tile } from 'carbon-components-react';
+import { AccordionItem } from "carbon-components-react";
+
 
 
 
@@ -33,45 +34,46 @@ function SingleSubmission(props) {
 
     return (
 
+        <AccordionItem
+            title={props.submissionId} >
 
-        <div>
+            <div>
+                {
+                    props.diff &&
+                    props.diff[props.index].failed.map((resp) => (
+                        <div key={resp.tc_id} >
+                            <h4>Test Case {resp.tc_id}</h4>
+                            <hr></hr>
+                            <ReactDiffViewer
+                                leftTitle="Expected"
+                                rightTitle="Output"
+                                oldValue={resp.expected}
+                                newValue={resp.output}
+                                useDarkTheme={true}
+                                className="single-diff-container"
+                            />
+                            <br></br>
+                        </div>
+                    ))
 
-            {
-                props.diff &&
-                props.diff.map((res) => (
-                    <div key={res.id} >
-                        {res.failed.map((f) => (
+                }
 
-                            <div key={f.tc_id} >
-                                <h4>Test Case {f.tc_id}</h4>
-                                <hr></hr>
-                                <ReactDiffViewer
-                                    leftTitle="Expected"
-                                    rightTitle="Output"
-                                    oldValue={f.expected}
-                                    newValue={f.output}
-                                    useDarkTheme={true}
-                                    className="single-diff-container"
-                                />
-                                <br></br>
-                            </div>
-                        ))}
+                {visible &&
+                    <CodeEditor
+                        subList={submissionFileList}
+                        course={props.course}
+                        lab={props.lab}
+                        submissionId={props.submissionId}
+                    />
+                }
 
-                    </div>
-                ))
-            }
+            </div>
 
 
-            {visible &&
-                <CodeEditor
-                    subList={submissionFileList}
-                    course={props.course}
-                    lab={props.lab}
-                    submissionId={props.submissionId}
-                />
-            }
 
-        </div>
+
+
+        </AccordionItem>
 
     )
 

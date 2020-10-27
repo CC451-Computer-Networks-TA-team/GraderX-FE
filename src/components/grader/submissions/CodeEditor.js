@@ -11,7 +11,7 @@ import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/mode-json";
 
 import "ace-builds/src-noconflict/theme-dracula";
-import 'ace-builds/src-min-noconflict/ext-searchbox';
+// import 'ace-builds/src-min-noconflict/ext-searchbox';
 import apiClient from "../../../api-client";
 import './CodeEditor.scss'
 
