@@ -49,22 +49,23 @@ function Revision(props) {
 
         <div>
 
-
             {visible &&
                 <Accordion align="start"
-                style= {{marginBottom:"10px"}}>
+                    style={{ marginBottom: "10px" }}>
                     {
-                        fileNameList.map((item) => (
-                            <AccordionItem
-                                title={item}
-                            >
+                        fileNameList.map((item, index) => (
+                            <div>
                                 <SingleSubmission
                                     course={props.course}
                                     lab={props.lab}
                                     submissionId={item}
                                     diff={diff}
+                                    index = {index}
                                 />
-                            </AccordionItem>
+
+                            </div>
+
+
                         ))
                     }
 
