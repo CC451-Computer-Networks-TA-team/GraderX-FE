@@ -6,17 +6,11 @@ import "./styles.scss";
 import {
   Link,
   DataTable,
+  DataTableSkeleton,
   Button,
-  Modal,
-  TextInput,
+  SelectSkeleton,
   Select,
   SelectItem,
-  Grid,
-  Row,
-  Column,
-  FileUploader,
-  Checkbox,
-  TextArea,
 } from "carbon-components-react";
 import { Delete16, Edit16, Add16 } from "@carbon/icons-react";
 const {
@@ -28,15 +22,16 @@ const {
   TableHeader,
   TableRow,
   TableToolbar,
-  TableToolbarAction,
   TableToolbarContent,
   TableToolbarSearch,
-  TableToolbarMenu,
 } = DataTable;
 
 function LabsPage() {
+  const [didMount, setDidMount] = useState(false)
   const [labs, setLabs] = useState([]);
+  const [labsLoaded, setLabsLoaded] = useState(false)
   const [courseIds, setCourseIds] = useState([]);
+  const [courseIdsLoaded, setCourseIdsLoaded] = useState(false)
   const [selectedCourse, setSelectedCourse] = useState("");
   const [openModal, setOpenModal] = useState(false);
   const [labToEdit, setLabToEdit] = useState(null)
@@ -52,6 +47,18 @@ function LabsPage() {
     setLabs(labs_objects);
   };
 
+  useEffect(() => {
+    if(didMount){
+      setLabsLoaded(true)
+    }
+  }, [labs])
+
+  useEffect(() => {
+    if(didMount){
+      setCourseIdsLoaded(true)
+    }
+  }, [courseIds])
+
   const createCoursesIds = (courses_array) => {
     let courses_ids = [];
     courses_array.forEach((course, index, _arr) => {
@@ -61,10 +68,11 @@ function LabsPage() {
   };
 
   const fetchLabs = (course_name) => {
+    setLabsLoaded(false)
     apiClient.getLabs(course_name).then((res) => {
       createLabsObjects(res.data.labs);
       setSelectedCourse(course_name);
-    });
+    })
   };
 
   const changeLabs = (event) => {
@@ -73,11 +81,12 @@ function LabsPage() {
   };
 
   useEffect(() => {
+    setDidMount(true)
     apiClient.getCourses(true).then((res) => {
       createCoursesIds(res.data.courses);
       fetchLabs(res.data.courses[0].name)
       setSelectedCourse(res.data.courses[0].name);
-    });
+    })
   }, []);
 
   const addLab = (formData) => {
@@ -141,108 +150,124 @@ function LabsPage() {
         labData={labToEdit}
       />
       <div style={{ marginLeft: 16, marginTop: 64, marginRight: 16 }}>
-        <Link href="#">Labs</Link>
         <div style={{ height: 16 }}></div>
         <h1>Browse Labs</h1>
         <div style={{ height: 40 }}></div>
-        <Select id="select-1" labelText="Select Course" onChange={changeLabs}>
-          {courseIds.map((course_id) => (
-            <SelectItem key={course_id} value={course_id} text={course_id} />
-          ))}
-        </Select>
+        {
+          courseIdsLoaded ? 
+          (
+          <Select id="select-1" labelText="Select Course" onChange={changeLabs}>
+            {courseIds.map((course_id) => (
+              <SelectItem key={course_id} value={course_id} text={course_id} />
+            ))}
+          </Select>
+          ) :
+          (
+            <SelectSkeleton style={{width: 224}} />
+          )
+        }
         <div style={{ height: 56 }}></div>
-        <DataTable
-          rows={labs}
-          headers={[
-            {
-              key: "id",
-              header: "Id",
-            },
-            {
-              key: "name",
-              header: "Name",
-            },
-            {
-              key: "disable_internet",
-              header: "Internet",
-            },
-            {
-              key: "runtime_limit",
-              header: "Runtime Limit",
-            },
-            {
-              key: "actions",
-              header: "Actions",
-            },
-          ]}
-          render={({ rows, headers, onInputChange }) => (
-            <TableContainer>
-              <TableToolbar aria-label="data table toolbar">
-                <TableToolbarContent>
-                  <TableToolbarSearch onChange={onInputChange} />
-                </TableToolbarContent>
-                <Button
-                  renderIcon={Add16}
-                  onClick={() => {
-                    setOpenModal(true);
-                  }}
-                >
-                  Add Lab
-                </Button>
-              </TableToolbar>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    {headers.map((header) => (
-                      <TableHeader>{header.header}</TableHeader>
-                    ))}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {rows.map((row) => (
-                    <TableRow>
-                      {row.cells.map((cell) => (
-                        <TableCell key={cell.id}>
-                          {cell.value === row.cells[2].value
-                            ? cell.value
-                              ? "Disabled"
-                              : "Enabled"
-                            : null}
-                          {cell.value === row.cells[4].value ? (
-                            <span>
-                              <Button
-                                kind="ghost"
-                                size="small"
-                                hasIconOnly
-                                renderIcon={Edit16}
-                                iconDescription="Edit"
-                                onClick={() => {
-                                  openEditLab(row.cells[1].value)
-                                }}
-                              />
-                              <Button
-                                kind="ghost"
-                                size="small"
-                                hasIconOnly
-                                renderIcon={Delete16}
-                                iconDescription="Delete"
-                                onClick={() => {
-                                  deleteLab(row.cells[1].value);
-                                }}
-                              />
-                            </span>
-                          ) : (
-                            cell.value
-                          )}
-                        </TableCell>
+        {
+          labsLoaded ? 
+          (
+            <DataTable
+              rows={labs}
+              headers={[
+                {
+                  key: "id",
+                  header: "Id",
+                },
+                {
+                  key: "name",
+                  header: "Name",
+                },
+                {
+                  key: "disable_internet",
+                  header: "Internet",
+                },
+                {
+                  key: "runtime_limit",
+                  header: "Runtime Limit",
+                },
+                {
+                  key: "actions",
+                  header: "Actions",
+                },
+              ]}
+              render={({ rows, headers, onInputChange }) => (
+                <TableContainer>
+                  <TableToolbar aria-label="data table toolbar">
+                    <TableToolbarContent>
+                      <TableToolbarSearch onChange={onInputChange} />
+                    </TableToolbarContent>
+                    <Button
+                      renderIcon={Add16}
+                      onClick={() => {
+                        setOpenModal(true);
+                      }}
+                    >
+                      Add Lab
+                    </Button>
+                  </TableToolbar>
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                        {headers.map((header) => (
+                          <TableHeader>{header.header}</TableHeader>
+                        ))}
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {rows.map((row) => (
+                        <TableRow>
+                          {row.cells.map((cell) => (
+                            <TableCell key={cell.id}>
+                              {cell.value === row.cells[2].value
+                                ? cell.value
+                                  ? "Disabled"
+                                  : "Enabled"
+                                : null}
+                              {cell.value === row.cells[4].value ? (
+                                <span>
+                                  <Button
+                                    kind="ghost"
+                                    size="small"
+                                    hasIconOnly
+                                    renderIcon={Edit16}
+                                    iconDescription="Edit"
+                                    onClick={() => {
+                                      openEditLab(row.cells[1].value)
+                                    }}
+                                  />
+                                  <Button
+                                    kind="ghost"
+                                    size="small"
+                                    hasIconOnly
+                                    renderIcon={Delete16}
+                                    iconDescription="Delete"
+                                    onClick={() => {
+                                      deleteLab(row.cells[1].value);
+                                    }}
+                                  />
+                                </span>
+                              ) : (
+                                cell.value
+                              )}
+                            </TableCell>
+                          ))}
+                        </TableRow>
                       ))}
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          )}
-        />
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              )}
+            />
+          ) :
+          (
+            <DataTableSkeleton showHeader={false} />
+          )
+        }
+        
       </div>
     </div>
   );
