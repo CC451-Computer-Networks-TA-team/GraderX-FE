@@ -48,6 +48,8 @@ function Grader() {
         apiClient.startGrading(course, lab)
           .then(res => {
             setStatus("");
+          }).catch(err => {
+            setStatus("failed");
           })
 
       })
@@ -72,6 +74,8 @@ function Grader() {
         apiClient.startGrading(course, lab)
           .then(res => {
             setStatus("")
+          }).catch(err => {
+            setStatus("failed");
           })
 
       })
