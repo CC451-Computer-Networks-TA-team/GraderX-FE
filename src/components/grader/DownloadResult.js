@@ -1,7 +1,8 @@
 import React from "react";
 import fileDownload from "js-file-download";
 import apiClient from "../../api-client";
-import { Button, Header} from "semantic-ui-react";
+import { Download32 } from '@carbon/icons-react';
+import { Button } from 'carbon-components-react';
 
 function DownloadResult(props) {
   function downloadFile() {
@@ -11,13 +12,11 @@ function DownloadResult(props) {
   }
 
   return (
-    <React.Fragment>
-      <Header textAlign="center" as="h4">
-        Results are ready for download
-      </Header>
-      <Button positive fluid onClick={downloadFile} style={{ marginBottom: "1%" }}>
+    <React.Fragment>     
+      <Button kind="primary" renderIcon={Download32}
+        onClick={downloadFile}>
         DOWNLOAD
-      </Button>
+        </Button>
     </React.Fragment>
   );
 }
