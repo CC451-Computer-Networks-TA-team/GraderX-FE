@@ -21,8 +21,7 @@ describe('Testing File input', () => {
             }
         });
 
-        //<p>Supported files: .rar / .7z / .zip</p>
-        expect(wrapper.find('p').length).toEqual(2);
+        expect(wrapper.contains(<p>Supported files: .rar / .7z / .zip</p>)).toBeTruthy();
     });
 
     it("should accept the file", () => {
