@@ -105,6 +105,9 @@ function CodeEditor(props) {
             const formData = getFiles();
             modifySubmissions(formData);
         }
+
+        // for regrading
+        apiClient.startGrading(props.course, props.lab)
         return true
     }
 
@@ -156,11 +159,7 @@ function CodeEditor(props) {
                     </Tab>
 
                 ))}
-
             </Tabs>
-
-
-
         </ModalWrapper>
     )
 
