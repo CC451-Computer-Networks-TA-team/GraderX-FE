@@ -11,10 +11,11 @@ function Revision(props) {
     const [visible, setVisible] = useState(false);
     const [diff, setDiff] = useState();
     const [update, setUpdate] = useState(0)
+    const [regrade, setRegrade] = useState(false)
 
     useEffect(() => {
         getSubmissionFilesList()
-        getDiffResults(); 
+        getDiffResults();
     }, [update])
 
 
@@ -23,6 +24,12 @@ function Revision(props) {
             setVisible(true)
 
     }, [fileNameList, setFileNameList])
+
+
+    function setRegradeStatus(val){
+
+        setRegrade(val);
+    }
 
     function getSubmissionFilesList() {
         apiClient.getSubmissionFilesList(props.course, props.lab)
@@ -46,11 +53,11 @@ function Revision(props) {
 
     }
 
-    function regradeSubmissions(){
+    function regradeSubmissions() {
         setUpdate(update => ++update);
     }
-  
-  
+
+
 
     return (
         <div>
@@ -66,6 +73,7 @@ function Revision(props) {
                                     submissionId={item}
                                     diff={diff}
                                     index={index}
+                                    regrade = {setRegradeStatus}
                                 />
 
                             </div>
@@ -73,10 +81,16 @@ function Revision(props) {
                     }
 
                 </Accordion>}
-            <Button kind="secondary" 
-                    renderIcon={Reset32} 
-                    onClick={regradeSubmissions} 
-                    style={{float:"left"}}>REGRADE AND SHOW RESULTS </Button> 
+            {
+                
+                <Button kind="secondary"
+                    renderIcon={Reset32}
+                    onClick={regradeSubmissions}
+                    disabled={!regrade}
+                    style={{ float: "left" }}>REGRADE AND SHOW RESULTS </Button>
+
+            }
+
         </div>
     )
 }

@@ -108,6 +108,7 @@ function CodeEditor(props) {
 
         // for regrading
         apiClient.startGrading(props.course, props.lab)
+        props.regrade(true)
         return true
     }
 
