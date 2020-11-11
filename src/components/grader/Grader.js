@@ -5,7 +5,7 @@ import GetSubmissions from './submissions/GetSubmissions'
 import Status from "./Status";
 import apiClient from "../../api-client";
 import ResultsContainer from "./ResultsContainer"
-
+import AppHeader from "../../components/layout/AppHeader";
 function Grader() {
   const [course, setCourse] = useState("")
   const [lab, setLab] = useState("");
@@ -106,6 +106,7 @@ function Grader() {
 
   return (
     <div>
+      <AppHeader />
       {determineVisible()}
     </div>
   );
