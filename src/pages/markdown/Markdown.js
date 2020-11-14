@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
 import apiClient from "../../api-client";
+import ReactDiffViewer from "react-diff-viewer";
 
 import './Markdown.scss';
 
@@ -25,6 +26,9 @@ function MarkdownPage({ match }) {
 
   const fileInputRef = React.createRef();
   const [markdown, setMarkdown] = useState("");
+  const [resultsReady, setResultsReady] = useState(false)
+  const [diff, setDiff] = useState([])
+  const resultsContainerRef = useRef(null)
 
   useEffect(() => {
     apiClient.getLabMD(courseName, LabName).then(res => {
@@ -32,6 +36,12 @@ function MarkdownPage({ match }) {
     });
   });
 
+  useEffect(() => {
+    if(resultsContainerRef.current && resultsReady){
+      resultsContainerRef.current.scrollIntoView()
+    }
+  }, [resultsReady])
+  
   const uploadFile = (file) => {
     const formData = new FormData();
 
@@ -43,7 +53,8 @@ function MarkdownPage({ match }) {
         apiClient.startGrading(courseName, LabName)
           .then(_res => {
             apiClient.getDiffResults(courseName, LabName).then(res => {
-              console.log(res.data);
+              setDiff(res.data[0].failed);
+              setResultsReady(true)
             });
           })
       });
@@ -59,11 +70,13 @@ function MarkdownPage({ match }) {
   }
 
   return (
-    <div className="content">
+    <div className="content single-submission">
       <div style={{ height: 24 }}></div>
-      <ReactMarkdown plugins={[gfm]}>
-        {markdown}
-      </ReactMarkdown>
+      <div className="markdown-container">
+        <ReactMarkdown plugins={[gfm]}>
+          {markdown}
+        </ReactMarkdown>
+      </div>
       <div style={{ height: 32 }}></div>
       <Button renderIcon={Add16} onClick={() => fileInputRef.current.click()}>
         Submit your code
@@ -77,8 +90,35 @@ function MarkdownPage({ match }) {
         accept=".zip,.rar,.7zip,.tar,.7z"
       />
       <div style={{ height: 32 }}></div>
-      <h3>Results</h3>
+      {
+        resultsReady && 
+        (
+            <div ref={resultsContainerRef} className="results-container">
+              <h3 className="results-header">Results</h3>
+              <div>
+                  {
+                      diff &&
+                      diff.map((tc) => (
+                          <div key={tc.tc_id} >
+                              <h4>Test Case {tc.tc_id}</h4>
+                              <hr></hr>
+                              <ReactDiffViewer
+                                  leftTitle="Expected"
+                                  rightTitle="Output"
+                                  oldValue={tc.expected}
+                                  newValue={tc.output}
+                                  useDarkTheme={true}
+                                  className="single-diff-container"
+                              />
+                              <br></br>
+                          </div>
+                      ))
 
+                  }
+              </div>
+            </div>
+        )
+      }
     </div>
   );
 }
