@@ -41,7 +41,7 @@ function MarkdownPage({ match }) {
       resultsContainerRef.current.scrollIntoView()
     }
   }, [resultsReady])
-  
+
   const uploadFile = (file) => {
     const formData = new FormData();
 
@@ -50,7 +50,7 @@ function MarkdownPage({ match }) {
     apiClient
       .uploadSubmissions(courseName, LabName, formData)
       .then(_res => {
-        apiClient.startGrading(courseName, LabName)
+        apiClient.startGrading(courseName, LabName, true)
           .then(_res => {
             apiClient.getDiffResults(courseName, LabName).then(res => {
               setDiff(res.data[0].failed);
