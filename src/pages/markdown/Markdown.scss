@@ -1,39 +1,41 @@
 .content {
   max-width: 750px;
-  margin: auto;
+  margin   : auto;
 }
 
-.content h2{
-  margin: 0 0 16px 0;
+.content h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 8px 0 8px 0;
 }
 
-.content p{
-  margin: 0 0 8px 0;
-}
 
-code{
+code {
   background-color: #353535;
-  border-radius: 4px;
-  padding: 0 6px 0 6px;
+  border-radius   : 4px;
+  padding         : 0 6px 0 6px;
 }
 
-pre{
-  border: 1px solid #363636;
+pre {
+  border          : 1px solid #363636;
   background-color: #262626;
-  border-radius: 0;
-  padding: 8px;
-  margin: 24px 0 24px 0;
+  border-radius   : 0;
+  padding         : 8px;
+  margin          : 16px 0 16px 0;
 }
 
 pre code {
-  background-color:transparent;
-  border-radius: 0;
-  padding:0;
-  margin: 0;
+  background-color: transparent;
+  border-radius   : 0;
+  padding         : 0;
+  margin          : 0;
 }
 
 a:link {
-  color: #78A9FF;
+  color          : #78A9FF;
   text-decoration: none;
 }
 
@@ -49,54 +51,51 @@ a:active {
   color: white;
 }
 
-ul{
+ul,
+ol {
   margin: 16px 0 16px 0;
 }
 
-li{
-  margin: 4px 0 4px 16px;
+ul {
+  list-style-type: disc;
+  margin-left    : 16px;
 }
 
-li:before {
-  content: "•";
-  font-size: 15px;
-  display: inline-block;
-  margin-left: -1.3em;
-  width: 1.3em;
+ol {
+  list-style-type: decimal;
+  margin-left    : 16px;
 }
 
-table{
+table {
   margin: 16px 0 16px 0;
 }
 
-th{
-  border:  1px solid #393939;
-  margin: 8px 8px 8px 8px; 
-  padding: 8px 16px;
+th {
+  border     : 1px solid #393939;
+  margin     : 8px 8px 8px 8px;
+  padding    : 8px 16px;
   font-weight: 600;
 }
 
-td{
-  border:  1px solid #393939;
+td {
+  border : 1px solid #393939;
   padding: 8px 16px;
 }
 
 hr {
-  border: 0;
-  margin: 24px 0 24px 0; 
+  border       : 0;
+  margin       : 24px 0 24px 0;
   border-bottom: 1.5px dashed #393939;
-  background: #393939;
+  background   : #393939;
 }
 
-blockquote{
+blockquote {
   background-color: #262626;
-  padding: 8px 16px 2px 16px; 
-  border-top: 1px solid #363636;
-  border-bottom: 1px solid #363636;
-  border-left: 3px solid #0F62FE;
-  border-right: 3px solid #0F62FE;
-}
-
-blockquote p{
-  margin: 0;
+  margin-bottom   : 12px;
+  margin-top      : 12px;
+  padding         : 8px 16px 8px 16px;
+  border-top      : 1px solid #363636;
+  border-bottom   : 1px solid #363636;
+  border-left     : 3px solid #0F62FE;
+  border-right    : 3px solid #0F62FE;
 }
