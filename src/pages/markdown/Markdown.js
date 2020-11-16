@@ -28,6 +28,7 @@ function MarkdownPage({ match }) {
   const [markdown, setMarkdown] = useState("");
   const [resultsReady, setResultsReady] = useState(false)
   const [diff, setDiff] = useState([])
+  const [totalTestcases, setTotalTestcases] = useState(0)
   const resultsContainerRef = useRef(null)
 
   useEffect(() => {
@@ -53,7 +54,8 @@ function MarkdownPage({ match }) {
         apiClient.startGrading(courseName, LabName, true)
           .then(_res => {
             apiClient.getDiffResults(courseName, LabName).then(res => {
-              setDiff(res.data[0].failed);
+              setDiff(res.data.diff[0].failed);
+              setTotalTestcases(res.data.total_test_cases_count)
               setResultsReady(true)
             });
           })
@@ -95,6 +97,7 @@ function MarkdownPage({ match }) {
         (
             <div ref={resultsContainerRef} className="results-container">
               <h3 className="results-header">Results</h3>
+              <p className="results-summary">You passed {totalTestcases - diff.length} test case{(totalTestcases - diff.length) == 1 ? "" : 's'} out of {totalTestcases}</p>
               <div>
                   {
                       diff &&

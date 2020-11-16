@@ -12,90 +12,97 @@ h6 {
   margin: 8px 0 8px 0;
 }
 
+.markdown-container{
 
-code {
-  background-color: #353535;
-  border-radius   : 4px;
-  padding         : 0 6px 0 6px;
+  code {
+    background-color: #353535;
+    border-radius   : 4px;
+    padding         : 0 6px 0 6px;
+  }
+  
+  pre {
+    border          : 1px solid #363636;
+    background-color: #262626;
+    border-radius   : 0;
+    padding         : 8px;
+    margin          : 16px 0 16px 0;
+  }
+  
+  pre code {
+    background-color: transparent;
+    border-radius   : 0;
+    padding         : 0;
+    margin          : 0;
+  }
+  
+  a:link {
+    color          : #78A9FF;
+    text-decoration: none;
+  }
+  
+  a:visited {
+    color: #BB8EFF;
+  }
+  
+  a:hover {
+    color: #A6C8FF;
+  }
+  
+  a:active {
+    color: white;
+  }
+  
+  ul,
+  ol {
+    margin: 16px 0 16px 0;
+  }
+  
+  ul {
+    list-style-type: disc;
+    margin-left    : 16px;
+  }
+  
+  ol {
+    list-style-type: decimal;
+    margin-left    : 16px;
+  }
+  
+  table {
+    margin: 16px 0 16px 0;
+  }
+  
+  th {
+    border     : 1px solid #393939;
+    margin     : 8px 8px 8px 8px;
+    padding    : 8px 16px;
+    font-weight: 600;
+  }
+  
+  td {
+    border : 1px solid #393939;
+    padding: 8px 16px;
+  }
+  
+  hr {
+    border       : 0;
+    margin       : 24px 0 24px 0;
+    border-bottom: 1.5px dashed #393939;
+    background   : #393939;
+  }
+  
+  blockquote {
+    background-color: #262626;
+    margin-bottom   : 12px;
+    margin-top      : 12px;
+    padding         : 8px 16px 8px 16px;
+    border-top      : 1px solid #363636;
+    border-bottom   : 1px solid #363636;
+    border-left     : 3px solid #0F62FE;
+    border-right    : 3px solid #0F62FE;
+  }
 }
 
-pre {
-  border          : 1px solid #363636;
-  background-color: #262626;
-  border-radius   : 0;
-  padding         : 8px;
-  margin          : 16px 0 16px 0;
-}
-
-pre code {
-  background-color: transparent;
-  border-radius   : 0;
-  padding         : 0;
-  margin          : 0;
-}
-
-a:link {
-  color          : #78A9FF;
-  text-decoration: none;
-}
-
-a:visited {
-  color: #BB8EFF;
-}
-
-a:hover {
-  color: #A6C8FF;
-}
-
-a:active {
-  color: white;
-}
-
-ul,
-ol {
-  margin: 16px 0 16px 0;
-}
-
-ul {
-  list-style-type: disc;
-  margin-left    : 16px;
-}
-
-ol {
-  list-style-type: decimal;
-  margin-left    : 16px;
-}
-
-table {
-  margin: 16px 0 16px 0;
-}
-
-th {
-  border     : 1px solid #393939;
-  margin     : 8px 8px 8px 8px;
-  padding    : 8px 16px;
-  font-weight: 600;
-}
-
-td {
-  border : 1px solid #393939;
-  padding: 8px 16px;
-}
-
-hr {
-  border       : 0;
-  margin       : 24px 0 24px 0;
-  border-bottom: 1.5px dashed #393939;
-  background   : #393939;
-}
-
-blockquote {
-  background-color: #262626;
-  margin-bottom   : 12px;
-  margin-top      : 12px;
-  padding         : 8px 16px 8px 16px;
-  border-top      : 1px solid #363636;
-  border-bottom   : 1px solid #363636;
-  border-left     : 3px solid #0F62FE;
-  border-right    : 3px solid #0F62FE;
+.results-summary{
+  text-align: center;
+  margin-bottom: 3rem;
 }
