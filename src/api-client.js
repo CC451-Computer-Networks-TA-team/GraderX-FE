@@ -87,8 +87,8 @@ export default {
     })
   },
 
-  startGrading(course, lab) {
-    return axios.get(`${GRADERX_API}run_grader?course=${course}&lab=${lab}`)
+  startGrading(course, lab, student=false) {
+    return axios.get(`${GRADERX_API}run_grader?course=${course}&lab=${lab}${student? "&student": ""}`)
   },
 
   getDiffResults(course, lab) {
