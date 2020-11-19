@@ -5,7 +5,7 @@ import {
   Header,
   HeaderName,
   HeaderNavigation,
-  HeaderMenuItem,
+  //HeaderMenuItem,
 } from "carbon-components-react/lib/components/UIShell";
 
 function AppHeader() {

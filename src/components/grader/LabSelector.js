@@ -21,6 +21,7 @@ function LabSelector(props) {
     apiClient.getLabs(props.course).then(res => {
       createLabObjects(res.data.labs.map(lab => lab.name));
     });
+  // eslint-disable-next-line
   }, []);
 
   const handleChange = (data) => {

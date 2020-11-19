@@ -16,20 +16,23 @@ function Revision(props) {
     useEffect(() => {
         getSubmissionFilesList()
         getDiffResults();
+        // eslint-disable-next-line
     }, [update])
 
 
     useEffect(() => {
-        if (fileNameList)
+        if (fileNameList) {
             setVisible(true)
+        }
 
     }, [fileNameList, setFileNameList])
 
 
-    function setRegradeStatus(val){
+    function setRegradeStatus(val) {
 
         setRegrade(val);
     }
+
 
     function getSubmissionFilesList() {
         apiClient.getSubmissionFilesList(props.course, props.lab)
@@ -73,7 +76,7 @@ function Revision(props) {
                                     submissionId={item}
                                     diff={diff}
                                     index={index}
-                                    regrade = {setRegradeStatus}
+                                    regrade={setRegradeStatus}
                                 />
 
                             </div>
@@ -82,12 +85,12 @@ function Revision(props) {
 
                 </Accordion>}
             {
-                
-                <Button kind="secondary"
-                    renderIcon={Reset32}
-                    onClick={regradeSubmissions}
-                    disabled={!regrade}
-                    style={{ float: "left" }}>REGRADE AND SHOW RESULTS </Button>
+                        <Button kind="secondary"
+                            renderIcon={Reset32}
+                            onClick={regradeSubmissions}
+                            disabled={(!regrade)}
+                            style={{ float: "left" }}>REGRADE AND SHOW RESULTS </Button>
+
 
             }
 

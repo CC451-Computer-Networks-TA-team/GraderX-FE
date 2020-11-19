@@ -18,7 +18,6 @@ import './CodeEditor.scss'
 function CodeEditor(props) {
     const [itemRefs] = useState(() => new MultiRef());
     const [tabRefs] = useState(() => new MultiRef());
-    const [preValue, setPreValue] = useState("");
     // eslint-disable-next-line
     const [tabLabels, setTabLabels] = useState([])
     const [currentTab, setCurrentTab] = useState(0)
@@ -73,8 +72,6 @@ function CodeEditor(props) {
         setCurrentTabLabel(tabLabels[index])
     }
 
-
-
     function getFiles() {
         const formData = new FormData();
         for (let key in submissionFiles) {
@@ -82,6 +79,7 @@ function CodeEditor(props) {
                 type: "text/plain",
             }))
         }
+        
         return formData
     }
 
@@ -97,7 +95,6 @@ function CodeEditor(props) {
     function modifySubmissions(formData) {
         apiClient
             .modifySubmissions(props.course, props.lab, props.submissionId, formData)
-
     }
 
     function saveFiles() {
@@ -150,11 +147,7 @@ function CodeEditor(props) {
                             ref={itemRefs.ref(index)}
                             style={{ width: "100%" }}
                             onChange={(newValue) => {
-                                //check if not empty first
-                                if (preValue !== "") {
-                                    submissionFiles[sub_id] = newValue;
-                                }
-                                setPreValue(newValue)
+                                submissionFiles[sub_id] = newValue;  
                             }}
                         />
                     </Tab>
