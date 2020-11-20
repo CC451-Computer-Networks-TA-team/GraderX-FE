@@ -29,7 +29,7 @@ function Revision(props) {
         apiClient.getDiffResults(props.course, props.lab)
             .then(res => {
                 if (res) {
-                    setDiff(res.data)
+                    setDiff(res.data.diff)
                 } else {
                     setDiff(false)
                 }

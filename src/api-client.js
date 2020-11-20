@@ -19,6 +19,10 @@ const GRADERX_API = process.env.GRADERX_API
   : "http://localhost:5000/";
 
 export default {
+  getLabMD(course, lab) {
+    return axios.get(`${GRADERX_API}courses/${course}/labs/${lab}/lab_guide`)
+  },
+
   getLabs(course) {
     return axios.get(`${GRADERX_API}courses/${course}/labs`);
   },
@@ -42,16 +46,16 @@ export default {
   addCourse(course) {
     return axios.post(`${GRADERX_API}course`, course);
   },
-  addLab(course, formData){
+  addLab(course, formData) {
     return axios.post(`${GRADERX_API}courses/${course}/labs`, formData)
   },
-  editLab(course, lab_id, runtime, internet, test_cases){
-    return axios.put(`${GRADERX_API}courses/${course}/labs/${lab_id}`, {name: lab_id, runtime_limit: runtime, disable_internet: !internet, test_cases})
+  editLab(course, lab_id, runtime, internet, test_cases) {
+    return axios.put(`${GRADERX_API}courses/${course}/labs/${lab_id}`, { name: lab_id, runtime_limit: runtime, disable_internet: !internet, test_cases })
   },
-  deleteLab(course, lab){
+  deleteLab(course, lab) {
     return axios.delete(`${GRADERX_API}courses/${course}/labs/${lab}`)
   },
-    
+
   uploadSubmissions(course, labId, formData) {
     return axios.post(`${GRADERX_API}submissions?course=${course}&lab=${labId}&method=file`, formData);
   },
@@ -83,15 +87,15 @@ export default {
     })
   },
 
-  startGrading(course, lab) {
-    return axios.get(`${GRADERX_API}run_grader?course=${course}&lab=${lab}`)
+  startGrading(course, lab, student=false) {
+    return axios.get(`${GRADERX_API}run_grader?course=${course}&lab=${lab}${student? "&student": ""}`)
   },
 
   getDiffResults(course, lab) {
     return axios.get(`${GRADERX_API}results?course=${course}&lab=${lab}&type=diff`)
   },
 
- 
+
   modifySubmissions(course, lab, submissionId, formData) {
     return axios.put(`${GRADERX_API}submissions?course=${course}&lab=${lab}&submission_id=${submissionId}`,
       formData);
@@ -101,11 +105,11 @@ export default {
     return axios.get(`${GRADERX_API}submissions?course=${course}&lab=${lab}&submission_id=${submissionId}`)
   },
 
-  getFile(course, lab, submissionId, fileName){
+  getFile(course, lab, submissionId, fileName) {
     return axios.get(`${GRADERX_API}submission_file?course=${course}&lab=${lab}&submission_id=${submissionId}&file_name=${fileName}`)
   },
 
-  getSubmissionFilesList(course,lab){
+  getSubmissionFilesList(course, lab) {
     return axios.get(`${GRADERX_API}/submissions?course=${course}&lab=${lab}`)
   }
 };
