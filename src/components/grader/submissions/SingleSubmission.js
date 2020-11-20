@@ -64,6 +64,7 @@ function SingleSubmission(props) {
                         course={props.course}
                         lab={props.lab}
                         submissionId={props.submissionId}
+                        regrade = {props.regrade}
                     />
                 }
 

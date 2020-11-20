@@ -85,7 +85,7 @@ const LabForm = (props) => {
   const editTestcase = (formTestcaseID, formTestcaseIN, formTestcaseOUT) => {
     let testcasesClone = formTestcases.slice(0);
     testcasesClone = testcasesClone.filter(
-      (test_case) => test_case.id != formTestcaseID
+      (test_case) => test_case.id !== formTestcaseID
     );
     testcasesClone.push({
       id: formTestcaseID,
@@ -98,7 +98,7 @@ const LabForm = (props) => {
 
   const deleteTestcase = (id) => {
     let testcasesClone = formTestcases.slice(0);
-    setFormTestcases(testcasesClone.filter((test_case) => test_case.id != id));
+    setFormTestcases(testcasesClone.filter((test_case) => test_case.id !== id));
   };
 
   useEffect(() => {
@@ -110,6 +110,7 @@ const LabForm = (props) => {
         setDisableID(true);
         setIsEdit(true);
     }
+  // eslint-disable-next-line
   }, [props.openModal]);
 
   const labGuideHandler = (e) => {

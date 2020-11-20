@@ -4,7 +4,7 @@ import LabForm from "./LabForm";
 import "./styles.scss";
 import AppHeader from "../../components/layout/AppHeader";
 import {
-  Link,
+  //Link,
   DataTable,
   DataTableSkeleton,
   Button,
@@ -51,12 +51,14 @@ function LabsPage() {
     if (didMount) {
       setLabsLoaded(true)
     }
+  // eslint-disable-next-line
   }, [labs])
 
   useEffect(() => {
     if (didMount) {
       setCourseIdsLoaded(true)
     }
+  // eslint-disable-next-line
   }, [courseIds])
 
   const createCoursesIds = (courses_array) => {
@@ -87,6 +89,7 @@ function LabsPage() {
       fetchLabs(res.data.courses[0].name)
       setSelectedCourse(res.data.courses[0].name);
     })
+  // eslint-disable-next-line
   }, []);
 
   const addLab = (formData) => {
@@ -128,7 +131,7 @@ function LabsPage() {
   };
 
   const openEditLab = (labID) => {
-    let labWithLabID = labs.find(lab => lab.name == labID)
+    let labWithLabID = labs.find(lab => lab.name === labID)
     setLabToEdit(labWithLabID)
     setOpenModal(true)
   }

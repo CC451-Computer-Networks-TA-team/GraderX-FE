@@ -49,6 +49,7 @@ const TestCaseForm = (props) => {
       setDisableID(true);
       setIsEdit(true);
     }
+  // eslint-disable-next-line
   }, [props.isTCModalOpen]);
 
   return (

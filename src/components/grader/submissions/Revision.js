@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Accordion, AccordionItem } from "carbon-components-react";
+import { Accordion, Button } from "carbon-components-react";
 import apiClient from "../../../api-client";
 import SingleSubmission from "./SingleSubmission"
+import { Reset32 } from '@carbon/icons-react';
 import './Revision.scss'
 
 function Revision(props) {
@@ -9,12 +10,29 @@ function Revision(props) {
     const [fileNameList, setFileNameList] = useState();
     const [visible, setVisible] = useState(false);
     const [diff, setDiff] = useState();
+    const [update, setUpdate] = useState(0)
+    const [regrade, setRegrade] = useState(false)
 
     useEffect(() => {
         getSubmissionFilesList()
         getDiffResults();
-        // eslint-disable-next-line 
-    }, [])
+        // eslint-disable-next-line
+    }, [update])
+
+
+    useEffect(() => {
+        if (fileNameList) {
+            setVisible(true)
+        }
+
+    }, [fileNameList, setFileNameList])
+
+
+    function setRegradeStatus(val) {
+
+        setRegrade(val);
+    }
+
 
     function getSubmissionFilesList() {
         apiClient.getSubmissionFilesList(props.course, props.lab)
@@ -38,17 +56,14 @@ function Revision(props) {
 
     }
 
-    useEffect(() => {
-        if (fileNameList)
-            setVisible(true)
+    function regradeSubmissions() {
+        setUpdate(update => ++update);
+    }
 
-    }, [fileNameList, setFileNameList])
+
 
     return (
-
-
         <div>
-
             {visible &&
                 <Accordion align="start"
                     style={{ marginBottom: "10px" }}>
@@ -60,16 +75,24 @@ function Revision(props) {
                                     lab={props.lab}
                                     submissionId={item}
                                     diff={diff}
-                                    index = {index}
+                                    index={index}
+                                    regrade={setRegradeStatus}
                                 />
 
                             </div>
-
-
                         ))
                     }
 
                 </Accordion>}
+            {
+                        <Button kind="secondary"
+                            renderIcon={Reset32}
+                            onClick={regradeSubmissions}
+                            disabled={(!regrade)}
+                            style={{ float: "left" }}>REGRADE AND SHOW RESULTS </Button>
+
+
+            }
 
         </div>
     )

@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import MultiRef from 'react-multi-ref';
 import { Tabs, Tab } from 'carbon-components-react';
 import AceEditor from "react-ace";
-import { ModalWrapper } from 'carbon-components-react';
+import { Modal, Button } from 'carbon-components-react';
+import { Edit16 } from '@carbon/icons-react';
 import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/mode-sql";
 import "ace-builds/src-noconflict/mode-c_cpp";
@@ -16,9 +17,9 @@ import apiClient from "../../../api-client";
 import './CodeEditor.scss'
 
 function CodeEditor(props) {
+    const [openModal, setOpenModal] = useState(false);
     const [itemRefs] = useState(() => new MultiRef());
     const [tabRefs] = useState(() => new MultiRef());
-    const [preValue, setPreValue] = useState("");
     // eslint-disable-next-line
     const [tabLabels, setTabLabels] = useState([])
     const [currentTab, setCurrentTab] = useState(0)
@@ -73,8 +74,6 @@ function CodeEditor(props) {
         setCurrentTabLabel(tabLabels[index])
     }
 
-
-
     function getFiles() {
         const formData = new FormData();
         for (let key in submissionFiles) {
@@ -82,6 +81,7 @@ function CodeEditor(props) {
                 type: "text/plain",
             }))
         }
+
         return formData
     }
 
@@ -97,7 +97,6 @@ function CodeEditor(props) {
     function modifySubmissions(formData) {
         apiClient
             .modifySubmissions(props.course, props.lab, props.submissionId, formData)
-
     }
 
     function saveFiles() {
@@ -105,6 +104,10 @@ function CodeEditor(props) {
             const formData = getFiles();
             modifySubmissions(formData);
         }
+
+        // for regrading
+        apiClient.startGrading(props.course, props.lab)
+        props.regrade(true)
         return true
     }
 
@@ -115,53 +118,58 @@ function CodeEditor(props) {
     }
 
     return (
-
-        <ModalWrapper size='lg'
-            buttonTriggerText="Edit Submission"
-            modalHeading="Edit Mode"
-            handleSubmit={saveFiles}
-            className="code-editor-wrapper"
-        >
-
-
-            <Tabs light
-                label="Files"
-                onSelectionChange={handleSelect}
+        <div>
+            <Modal
+                hasForm
+                open={openModal}
+                onRequestClose={() => {
+                    setOpenModal(false);
+                }}
+                primaryButtonText='Save'
+                secondaryButtonText='Close'
+                onRequestSubmit={() => {
+                    saveFiles();
+                    setOpenModal(false);
+                }}
+                size='lg'
+                modalHeading="Edit Mode"
             >
-
-                {props.subList.map((sub_id, index) => (
-
-                    <Tab
-                        href="#"
-                        id={index}
-                        label={setTabLabel(sub_id, index)}
-                        ref={tabRefs.ref(index)}
+                <div>
+                    <Tabs light
+                        label="Files"
+                        onSelectionChange={handleSelect}
                     >
-                        <AceEditor
-                            mode={getLanguageMode(sub_id)}
-                            theme="dracula"
-                            name="UNIQUE_ID_OF_DIV"
-                            minLines="5"
-                            maxLines="30"
-                            ref={itemRefs.ref(index)}
-                            style={{ width: "100%" }}
-                            onChange={(newValue) => {
-                                //check if not empty first
-                                if (preValue !== "") {
-                                    submissionFiles[sub_id] = newValue;
-                                }
-                                setPreValue(newValue)
-                            }}
-                        />
-                    </Tab>
 
-                ))}
+                        {props.subList.map((sub_id, index) => (
 
-            </Tabs>
+                            <Tab
+                                href="#"
+                                id={index}
+                                label={setTabLabel(sub_id, index)}
+                                ref={tabRefs.ref(index)}
+                            >
+                                <AceEditor
+                                    mode={getLanguageMode(sub_id)}
+                                    theme="dracula"
+                                    name="UNIQUE_ID_OF_DIV"
+                                    minLines="5"
+                                    maxLines="30"
+                                    ref={itemRefs.ref(index)}
+                                    style={{ width: "100%" }}
+                                    onChange={(newValue) => {
+                                        submissionFiles[sub_id] = newValue;
+                                    }}
+                                />
+                            </Tab>
 
-
-
-        </ModalWrapper>
+                        ))}
+                    </Tabs>
+                </div>
+            </Modal>
+            <Button renderIcon={Edit16} onClick={() => setOpenModal(true)}>
+                Edit Submission
+            </Button>
+        </div>
     )
 
 }

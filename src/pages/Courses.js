@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import apiClient from "../api-client";
 
 import {
-  Link, Tile, DataTable, Button,
+  //Link,
+  Tile, DataTable, Button,
   TextInput, Dropdown, Modal, DataTableSkeleton
 } from 'carbon-components-react';
 import AppHeader from "../components/layout/AppHeader";
@@ -18,10 +19,10 @@ const {
   TableHeader,
   TableRow,
   TableToolbar,
-  TableToolbarAction,
+  //TableToolbarAction,
   TableToolbarContent,
   TableToolbarSearch,
-  TableToolbarMenu,
+  //TableToolbarMenu,
 } = DataTable;
 
 function CoursesPage() {
@@ -54,6 +55,7 @@ function CoursesPage() {
     if (didMount) {
       setCoursesLoaded(true)
     }
+  // eslint-disable-next-line
   }, [courses])
 
   useEffect(() => {
