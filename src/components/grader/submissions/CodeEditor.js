@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import MultiRef from 'react-multi-ref';
 import { Tabs, Tab } from 'carbon-components-react';
 import AceEditor from "react-ace";
-import { ModalWrapper, Modal, Button } from 'carbon-components-react';
+import { Modal, Button } from 'carbon-components-react';
 import { Edit16 } from '@carbon/icons-react';
 import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/mode-sql";
@@ -133,9 +133,8 @@ function CodeEditor(props) {
                 }}
                 size='lg'
                 modalHeading="Edit Mode"
-                modalLabel={formTitle.toString()}
             >
-                <div className="code-editor-wrapper">
+                <div>
                     <Tabs light
                         label="Files"
                         onSelectionChange={handleSelect}
