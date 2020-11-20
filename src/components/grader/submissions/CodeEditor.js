@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import MultiRef from 'react-multi-ref';
 import { Tabs, Tab } from 'carbon-components-react';
 import AceEditor from "react-ace";
-import { ModalWrapper } from 'carbon-components-react';
+import { ModalWrapper, Modal, Button } from 'carbon-components-react';
+import { Edit16 } from '@carbon/icons-react';
 import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/mode-sql";
 import "ace-builds/src-noconflict/mode-c_cpp";
@@ -16,6 +17,7 @@ import apiClient from "../../../api-client";
 import './CodeEditor.scss'
 
 function CodeEditor(props) {
+    const [openModal, setOpenModal] = useState(false);
     const [itemRefs] = useState(() => new MultiRef());
     const [tabRefs] = useState(() => new MultiRef());
     // eslint-disable-next-line
@@ -79,7 +81,7 @@ function CodeEditor(props) {
                 type: "text/plain",
             }))
         }
-        
+
         return formData
     }
 
@@ -116,45 +118,59 @@ function CodeEditor(props) {
     }
 
     return (
-
-        <ModalWrapper size='lg'
-            buttonTriggerText="Edit Submission"
-            modalHeading="Edit Mode"
-            handleSubmit={saveFiles}
-            className="code-editor-wrapper"
-        >
-
-
-            <Tabs light
-                label="Files"
-                onSelectionChange={handleSelect}
+        <div>
+            <Modal
+                hasForm
+                open={openModal}
+                onRequestClose={() => {
+                    setOpenModal(false);
+                }}
+                primaryButtonText='Save'
+                secondaryButtonText='Close'
+                onRequestSubmit={() => {
+                    saveFiles();
+                    setOpenModal(false);
+                }}
+                size='lg'
+                modalHeading="Edit Mode"
+                modalLabel={formTitle.toString()}
             >
-
-                {props.subList.map((sub_id, index) => (
-
-                    <Tab
-                        href="#"
-                        id={index}
-                        label={setTabLabel(sub_id, index)}
-                        ref={tabRefs.ref(index)}
+                <div className="code-editor-wrapper">
+                    <Tabs light
+                        label="Files"
+                        onSelectionChange={handleSelect}
                     >
-                        <AceEditor
-                            mode={getLanguageMode(sub_id)}
-                            theme="dracula"
-                            name="UNIQUE_ID_OF_DIV"
-                            minLines="5"
-                            maxLines="30"
-                            ref={itemRefs.ref(index)}
-                            style={{ width: "100%" }}
-                            onChange={(newValue) => {
-                                submissionFiles[sub_id] = newValue;  
-                            }}
-                        />
-                    </Tab>
 
-                ))}
-            </Tabs>
-        </ModalWrapper>
+                        {props.subList.map((sub_id, index) => (
+
+                            <Tab
+                                href="#"
+                                id={index}
+                                label={setTabLabel(sub_id, index)}
+                                ref={tabRefs.ref(index)}
+                            >
+                                <AceEditor
+                                    mode={getLanguageMode(sub_id)}
+                                    theme="dracula"
+                                    name="UNIQUE_ID_OF_DIV"
+                                    minLines="5"
+                                    maxLines="30"
+                                    ref={itemRefs.ref(index)}
+                                    style={{ width: "100%" }}
+                                    onChange={(newValue) => {
+                                        submissionFiles[sub_id] = newValue;
+                                    }}
+                                />
+                            </Tab>
+
+                        ))}
+                    </Tabs>
+                </div>
+            </Modal>
+            <Button renderIcon={Edit16} onClick={() => setOpenModal(true)}>
+                Edit Submission
+            </Button>
+        </div>
     )
 
 }
