@@ -1,12 +1,7 @@
 import React from 'react';
 import './styles.scss';
 
-import {
-  Header,
-  HeaderName,
-  HeaderNavigation,
-  HeaderMenuItem
-} from "carbon-components-react/lib/components/UIShell";
+import AppHeader from "./layout/AppHeader";
 
 import {
   FileUploader, TextInput,
@@ -17,17 +12,7 @@ function MossOne() {
   return (
     <div>
       <div>
-        <Header aria-label="Alexandria University - GraderX">
-          <HeaderName href="#" prefix="Alexandria University">
-            Grader-X
-        </HeaderName>
-          <HeaderNavigation aria-label="Alexandria University - GraderX">
-            <HeaderMenuItem href="#">Courses</HeaderMenuItem>
-            <HeaderMenuItem href="#">Labs</HeaderMenuItem>
-            <HeaderMenuItem href="#">Grader</HeaderMenuItem>
-            <HeaderMenuItem href="#">Moss</HeaderMenuItem>
-          </HeaderNavigation>
-        </Header>
+        <AppHeader />
       </div>
       <div className="moss-container">
         <div style={{ paddingTop: 50 }}>

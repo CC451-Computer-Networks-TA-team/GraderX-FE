@@ -1,5 +1,5 @@
 import React from "react";
-import {NavLink} from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 
 import {
   Header,
@@ -13,6 +13,7 @@ function AppHeader() {
     { key: 0, to: "/courses", text: "Courses" },
     { key: 1, to: "/labs", text: "Labs" },
     { key: 2, to: "/grader", text: "Grader" },
+    { key: 3, to: "/moss", text: "Moss" },
   ];
 
   return (
@@ -24,7 +25,7 @@ function AppHeader() {
         <HeaderNavigation aria-label="Alexandria University - GraderX">
           {links.map((link) => (
             <NavLink key={link.key} className="bx--header__menu-item" to={link.to}>{link.text}</NavLink>
-          ))}          
+          ))}
         </HeaderNavigation>
       </Header>
     </React.Fragment>
