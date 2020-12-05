@@ -105,4 +105,10 @@ h6 {
 .results-summary{
   text-align: center;
   margin-bottom: 3rem;
+  &.warning{
+    color: #cf6679
+  }
+  &.success{
+    color: #75F94B
+  }
 }
