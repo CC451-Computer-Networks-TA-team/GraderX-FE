@@ -59,7 +59,9 @@ export default {
   uploadSubmissions(course, labId, formData) {
     return axios.post(`${GRADERX_API}submissions?course=${course}&lab=${labId}&method=file`, formData);
   },
-
+  uploadMossSubmissions(course, labId, formData) {
+    return axios.post(`${GRADERX_API}submissions?course=${course}&lab=${labId}&method=file-moss`, formData);
+  },
   downloadResults(course, labId) {
     return axios.get(`${GRADERX_API}results?course=${course}&lab=${labId}&type=download`, {
       responseType: 'blob',

@@ -2,7 +2,7 @@ import React from "react";
 
 import { Route, Switch, Redirect } from 'react-router-dom';
 import Grader from "./components/grader/Grader";
-import Moss from "./components/Moss1";
+import Moss from "./components/moss/Moss1";
 import LabsPage from './pages/lab/Labs';
 import CoursesPage from "./pages/Courses";
 import MarkdownPage from "./pages/markdown/Markdown";
