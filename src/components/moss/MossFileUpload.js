@@ -39,7 +39,7 @@ function MossFileUpload(props) {
       <div className="moss-container">
         <h3>MOSS</h3>
         <div style={{ height: 24 }}></div>
-        <p> Only .rar / .7z / .zip files.</p>
+        <p> Only .rar / .7z / .zip files</p>
         <div style={{ height: 16 }}></div>
         <Button
           renderIcon={Upload16}

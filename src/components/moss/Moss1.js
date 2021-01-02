@@ -4,39 +4,46 @@ import { Upload16 } from "@carbon/icons-react";
 import "../styles.scss";
 import apiClient from "../../api-client";
 import MossFileUpload from "./MossFileUpload";
-import Status from "../grader/Status";
+import Status, { statusState } from "./Status";
+import MossLinkView from './MossLinkView'
 
 function MossOne() {
   const [file, setFile] = useState(null);
   const [status, setStatus] = useState("");
+  const [mossLink, setMossLink] = useState("");
 
   const resetFile = () => {
     setFile(null);
     setStatus("");
   };
 
-  useEffect(
-    () => {
-      if (file) {
-        const formData = new FormData();
-        formData.append("submissions_file", file);
-        apiClient
-          .uploadMossSubmissions("cc451", "lab3", formData)
-          .then((res) => {
-            setStatus("grading")
-          });
-      }
-    },
-    [file]
-  );
+  const changeFile = (file) => {
+    setStatus(statusState.LOADING);
+    setFile(file);
+  };
+
+  useEffect(() => {
+    if (file) {
+      const formData = new FormData();
+      formData.append("submissions_file", file);
+      apiClient
+        .uploadMossSubmissions(formData)
+        .then((res) => {
+          setMossLink(res.data.url)
+          setStatus("")
+        }).catch(err => {
+          setStatus(statusState.FAILED)
+        });
+    }
+  }, [file]);
 
   const determineVisible = () => {
     if (!file) {
-      return <MossFileUpload setFile={setFile} />;
+      return <MossFileUpload setFile={changeFile} />;
     } else if (status) {
-      return <Status status="grading" resetFile={resetFile} />;
+      return <Status statusState={status} loadingText="processing" reset={resetFile} />;
     } else {
-      return <h1>Done</h1>;
+    return <MossLinkView link={mossLink} />;
     }
   };
 
