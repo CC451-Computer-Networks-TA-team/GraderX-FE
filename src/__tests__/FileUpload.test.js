@@ -1,5 +1,6 @@
 import React from "react";
-import FileUpload, { validateExtension } from '../components/grader/submissions/FileUpload';
+import FileUpload from '../components/grader/submissions/FileUpload';
+import { validateExtension } from '../utils'
 import { shallow, configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
