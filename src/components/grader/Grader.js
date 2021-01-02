@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 import LabSelector from "./LabSelector";
 import CourseSelector from './CourseSelector'
 import GetSubmissions from './submissions/GetSubmissions'
-import Status from "./Status";
+import Status, { statusState } from "./Status";
 import apiClient from "../../api-client";
 import ResultsContainer from "./ResultsContainer"
 import AppHeader from "../../components/layout/AppHeader";
+
+
 function Grader() {
   const [course, setCourse] = useState("")
   const [lab, setLab] = useState("");
@@ -22,7 +24,7 @@ function Grader() {
   }
 
   const changeFile = f => {
-    setStatus("grading");
+    setStatus(statusState.LOADING);
     setFile(f);
   };
 
@@ -49,12 +51,12 @@ function Grader() {
           .then(res => {
             setStatus("");
           }).catch(err => {
-            setStatus("failed");
+            setStatus(statusState.FAILED);
           })
 
       })
       .catch(err => {
-        setStatus("failed");
+        setStatus(statusState.FAILED);
       });
   };
 
@@ -67,7 +69,7 @@ function Grader() {
   }, [file]);
 
   const importAndGrade = (accessToken, sheetLink, field) => {
-    setStatus("grading")
+    setStatus(statusState.LOADING)
     setImporting("true")
     apiClient.startImporting(accessToken, sheetLink, field, course, lab)
       .then((res) => {
@@ -75,7 +77,7 @@ function Grader() {
           .then(res => {
             setStatus("")
           }).catch(err => {
-            setStatus("failed");
+            setStatus(statusState.FAILED);
           })
 
       })
@@ -94,7 +96,7 @@ function Grader() {
     } else if (!importing && !file) {
       return <GetSubmissions setFile={changeFile} resetLab={resetLab} importAndGrade={importAndGrade} />;
     } else if (status) {
-      return <Status status={status} resetFile={resetFile} />;
+      return <Status statusState={status} loadingText="grading" failedText="grading" reset={resetFile} />;
     } else {
       return (<div>
         <ResultsContainer course={course} lab={lab} resetLab={resetLab} />

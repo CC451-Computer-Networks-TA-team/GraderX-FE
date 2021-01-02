@@ -4,7 +4,7 @@ import { Upload16 } from "@carbon/icons-react";
 import "../styles.scss";
 import apiClient from "../../api-client";
 import MossFileUpload from "./MossFileUpload";
-import Status, { statusState } from "./Status";
+import Status, { statusState } from "../grader/Status";
 import MossLinkView from './MossLinkView'
 
 function MossOne() {
