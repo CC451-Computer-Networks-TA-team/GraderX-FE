@@ -4,9 +4,6 @@ import AppHeader from "../layout/AppHeader";
 const MossLinkView = (props) => {
   return (
     <div>
-      <div>
-        <AppHeader />
-      </div>
 
       <div className="moss-container" style={{width: "30%", textAlign: "center"}}>
         <h3>MOSS Results</h3>

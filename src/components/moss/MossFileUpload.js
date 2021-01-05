@@ -6,11 +6,9 @@ import { validateExtension } from "../../utils";
 import apiClient from "../../api-client";
 
 import AppHeader from "../layout/AppHeader";
+import { Checkbox } from "carbon-components-react";
 
 function MossFileUpload(props) {
-  const [file, setFile] = useState(null);
-  const [status, setStatus] = useState("");
-  const [importing, setImporting] = useState(false);
   const [selectedInvalid, setSelectedInvalid] = useState(false);
   const fileInputRef = React.createRef();
 
@@ -19,12 +17,7 @@ function MossFileUpload(props) {
       event.target.files[0] &&
       validateExtension(event.target.files[0].type)
     ) {
-        props.setFile(event.target.files[0])
-    //   const formData = new FormData();
-    //   formData.append("submissions_file", event.target.files[0]);
-    //   apiClient.uploadMossSubmissions("cc451", "lab3", formData).then((res) => {
-    //     console.log(res);
-    //   });
+      props.setFile(event.target.files[0]);
     } else {
       setSelectedInvalid(true);
     }
@@ -32,21 +25,42 @@ function MossFileUpload(props) {
 
   return (
     <div>
-      <div>
-        <AppHeader />
-      </div>
 
       <div className="moss-container">
         <h3>MOSS</h3>
         <div style={{ height: 24 }}></div>
         <p> Only .rar / .7z / .zip files</p>
         <div style={{ height: 16 }}></div>
-        <Button
-          renderIcon={Upload16}
-          onClick={() => fileInputRef.current.click()}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            flexDirection: "column",
+          }}
         >
-          Select file
-        </Button>
+          <Button
+            renderIcon={Upload16}
+            onClick={() => fileInputRef.current.click()}
+            style={{ marginBottom: "1rem" }}
+          >
+            Select file
+          </Button>
+
+          <div style={{ marginBottom: "3rem" }}>
+            <Checkbox
+              labelText="Clear pre-existing submissions for this lab"
+              id="clear-pre"
+              checked={props.clearSubs}
+              onChange={(e) => props.setClearSubs(!props.clearSubs)}
+              
+            />
+          </div>
+
+          <Button disabled={props.clearSubs} onClick={() => props.runOnExisting()}>
+            Run On Existing Submissions
+          </Button>
+        </div>
+
         {selectedInvalid ? (
           <div>
             <div style={{ height: 16 }}></div>
