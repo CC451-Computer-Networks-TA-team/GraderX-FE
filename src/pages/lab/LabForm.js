@@ -8,9 +8,10 @@ import {
   Row,
   Column,
   Checkbox,
-  FileUploader
+  FileUploader,
+  TooltipIcon
 } from "carbon-components-react";
-import { Delete16, Edit16, Add16 } from "@carbon/icons-react";
+import { Delete16, Edit16, Add16, Information16 } from "@carbon/icons-react";
 
 const LabForm = (props) => {
   const [isTCModalOpen, setIsTCModalOpen] = useState(false);
@@ -21,29 +22,29 @@ const LabForm = (props) => {
   const [formRuntime, setFormRuntime] = useState("");
   const [formInternet, setFormInternet] = useState(false);
   const [formTestcases, setFormTestcases] = useState([]);
-  const [formLabGuide, setFormLabGuide] = useState(null)
+  const [formLabGuide, setFormLabGuide] = useState(null);
 
 
   const addLab = () => {
-    if(formLabId && formRuntime){
-        const formData = new FormData();
-        formData.append('name', formLabId)
-        formData.append('runtime_limit', formRuntime)
-        formData.append('disable_internet', !formInternet)
-        formData.append('test_cases', JSON.stringify(formTestcases))
-        formData.append('lab_guide', formLabGuide)
+    if (formLabId && formRuntime) {
+      const formData = new FormData();
+      formData.append('name', formLabId)
+      formData.append('runtime_limit', formRuntime)
+      formData.append('disable_internet', !formInternet)
+      formData.append('test_cases', JSON.stringify(formTestcases))
+      formData.append('lab_guide', formLabGuide)
 
-        props.addLab(formData);
-        props.closeLabModal();
-        resetAndCloseLabModal()
+      props.addLab(formData);
+      props.closeLabModal();
+      resetAndCloseLabModal()
     }
   }
 
   const editLab = () => {
-    if(formLabId && formRuntime){
-        props.editLab(formLabId, formRuntime, formInternet, formTestcases);
-        props.closeLabModal();
-        resetAndCloseLabModal()
+    if (formLabId && formRuntime) {
+      props.editLab(formLabId, formRuntime, formInternet, formTestcases);
+      props.closeLabModal();
+      resetAndCloseLabModal()
     }
   }
 
@@ -103,14 +104,14 @@ const LabForm = (props) => {
 
   useEffect(() => {
     if (props.labData) {
-        setFormLabId(props.labData.name);
-        setFormRuntime(props.labData.runtime_limit);
-        setFormInternet(!props.labData.disable_internet);
-        setFormTestcases(props.labData.test_cases);
-        setDisableID(true);
-        setIsEdit(true);
+      setFormLabId(props.labData.name);
+      setFormRuntime(props.labData.runtime_limit);
+      setFormInternet(!props.labData.disable_internet);
+      setFormTestcases(props.labData.test_cases);
+      setDisableID(true);
+      setIsEdit(true);
     }
-  // eslint-disable-next-line
+    // eslint-disable-next-line
   }, [props.openModal]);
 
   const labGuideHandler = (e) => {
@@ -164,7 +165,16 @@ const LabForm = (props) => {
           <Row style={{ marginTop: "1rem" }}>
             <Column>
               <Checkbox
-                labelText={`Enable Internet Access`}
+                labelText={
+                  <span style={{ display: 'flex' }}>
+                    <p>Enable internet access</p>
+                    <div style={{ width: 8 }}></div>
+                    <TooltipIcon
+                      tooltipText="Enables code to access interent."
+                    ><Information16 />
+                    </TooltipIcon>
+                  </span>
+                }
                 id="checkbox-label-1"
                 checked={formInternet}
                 onChange={(e) => setFormInternet(e)}
@@ -173,7 +183,7 @@ const LabForm = (props) => {
           </Row>
           <Row style={{ marginTop: "2rem" }}>
             <Column>
-              <FileUploader buttonLabel="Select file" labelTitle="Upload Lab Guide (optional)" labelDescription="only .md files" filenameStatus='complete' onChange={labGuideHandler}/>
+              <FileUploader buttonLabel="Select file" labelTitle="Upload Lab Guide (optional)" labelDescription="only .md files" filenameStatus='complete' onChange={labGuideHandler} />
             </Column>
           </Row>
           <Row style={{ marginTop: "2rem" }}>
