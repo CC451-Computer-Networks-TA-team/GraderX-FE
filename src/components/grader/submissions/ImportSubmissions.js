@@ -117,6 +117,7 @@ const ImportSubmissions = (props) => {
                             cookiePolicy={'single_host_origin'}
                         />
                     </div>
+                    <div style={{ width: 5 }}></div>
                     <div
                         style={{ height: 40, width: 104, display: "inline-block" }}
                     ><MicrosoftLogin
@@ -127,8 +128,6 @@ const ImportSubmissions = (props) => {
                         />
                     </div>
                 </div>
-
-
             </div>
 
             <div style={authorized ? {} : { display: 'none' }}>
