@@ -1,6 +1,17 @@
+body{
+  height: initial !important;;
+}
+
+.results-container{
+  width: 60%;
+  margin: auto;
+  margin-top: 25vh;
+  margin-bottom: 2rem;
+}
+
 .moss-container{
     width: 300px;
-    margin: 12% auto;
+    margin: 20vh auto;
   }
   
   .separator .left{
@@ -24,4 +35,8 @@
   
   #googlebutton:hover{
     cursor: pointer;
+  }
+
+  .moss-results-header{
+    text-align: center;
   }

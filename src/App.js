@@ -2,6 +2,7 @@ import React from "react";
 
 import { Route, Switch, Redirect } from 'react-router-dom';
 import Grader from "./components/grader/Grader";
+import Moss from "./components/moss/Moss";
 import LabsPage from './pages/lab/Labs';
 import CoursesPage from "./pages/Courses";
 import MarkdownPage from "./pages/markdown/Markdown";
@@ -14,6 +15,7 @@ function App() {
         <Route path="/courses" component={CoursesPage} />
         <Route path="/labs" component={LabsPage} />
         <Route path="/grader" component={Grader} />
+        <Route path="/moss" component={Moss} />
         <Redirect from="/" to="/grader" />
       </Switch>
     </React.Fragment>
