@@ -59,8 +59,21 @@ export default {
   uploadSubmissions(course, labId, formData) {
     return axios.post(`${GRADERX_API}submissions?course=${course}&lab=${labId}&method=file`, formData);
   },
-  uploadMossSubmissions(course, labId, clearSubs, useExisting, formData) {
-    return axios.post(`${GRADERX_API}submissions?course=${course}&lab=${labId}${clearSubs? "&clearSubs": ""}${useExisting? "&useExisting": ""}&method=file-moss`, formData);
+  uploadMossSubmissions(course, lab, clearSubs, useExisting, formData) {
+    const method = 'file-moss'
+    return axios.post(
+      `${GRADERX_API}submissions`,
+      formData,
+      {
+        params: {
+          course,
+          lab,
+          clearSubs,
+          useExisting,
+          method
+        }
+      }
+    );
   },
   downloadResults(course, labId) {
     return axios.get(`${GRADERX_API}results?course=${course}&lab=${labId}&type=download`, {
