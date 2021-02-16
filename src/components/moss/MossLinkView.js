@@ -5,8 +5,8 @@ const MossLinkView = (props) => {
   return (
     <div>
 
-      <div className="moss-container" style={{width: "30%", textAlign: "center"}}>
-        <h3>MOSS Results</h3>
+      <div className="moss-container">
+        <h3 className="moss-results-header">MOSS Results</h3>
         <div style={{ height: 24 }}></div>
         <a target="_blank" href={props.link}>{props.link}</a>
       </div>

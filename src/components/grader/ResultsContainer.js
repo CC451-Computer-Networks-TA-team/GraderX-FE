@@ -20,12 +20,7 @@ function ResultsContainer(props) {
     <React.Fragment>
 
       <div
-        className="bx--grid"
-        style={{
-          width: "50%",
-          paddingTop: "20%",
-          margin: "auto"
-        }}
+        className="bx--grid results-container"
       >
 
         <div style={{ paddingBottom: "0.5rem" }}>
