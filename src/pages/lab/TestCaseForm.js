@@ -26,7 +26,7 @@ const TestCaseForm = (props) => {
 
   const editTestcase = () => {
     if (formTestcaseID && formTestcaseIN && formTestcaseOUT) {
-      props.editTestcase(formTestcaseID, formTestcaseIN, formTestcaseOUT);
+      props.editTestcase(formTestcaseID, formTestcaseIN, formTestcaseOUT, formStudentAccessible);
       resetAndCloseTCModal()
     }
   };
@@ -46,6 +46,7 @@ const TestCaseForm = (props) => {
       setFormTestcaseID(props.testCase.id);
       setFormTestcaseIN(props.testCase.input);
       setFormTestcaseOUT(props.testCase.output);
+      setFormStudentAccessible(props.testCase.public)
       setDisableID(true);
       setIsEdit(true);
     }

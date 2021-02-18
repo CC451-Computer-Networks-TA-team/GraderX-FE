@@ -107,14 +107,12 @@ function LabsPage() {
   };
 
 
-  const editLab = (formLabId, formRuntime, formInternet, formTestcases) => {
+  const editLab = (labId, formData) => {
     apiClient
       .editLab(
         selectedCourse,
-        formLabId,
-        formRuntime,
-        formInternet,
-        formTestcases
+        labId,
+        formData
       )
       .then((res) => {
         fetchLabs(selectedCourse);
