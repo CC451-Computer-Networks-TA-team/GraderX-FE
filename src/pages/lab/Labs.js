@@ -3,7 +3,7 @@ import apiClient from "../../api-client";
 import LabForm from "./LabForm";
 import "./styles.scss";
 import AppHeader from "../../components/layout/AppHeader";
-import {CopyToClipboard} from 'react-copy-to-clipboard';
+import { CopyToClipboard } from "react-copy-to-clipboard";
 
 import {
   //Link,
@@ -37,7 +37,7 @@ function LabsPage() {
   const [selectedCourse, setSelectedCourse] = useState("");
   const [openModal, setOpenModal] = useState(false);
   const [labToEdit, setLabToEdit] = useState(null);
-  const [copied, setCopied] = useState(false)
+  const [copied, setCopied] = useState(false);
 
   const createLabsObjects = (labs_array) => {
     let labs_objects = [];
@@ -52,8 +52,8 @@ function LabsPage() {
   };
 
   const formLabLink = (lab_name) => {
-    return `${window.origin}/courses/${selectedCourse}/labs/${lab_name}/lab_guide`
-  }
+    return `${window.origin}/courses/${selectedCourse}/labs/${lab_name}/lab_guide`;
+  };
 
   useEffect(() => {
     if (didMount) {
@@ -86,10 +86,8 @@ function LabsPage() {
 
   const changeLabs = (event) => {
     const course_name = event.target.value;
-    setSelectedCourse(course_name)
-    // fetchLabs(course_name);
+    setSelectedCourse(course_name);
   };
-
 
   useEffect(() => {
     setDidMount(true);
@@ -101,10 +99,10 @@ function LabsPage() {
   }, []);
 
   useEffect(() => {
-    if(selectedCourse){
+    if (selectedCourse) {
       fetchLabs(selectedCourse);
     }
-  }, [selectedCourse])
+  }, [selectedCourse]);
 
   const addLab = (formData) => {
     apiClient
@@ -256,8 +254,7 @@ function LabsPage() {
                                   }}
                                 />
                               </span>
-                            ) : 
-                            cell.info.header === "lab_link" ? (
+                            ) : cell.info.header === "lab_link" ? (
                               <span class="lab-link-container">
                                 <a
                                   class="lab-link"
@@ -275,15 +272,24 @@ function LabsPage() {
                                     iconDescription="Go To Lab"
                                   />
                                 </a>
-                                <CopyToClipboard text={cell.value} onCopy={() => setCopied(true)}>
+                                <CopyToClipboard
+                                  text={cell.value}
+                                  onCopy={() => setCopied(true)}
+                                >
                                   <Button
                                     class="lab-link-copy-button"
                                     kind="ghost"
                                     size="small"
                                     hasIconOnly
                                     renderIcon={Copy16}
-                                    iconDescription={copied ? "Copied To Clipbloard!": "Copy To Clipboard" }
-                                    onBlur={() => {setCopied(false)}}
+                                    iconDescription={
+                                      copied
+                                        ? "Copied To Clipbloard!"
+                                        : "Copy To Clipboard"
+                                    }
+                                    onBlur={() => {
+                                      setCopied(false);
+                                    }}
                                   />
                                 </CopyToClipboard>
                               </span>
