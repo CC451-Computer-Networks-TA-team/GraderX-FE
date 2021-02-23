@@ -45,9 +45,11 @@ function LabsPage() {
     labs_array.forEach((lab, index, _arr) => {
       lab.id = `${index}`;
       lab.lab_link = formLabLink(lab.name);
+      lab.test_cases.forEach((tc) => {
+        tc.public = lab.public_test_cases.includes(tc.id)
+      })
       labs_objects.push(lab);
     });
-
     setLabs(labs_objects);
   };
 

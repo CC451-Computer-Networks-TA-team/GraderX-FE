@@ -178,7 +178,7 @@ const LabForm = (props) => {
                     <p>Enable internet access</p>
                     <div style={{ width: 8 }}></div>
                     <TooltipIcon
-                      tooltipText="Enables code to access internet."
+                      tooltipText="Enables submissions code to access internet."
                     ><Information16 />
                     </TooltipIcon>
                   </span>
