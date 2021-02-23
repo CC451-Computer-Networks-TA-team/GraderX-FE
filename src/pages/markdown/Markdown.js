@@ -93,7 +93,7 @@ function MarkdownPage({ match }) {
       />
       <div style={{ height: 32 }}></div>
       {resultsReady && (
-        <div ref={resultsContainerRef} className="results-container">
+        <div ref={resultsContainerRef} className="single-results-container">
           <h3 className="results-header">Results</h3>
           {diff.length > 0 && (
             <div>

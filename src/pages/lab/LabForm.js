@@ -42,7 +42,14 @@ const LabForm = (props) => {
 
   const editLab = () => {
     if (formLabId && formRuntime) {
-      props.editLab(formLabId, formRuntime, formInternet, formTestcases);
+      const formData = new FormData();
+      formData.append('name', formLabId)
+      formData.append('runtime_limit', formRuntime)
+      formData.append('disable_internet', !formInternet)
+      formData.append('test_cases', JSON.stringify(formTestcases))
+      formData.append('lab_guide', formLabGuide)
+
+      props.editLab(formLabId, formData);
       props.closeLabModal();
       resetAndCloseLabModal()
     }
@@ -83,7 +90,7 @@ const LabForm = (props) => {
     closeTCModal();
   };
 
-  const editTestcase = (formTestcaseID, formTestcaseIN, formTestcaseOUT) => {
+  const editTestcase = (formTestcaseID, formTestcaseIN, formTestcaseOUT, formStudentAccessible) => {
     let testcasesClone = formTestcases.slice(0);
     testcasesClone = testcasesClone.filter(
       (test_case) => test_case.id !== formTestcaseID
@@ -92,6 +99,7 @@ const LabForm = (props) => {
       id: formTestcaseID,
       input: formTestcaseIN,
       output: formTestcaseOUT,
+      public: formStudentAccessible
     });
     setFormTestcases(testcasesClone);
     closeTCModal();
@@ -170,7 +178,7 @@ const LabForm = (props) => {
                     <p>Enable internet access</p>
                     <div style={{ width: 8 }}></div>
                     <TooltipIcon
-                      tooltipText="Enables code to access interent."
+                      tooltipText="Enables submissions code to access internet."
                     ><Information16 />
                     </TooltipIcon>
                   </span>

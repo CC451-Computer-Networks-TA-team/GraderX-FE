@@ -1,11 +1,27 @@
 .container {
-    display: flex;
-    align-items: center;
-    margin-left: 0;
+  display: flex;
+  align-items: center;
+  margin-left: 0;
+}
+
+.column-1,
+.column-2 {
+  float: left;
+  width: 50%;
+}
+
+.lab-link-container{
+  display: flex;
+  align-items: center;
+  max-width: 11rem;
+  justify-content: space-between;
+}
+
+.lab-link{
+  display: flex;
+  align-items: center;
+  color: #007bff;
+  .lab-link-copy-button{
+    color: #007bff;
   }
-  
-  .column-1,
-  .column-2 {
-    float: left;
-    width: 50%;
-  }
+}
