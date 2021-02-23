@@ -49,8 +49,8 @@ export default {
   addLab(course, formData) {
     return axios.post(`${GRADERX_API}courses/${course}/labs`, formData)
   },
-  editLab(course, lab_id, formData) {
-    return axios.put(`${GRADERX_API}courses/${course}/labs/${lab_id}`, formData)
+  editLab(course, lab, formData) {
+    return axios.put(`${GRADERX_API}courses/${course}/labs/${lab}`, formData)
   },
   deleteLab(course, lab) {
     return axios.delete(`${GRADERX_API}courses/${course}/labs/${lab}`)
